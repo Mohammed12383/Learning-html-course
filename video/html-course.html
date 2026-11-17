@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Hello HTML · the video</title>
+<link rel="stylesheet" href="video.css">
+</head>
+<body>
+<div id="stage"></div>
+<script src="build/highlight.js"></script>
+<script src="build/assets.js"></script>
+<script src="engine.js"></script>
+<script src="html-course.js"></script>
+<script>
+/* Wait for the fonts, then either wait for the renderer (?render) or play in the window. */
+(async function () {
+  const fonts = ['500 20px "Bricolage Grotesque"', '700 20px "Bricolage Grotesque"', '800 20px "Bricolage Grotesque"', '400 20px Figtree', '500 20px Figtree', '600 20px Figtree', '700 20px Figtree',
+    '400 20px "JetBrains Mono"', '500 20px "JetBrains Mono"', '500 20px Fredoka', '700 20px Fredoka'];
+  await Promise.all(fonts.map(f => document.fonts.load(f)));
+  await document.fonts.ready;
+  const V = window.VIDEO;
+  await V.frame(0);
+  V.ready = true;
+  if (/render/.test(location.search)) return;
+  // a simple player: space = pause, arrows = jump 5s
+  const stage = document.getElementById('stage');
+  const fit = () => { const s = Math.min(innerWidth / 1920, innerHeight / 1080); stage.style.transform = 'scale(' + s + ')'; };
+  fit(); addEventListener('resize', fit);
+  let t = parseFloat((location.hash || '').slice(1)) || 0, playing = true, last = performance.now();
+  addEventListener('keydown', e => {
+    if (e.key === ' ') playing = !playing;
+    if (e.key === 'ArrowRight') t += 5;
+    if (e.key === 'ArrowLeft') t = Math.max(0, t - 5);
+  });
+  (function loop(now) {
+    if (playing) t += (now - last) / 1000;
+    last = now;
+    if (t > V.duration) t = 0;
+    V.frame(t);
+    requestAnimationFrame(loop);
+  })(performance.now());
+})();
+</script>
+</body>
+</html>
