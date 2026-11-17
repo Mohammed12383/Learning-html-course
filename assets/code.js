@@ -837,7 +837,8 @@
     ready = true;
     if (lang === 'cpp') showSaved();
     else if (autoRun) { out.setStatus('idle', 'Ready'); whenVisible(wrap, function () { run(true); }); }
-    else out.note('This program asks you questions. Press <b>Run</b>, then type your answers here.', 'quiet');
+    else if (/\binput\s*\(/.test(original)) out.note('This program asks you questions. Press <b>Run</b>, then type your answers here.', 'quiet');
+    else out.note('Press <b>Run</b> to start this program.', 'quiet');
     if (lang === 'typescript') whenVisible(wrap, check);
     return { wrap: wrap, run: run, editor: editor, out: out };
   }

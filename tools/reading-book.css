@@ -1,0 +1,129 @@
+
+/* ==========================================================
+   The reading book (made by tools/build-reading-book.js)
+   Everything is static: no part of the page needs JavaScript.
+   ========================================================== */
+html { scroll-behavior: auto; }
+body.book-body { background: var(--bg); }
+.book { max-width: 800px; margin: 0 auto; padding: 0 16px 80px; }
+@media (min-width: 700px) { .book { padding: 0 24px 100px; } }
+.book, .book-part { --g: var(--c-tag); }
+.book-lesson[data-group="basics"] { --g: var(--c-tag); }
+.book-lesson[data-group="style"]  { --g: var(--c-prop); }
+.book-lesson[data-group="parts"]  { --g: var(--c-attr); }
+.book-lesson[data-group="layout"] { --g: var(--c-val); }
+.book-lesson[data-group="polish"] { --g: var(--c-sel); }
+.book-lesson[data-group="build"]  { --g: var(--ink); }
+.book a { text-underline-offset: 3px; }
+
+/* ----- cover and contents ----- */
+.book-cover { padding: 44px 0 20px; display: grid; gap: 18px; }
+.book-cover .eyebrow { margin: 0; }
+.book-cover h1 { font-size: clamp(40px, 8vw, 68px); font-weight: 800; letter-spacing: -0.035em; line-height: 1.02; }
+.book-cover .tagword { font-family: var(--font-code); font-weight: 500; color: var(--c-tag); letter-spacing: -0.04em; }
+.book-cover .tagword.alt { color: var(--c-prop); }
+.book-cover .lead { margin: 0; max-width: 660px; }
+.cover-notes { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.cover-notes > div { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 14px 16px; font-size: 15px; line-height: 1.45; }
+.cover-notes b { display: block; font-family: var(--font-display); font-size: 17px; margin-bottom: 2px; }
+.cover-tip { margin: 0; font-size: 15px; line-height: 1.5; color: var(--ink-3); }
+.cover-tip code { overflow-wrap: anywhere; }
+
+.book-toc { margin: 22px 0 30px; padding: 22px 20px; border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); box-shadow: var(--shadow); }
+.book-toc h2 { font-size: 32px; font-weight: 800; margin: 0 0 16px; }
+.toc { list-style: none; padding: 0; margin: 0; display: grid; gap: 26px; }
+.toc-course { display: grid; gap: 2px; text-decoration: none; color: var(--ink); }
+.toc-n { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
+.toc-course strong { font-family: var(--font-display); font-size: 25px; letter-spacing: -0.01em; }
+.toc-part:nth-child(1) .toc-course strong { color: var(--c-tag); }
+.toc-part:nth-child(2) .toc-course strong { color: var(--c-prop); }
+.toc-part:nth-child(3) .toc-course strong { color: var(--c-val); }
+.toc-part:nth-child(4) .toc-course strong { color: var(--c-attr); }
+.toc-what { font-size: 14.5px; color: var(--ink-3); }
+.toc-lessons { list-style: none; padding: 0; margin: 10px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 0 16px; }
+.toc-lessons a { display: flex; gap: 10px; padding: 7px 0; color: var(--ink-2); text-decoration: none; font-size: 15.5px; border-bottom: 1px dashed var(--line); }
+.toc-lessons .num { font-family: var(--font-code); font-size: 12.5px; color: var(--ink-3); min-width: 20px; padding-top: 2px; }
+
+/* ----- course parts ----- */
+.book-part { margin-top: 64px; padding-top: 26px; border-top: 4px solid var(--ink); }
+.part-n { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 4px; }
+.book .home-hero { grid-template-columns: minmax(0, 1fr) !important; padding-block: 4px 0; gap: 22px; max-width: none; }
+.book .home-hero h1 { font-size: clamp(38px, 7vw, 60px); }
+.book .home-hero .lead { margin: 14px 0 0; }
+.part-list-title { font-size: 26px; font-weight: 800; margin: 38px 0 12px; }
+.part-lessons { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.part-lessons a { display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 12px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); text-decoration: none; color: var(--ink); }
+.part-lessons .chip-code { font-family: var(--font-code); font-size: 12.5px; color: var(--c-tag); background: var(--code-bg); border-radius: 8px; padding: 6px 6px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.part-lessons strong { display: block; font-size: 16px; }
+.part-lessons small { display: block; color: var(--ink-3); font-size: 14px; line-height: 1.4; }
+
+/* ----- lessons ----- */
+.book-lesson { margin-top: 70px; padding-top: 26px; border-top: 1px solid var(--line); }
+.book-crumb { margin: 0 0 2px !important; font-size: 12.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.book-crumb a { color: var(--ink-3); text-decoration: none; }
+.book-next { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 20px; margin: 52px 0 0 !important; padding: 14px 18px; border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--line); font-weight: 600; }
+.book-next a { color: var(--ink); text-decoration: none; }
+.book-next a + a { color: var(--ink-3); }
+.book-end { margin-top: 70px; padding: 26px 0; border-top: 4px solid var(--ink); font-size: 18px; }
+.was-button { cursor: default; }
+.swatch.was-button { display: block; }
+.was-link { color: var(--ink); font-weight: 600; }
+
+/* ----- static examples ----- */
+.static-bench { margin: 30px 0; }
+.pg.static { grid-template-columns: minmax(0, 1fr) !important; }
+.pg.static > .pg-code { border-right: 0 !important; border-bottom: 1px solid var(--line); }
+.static .pg-tab { cursor: default; }
+.static .ed { cursor: auto; font-size: 13.5px; }
+.static .ed-hl { position: static; overflow-x: auto; pointer-events: auto; padding-bottom: 14px; }
+.static .ed-gutter b { color: var(--bad); }
+.static .diag { display: block; }
+
+.static-browser + .static-browser { border-top: 1px solid var(--line); }
+.shot-label { font-size: 12px; font-weight: 700; color: var(--ink-2); white-space: nowrap; }
+@media (max-width: 520px) { .static-browser .browser-bar { flex-wrap: wrap; } .shot-label { width: 100%; } }
+.shot-wrap { background: #fff; }
+.static-browser.narrow .shot-wrap { background: var(--chrome); padding: 12px 10px; }
+img.shot { display: block; width: 100%; height: auto; margin: 0 auto; }
+.static-browser.narrow img.shot { width: min(375px, 100%); box-shadow: 0 0 0 1px var(--line), 0 6px 20px rgba(0, 0, 0, 0.08); }
+.static-turtle { background: var(--chrome); padding: 12px; }
+.static-turtle img { display: block; width: min(400px, 100%); height: auto; margin: 0 auto; border-radius: 8px; }
+.static .console { max-height: none; min-height: 0; overflow: visible; }
+.static .console.console-small { max-height: none; min-height: 0; }
+.static-stdin { padding: 10px 16px 12px; border-bottom: 1px solid var(--line); background: var(--surface); }
+.static-stdin pre { margin: 6px 0 0; padding: 8px 12px; background: var(--code-bg); border-radius: 8px; font-size: 13.5px; white-space: pre-wrap; }
+
+.static-intro { font-size: 15px; color: var(--ink-3); margin: -2px 0 12px; }
+.ex.static + .ex.static { margin-top: 16px; }
+.ex.static .ex-body { grid-template-columns: minmax(0, 1fr) !important; }
+.ex.static .ex-code { border-right: 0 !important; border-bottom: 1px solid var(--line); max-height: none; }
+.static-settings { padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--surface); display: grid; gap: 8px; }
+.static-settings .step-label { margin: 0; }
+.static-settings .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 13.5px; padding: 3px 10px; border-radius: 999px; background: var(--code-bg); border: 1px solid var(--line); overflow-wrap: anywhere; }
+.chip code { color: var(--c-prop); font-size: 12.5px; }
+.chip.changed { border-color: var(--c-val); background: color-mix(in srgb, var(--c-val) 13%, var(--surface)); font-weight: 600; }
+
+/* step by step, written out as stages */
+.step-whole { border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; background: var(--code-bg); box-shadow: var(--shadow); }
+.step-whole > .step-label { padding: 12px 16px 0; margin: 0; }
+.step-whole .step-code { max-height: none; }
+ol.stages { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 12px; }
+.lesson ol.stages > li.stage { margin: 0; }
+.stage { border: 1px solid var(--line); border-left: 5px solid var(--g); border-radius: var(--r-md); background: var(--surface); padding: 14px 16px; display: grid; gap: 10px; }
+.stage-head { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.stage-num { font-family: var(--font-display); font-weight: 800; font-size: 17px; }
+.stage-line { font-family: var(--font-code); font-size: 12.5px; color: var(--ink-3); }
+.stage-code { border-radius: 8px; padding: 4px 0; max-height: none; }
+.stage .step-label { margin: 0 0 6px; }
+.stage .step-vars, .stage .step-note, .stage .step-out { min-height: 0; }
+
+/* quick checks with the answer shown */
+.static-quiz .q { margin-bottom: 12px; }
+.lesson .static-opts, .static-opts { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.lesson .static-opts li { margin: 0; }
+.static-opts li { font-size: 15.5px; padding: 8px 14px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--bg); color: var(--ink-2); }
+.static-opts li.right { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 12%, var(--surface)); color: var(--ink); font-weight: 600; }
+.static-opts .mark { color: var(--ok); font-weight: 800; }
+.static-quiz .why { margin-top: 14px; }
+.static-quiz .why > b:first-child { color: var(--ok); }

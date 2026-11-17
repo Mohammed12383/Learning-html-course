@@ -14,6 +14,8 @@ Four visual programming courses for total beginners: **HTML & CSS**, **Python**,
 - **One file per course, any device (iPad, phone, computer):**
   `hello-html-course.html`, `hello-python-course.html`, `hello-typescript-course.html`, `hello-cpp-course.html`.
   Each file holds the whole course. Open it in a web browser.
+- **The reading book, for any viewer (even the iPad Files preview):** `hello-courses-book.html`.
+  All four courses in one page (HTML, then Python, then C++, then TypeScript), with nothing that needs to run: just scroll down. Every example shows its code and the result it made (websites and drawings as pictures, program output as text), step-throughs are written out as stages, and quiz answers are shown. Use it to read anywhere; use the course files above to change and run the code.
 - **As a website:** turn on GitHub Pages for this repository (Settings → Pages → Deploy from a branch → pick the branch → `/ (root)` → Save). Then open `https://<your-username>.github.io/Learning-html-course/` (the HTML course links to the others), or a single-file course such as `.../hello-python-course.html`. On an iPad, tap Share → **Add to Home Screen** to get an app icon.
 - **On a computer:** download the repository and double-click `index.html`, `python/index.html`, `typescript/index.html` or `cpp/index.html`.
 
@@ -39,7 +41,8 @@ assets/course.css     the courses' design
 assets/course.js      the course engine: menus, progress, playgrounds, quizzes
 assets/code.js        code boxes for Python, TypeScript and C++
 assets/vendor/        Skulpt (Python in the browser) and the TypeScript compiler, with their licenses
-tools/                build-single-file.py (makes the one-file courses), update-cpp-outputs.py
+tools/                build-single-file.py (makes the one-file courses), update-cpp-outputs.py,
+                      build-reading-book.js + reading-book.css (makes the reading book)
 ```
 
 ## After changing a lesson
@@ -47,4 +50,5 @@ tools/                build-single-file.py (makes the one-file courses), update-
 ```
 python3 tools/update-cpp-outputs.py     # C++ only: recompile examples and save their outputs (needs g++)
 python3 tools/build-single-file.py      # rebuild the one-file courses
+node tools/build-reading-book.js        # rebuild the reading book (needs Playwright + Chromium; runs every example)
 ```
