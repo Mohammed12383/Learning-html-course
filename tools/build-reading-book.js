@@ -483,17 +483,17 @@ function pageHelpers() {
   async function answer(p, b) {
     const plan = (ANSWERS[b.title] || []).slice();
     const guessing = /Guess the number/.test(b.title);
-    let lo = 1, hi = 20, guess = 0, seenText = '';
+    let lo = 1, hi = 20, guess = 0;
     await p.evaluate(k => BK.click(k, '.run-btn'), b.k);
     for (let n = 0; n < 40; n++) {
       const st = await waitEnd(p, b.k, 15000);
       if (st !== 'ask') break;
       let a;
       if (guessing) {
+        // The last hint printed is the answer to the last guess
         const text = await p.evaluate(k => BK.text(k), b.k);
-        const fresh = text.slice(seenText.length);
-        seenText = text;
-        if (guess) { if (/Too low/.test(fresh)) lo = guess + 1; else if (/Too high/.test(fresh)) hi = guess - 1; }
+        const low = text.lastIndexOf('Too low'), high = text.lastIndexOf('Too high');
+        if (guess) { if (low > high) lo = guess + 1; else if (high > low) hi = guess - 1; }
         guess = Math.floor((lo + hi) / 2);
         a = String(guess);
       } else {
