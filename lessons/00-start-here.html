@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Start Here · Hello HTML</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".." data-lesson="00-start-here">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 00 &middot; <b>HTML basics</b></p>
+      <div class="hero-code" aria-hidden="true">hello</div>
+      <h1>Start Here</h1>
+      <p class="lead">You don't need to know anything yet. In this lesson you'll find out what a website is made of, how to use this course, and how to make a website file on your own computer.</p>
+      <ul class="learn">
+        <li>What a website really is</li>
+        <li>HTML, CSS and JavaScript</li>
+        <li>How to use the playgrounds</li>
+        <li>Your first file</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>A website is just text</h2>
+      <p>Every website you have ever visited is made from plain text files. Your browser (Chrome, Safari, Edge, Firefox) reads that text and turns it into what you see: titles, pictures, buttons and colors.</p>
+      <p>That text is called <strong>code</strong>. It looks strange at first, but it's mostly English words inside little brackets. Here is a real one. The code is on the left. The website it makes is on the right.</p>
+
+      <div class="playground" data-title="Your first look at code">
+        <script type="text/plain">
+          <h1>Hi, I'm learning to code!</h1>
+          <p>This is my very first website.</p>
+          <button>Click me</button>
+        </script>
+      </div>
+
+      <p>Click inside the code and change <code>learning to code</code> to anything you like. The website changes as you type. That's the whole idea of this course: <strong>see the code and the result together, and learn by changing things.</strong></p>
+    </section>
+
+    <section>
+      <h2>The three languages of the web</h2>
+      <p>Websites are built with three languages. Each one has a different job. Think of building a house:</p>
+      <div class="trio">
+        <div>
+          <div class="big" style="color: var(--c-tag)">HTML</div>
+          <p><strong>The walls and rooms.</strong> It says <em>what</em> is on the page: a title, a paragraph, a picture, a button.</p>
+        </div>
+        <div>
+          <div class="big" style="color: var(--c-prop)">CSS</div>
+          <p><strong>The paint and furniture.</strong> It says <em>how it looks</em>: colors, sizes, fonts, spacing, layout.</p>
+        </div>
+        <div>
+          <div class="big" style="color: var(--c-attr)">JavaScript</div>
+          <p><strong>The electricity.</strong> It makes things <em>happen</em>: menus that open, games, things that react to clicks.</p>
+        </div>
+      </div>
+      <p>This course teaches <strong>HTML and CSS</strong>, which is everything you need to build good-looking websites. You'll get a small taste of JavaScript in the Buttons lesson.</p>
+      <p>Here's the difference between HTML and CSS. Turn the CSS off and on with the checkbox:</p>
+
+      <div class="explorer" data-title="Turn the CSS on and off">
+        <input type="checkbox" name="css" data-label="Use CSS (the styling)" checked data-off="<!-- No CSS here, so the browser uses its plain default look -->">
+        <script type="text/plain" data-for="css">
+          <style>
+            body {
+              font-family: system-ui, sans-serif;
+              background: #F3F0FF;
+              padding: 20px;
+            }
+            h1 { color: #6C4CE0; }
+            button {
+              background: #6C4CE0;
+              color: white;
+              border: none;
+              padding: 10px 20px;
+              border-radius: 99px;
+            }
+          </style>
+        </script>
+        <script type="text/plain">
+          {{css}}
+          <h1>My Pet Shop</h1>
+          <p>Toys and treats for happy pets.</p>
+          <button>Shop now</button>
+        </script>
+      </div>
+
+      <p>Without CSS, a page looks like a plain document: black text, a basic font, everything on the left. With CSS, the same HTML gets colors, a nicer font and a round button. <strong>HTML is the content. CSS is the look.</strong></p>
+    </section>
+
+    <section>
+      <h2>How to use this course</h2>
+
+      <h3>Playgrounds</h3>
+      <p>A playground is a small code editor next to a pretend browser window. You saw one above.</p>
+      <ul>
+        <li><strong>Type in the code</strong> and the website updates by itself.</li>
+        <li><strong>Reset</strong> puts the code back to how it started. You can't break anything.</li>
+        <li><strong>Copy</strong> copies the code so you can paste it into your own file.</li>
+        <li><strong>X-ray</strong> draws a line around every part of the website. Point at (or tap) something to see what it is and how big it is in pixels.</li>
+      </ul>
+
+      <h3>Explorers</h3>
+      <p>An explorer has sliders, color pickers and menus. Move them and watch the code and the website change together. The part of the code that changes is highlighted in green.</p>
+
+      <h3>Code colors</h3>
+      <p>Code is colored to help you read it. The same colors are used in the explanations, so you always know what kind of thing you're looking at:</p>
+      <div class="legend">
+        <code class="k-tag">tag</code>
+        <code class="k-attr">attribute</code>
+        <code class="k-val">value</code>
+        <code class="k-sel">selector</code>
+        <code class="k-prop">property</code>
+      </div>
+      <p>Don't worry about these words yet. You'll meet each one soon.</p>
+
+      <h3>Tasks and quizzes</h3>
+      <p>Most lessons have a <strong>Your turn</strong> box with small tasks and a <strong>Quick check</strong> question. At the end of each lesson, click <strong>Mark as done</strong> to fill your progress bar.</p>
+    </section>
+
+    <section>
+      <h2>Making a website on your own computer</h2>
+      <p>You can do every lesson right here in the playgrounds. But building your own site on your computer feels great, and it's easy. You need two free things: a <strong>code editor</strong> (a program for writing code) and a <strong>browser</strong> (which you already have).</p>
+
+      <ol class="steps">
+        <li><div><p><strong>Install VS Code.</strong> It's a free code editor. Get it from <a href="https://code.visualstudio.com" target="_blank" rel="noopener">code.visualstudio.com</a>.</p></div></li>
+        <li><div><p><strong>Make a folder</strong> on your computer called <code>my-website</code>. Your website will live in this folder.</p></div></li>
+        <li><div><p><strong>Open the folder in VS Code:</strong> File &rarr; Open Folder &rarr; choose <code>my-website</code>.</p></div></li>
+        <li><div><p><strong>Make a new file</strong> called <code>index.html</code>. The <code>.html</code> at the end tells the computer it's a web page. <code>index.html</code> is the name for a website's home page.</p></div></li>
+        <li><div><p><strong>Type <kbd>!</kbd> and press <kbd>Enter</kbd>.</strong> VS Code writes the basic page skeleton for you. (You'll learn what it means in the next lesson.)</p></div></li>
+        <li><div><p><strong>Write something</strong> between <code>&lt;body&gt;</code> and <code>&lt;/body&gt;</code>, like <code>&lt;h1&gt;Hello!&lt;/h1&gt;</code>. Then save with <kbd>Ctrl</kbd>+<kbd>S</kbd> (Windows) or <kbd>Cmd</kbd>+<kbd>S</kbd> (Mac).</p></div></li>
+        <li><div><p><strong>Open it in your browser:</strong> double-click <code>index.html</code> in your folder. Every time you change the code, save and then refresh the browser to see the change.</p></div></li>
+      </ol>
+
+      <aside class="note tip">
+        <h4>Tip</h4>
+        <p>In VS Code, install the free <strong>Live Server</strong> extension (click the Extensions icon on the left and search for it). Then right-click your file and choose <strong>Open with Live Server</strong>. Your browser will refresh by itself every time you save.</p>
+      </aside>
+
+      <aside class="note remember">
+        <h4>No computer right now?</h4>
+        <p>That's fine. Use the playgrounds in this course on any phone or tablet. There's also a blank page for you in the <code>practice</code> folder of this course.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>A secret: you can look at any website's code</h2>
+      <p>On a computer, open any website in Chrome, right-click anything on the page and choose <strong>Inspect</strong>. A panel opens showing the HTML and CSS of that page. It's the same kind of code you're about to learn. Big sites like YouTube use the exact same tags you'll learn in the next lessons.</p>
+    </section>
+
+    <section>
+      <div class="quiz">
+        <p class="q">Which language decides the colors of a website?</p>
+        <div class="opts">
+          <button>HTML</button>
+          <button data-correct>CSS</button>
+          <button>JavaScript</button>
+        </div>
+        <p class="why">CSS is the styling language. HTML says what is on the page, CSS says how it looks, and JavaScript makes things happen.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>A website is text files that the browser turns into a page.</li>
+          <li><strong>HTML</strong> = what's on the page. <strong>CSS</strong> = how it looks. <strong>JavaScript</strong> = what it does.</li>
+          <li>Web page files end in <code>.html</code>. The home page is called <code>index.html</code>.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../assets/course.js"></script>
+</body>
+</html>

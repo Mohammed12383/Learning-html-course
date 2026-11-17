@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Layout with Flexbox · Hello HTML</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".." data-lesson="11-flexbox">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 11 &middot; <b>Layout &amp; pages</b></p>
+      <div class="hero-code" aria-hidden="true">flex</div>
+      <h1>Layout with Flexbox</h1>
+      <p class="lead">Up to now, boxes stacked on top of each other. Real websites put things side by side: menus, rows of cards, a picture next to text. Flexbox is the tool for that, and it's easier than it sounds.</p>
+      <ul class="learn">
+        <li>Side by side with one line</li>
+        <li>Container and items</li>
+        <li>Spacing things out</li>
+        <li>Centering anything</li>
+        <li>Navigation bars and card rows</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>One line puts things side by side</h2>
+      <p>Block boxes stack on top of each other. Add <code><span class="t-prop">display</span>: <span class="t-val">flex</span>;</code> to the box <em>around</em> them, and they line up in a row.</p>
+
+      <div class="explorer" data-title="Flex on and off">
+        <input type="checkbox" name="on" data-label="display: flex on the container" data-on="flex" data-off="block" checked>
+        <script type="text/plain">
+          <style>
+            .container {
+              display: {{on}};
+              gap: 10px;
+              padding: 10px;
+              border: 3px dashed #9C7BD6;
+            }
+            .item {
+              background-color: #FFB4CB;
+              padding: 20px;
+              border-radius: 10px;
+              font-family: sans-serif;
+            }
+          </style>
+
+          <div class="container">
+            <div class="item">1</div>
+            <div class="item">2</div>
+            <div class="item">3</div>
+          </div>
+        </script>
+      </div>
+
+      <h3>Container and items</h3>
+      <p>Flexbox always has two parts:</p>
+      <ul>
+        <li>The <strong>container</strong>: the parent box. You put <code>display: flex</code> on <strong>this one</strong>.</li>
+        <li>The <strong>items</strong>: the boxes directly inside it. They get arranged.</li>
+      </ul>
+      <p>Think of the container as a shelf, and the items as books on it. You tell the <em>shelf</em> how to arrange the books.</p>
+
+      <div class="axis" role="img" aria-label="Diagram: the main axis goes left to right along the row; the cross axis goes top to bottom">
+        <span class="main">main axis (the direction of the row) →</span>
+        <span class="cross">cross axis</span>
+        <div class="row"><i>1</i><i>2</i><i>3</i></div>
+      </div>
+      <p>Flexbox thinks in two directions. The <strong style="color: var(--c-prop)">main axis</strong> is the direction items line up (left to right in a row). The <strong style="color: var(--c-tag)">cross axis</strong> goes the other way (top to bottom).</p>
+    </section>
+
+    <section>
+      <h2>The flexbox playground</h2>
+      <p>These five properties go on the <strong>container</strong>. Change each one and watch the boxes move.</p>
+
+      <div class="explorer" data-title="Every flexbox setting" data-height="300">
+        <select name="dir" data-label="flex-direction">
+          <option selected>row</option><option>column</option><option>row-reverse</option><option>column-reverse</option>
+        </select>
+        <select name="jc" data-label="justify-content">
+          <option selected>flex-start</option><option>center</option><option>flex-end</option><option>space-between</option><option>space-around</option><option>space-evenly</option>
+        </select>
+        <select name="ai" data-label="align-items">
+          <option>stretch</option><option selected>flex-start</option><option>center</option><option>flex-end</option>
+        </select>
+        <input type="range" name="gap" data-label="gap" min="0" max="40" value="10" data-unit="px">
+        <select name="wrap" data-label="flex-wrap">
+          <option selected>nowrap</option><option>wrap</option>
+        </select>
+        <script type="text/plain">
+          <style>
+            body { margin: 0; font-family: sans-serif; }
+            .container {
+              display: flex;
+              flex-direction: {{dir}};
+              justify-content: {{jc}};
+              align-items: {{ai}};
+              gap: {{gap}};
+              flex-wrap: {{wrap}};
+              height: 280px;
+              background-color: #F3F0FF;
+            }
+            .item { padding: 16px 22px; border-radius: 10px; color: white; font-weight: bold; }
+            .a { background-color: #FF5C8A; }
+            .b { background-color: #8F7BFF; padding-top: 34px; }
+            .c { background-color: #2FB67C; }
+            .d { background-color: #FF8A3D; }
+          </style>
+
+          <div class="container">
+            <div class="item a">A</div>
+            <div class="item b">B</div>
+            <div class="item c">C</div>
+            <div class="item d">D</div>
+          </div>
+        </script>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Property</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td><code>flex-direction</code></td><td><code>row</code> (side by side, the default) or <code>column</code> (stacked).</td></tr>
+            <tr><td><code>justify-content</code></td><td>Spreads items along the <strong>main axis</strong>: at the start, center, end, or with space between.</td></tr>
+            <tr><td><code>align-items</code></td><td>Lines items up on the <strong>cross axis</strong>: top, center, bottom, or stretched to fill.</td></tr>
+            <tr><td><code>gap</code></td><td>Space between items. Much easier than margins.</td></tr>
+            <tr><td><code>flex-wrap</code></td><td><code>wrap</code> lets items move to a new line when there isn't enough room.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="note tip">
+        <h4>How to remember justify vs align</h4>
+        <p><strong>justify-content</strong> = along the row (the main direction). <strong>align-items</strong> = up and down (the other direction). When you switch to <code>column</code>, they swap: justify becomes up and down.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Center anything</h2>
+      <p>For years, centering things in the middle of a box was famously hard in CSS. With flexbox, it's three lines. This is one of the most useful tricks you'll ever learn:</p>
+
+      <div class="playground" data-title="Perfect centering">
+        <script type="text/plain">
+          <style>
+            body { margin: 0; }
+            .stage {
+              display: flex;
+              justify-content: center;  /* center left-right */
+              align-items: center;      /* center top-bottom */
+              height: 260px;
+              background: linear-gradient(135deg, #FFE4EC, #E6E9FF);
+            }
+            .badge {
+              background: white;
+              padding: 16px 28px;
+              border-radius: 999px;
+              font-family: sans-serif;
+              font-weight: bold;
+            }
+          </style>
+
+          <div class="stage">
+            <div class="badge">I'm right in the middle 🎯</div>
+          </div>
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Growing to fill space</h2>
+      <p>The properties so far go on the container. One very useful property goes on an <strong>item</strong>: <code><span class="t-prop">flex</span>: <span class="t-val">1</span></code>. It means "grow and take up the leftover space".</p>
+
+      <div class="playground" data-title="flex: 1 fills the gap">
+        <script type="text/plain">
+          <style>
+            * { box-sizing: border-box; }
+            body { font-family: sans-serif; }
+            .search {
+              display: flex;
+              gap: 8px;
+            }
+            .search input {
+              flex: 1;    /* take all the space that's left */
+              padding: 12px;
+              font-size: 16px;
+              border: 2px solid #DDD;
+              border-radius: 10px;
+            }
+            .search button {
+              padding: 12px 20px;
+              border: none;
+              border-radius: 10px;
+              background: #1F1D2E;
+              color: white;
+            }
+          </style>
+
+          <div class="search">
+            <input type="search" placeholder="Search recipes...">
+            <button>Search</button>
+          </div>
+        </script>
+      </div>
+      <p>The button keeps its size, and the text box stretches to fill the rest. If two items both have <code>flex: 1</code>, they share the space equally. <code>flex: 2</code> takes twice as much as <code>flex: 1</code>.</p>
+    </section>
+
+    <section>
+      <h2>Real examples</h2>
+
+      <h3>A navigation bar</h3>
+      <p>Logo on the left, links on the right. The trick is <code>justify-content: space-between</code>, which pushes the first and last items to the edges. Notice there are <strong>two</strong> flex containers: the whole bar, and the group of links.</p>
+
+      <div class="playground" data-title="Navigation bar" data-devices>
+        <script type="text/plain">
+          <style>
+            body { margin: 0; font-family: system-ui, sans-serif; }
+            .nav {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 16px 24px;
+              background: white;
+              box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            }
+            .logo {
+              font-weight: 800;
+              font-size: 20px;
+              color: #FF5C8A;
+            }
+            .links {
+              display: flex;
+              gap: 20px;
+            }
+            .links a {
+              color: #1F1D2E;
+              text-decoration: none;
+            }
+          </style>
+
+          <nav class="nav">
+            <div class="logo">bloom</div>
+            <div class="links">
+              <a href="#">Home</a>
+              <a href="#">Shop</a>
+              <a href="#">About</a>
+            </div>
+          </nav>
+        </script>
+      </div>
+
+      <h3>Picture next to text</h3>
+      <div class="playground" data-title="A comment with an avatar">
+        <script type="text/plain">
+          <style>
+            body { font-family: system-ui, sans-serif; }
+            .comment {
+              display: flex;
+              gap: 14px;
+              align-items: flex-start;
+              background: #F6F4FB;
+              padding: 16px;
+              border-radius: 16px;
+            }
+            .comment img {
+              width: 48px;
+              height: 48px;
+              border-radius: 50%;
+            }
+            .comment p { margin: 4px 0 0; }
+          </style>
+
+          <div class="comment">
+            <img src="images/avatar.svg" alt="">
+            <div>
+              <strong>Sam Rivers</strong>
+              <p>This recipe was amazing! I added extra chocolate chips. 🍪</p>
+            </div>
+          </div>
+        </script>
+      </div>
+
+      <h3>A row of cards that wraps</h3>
+      <p>With <code>flex-wrap: wrap</code>, cards move to the next line when the screen gets narrow. Try Phone and Laptop.</p>
+      <div class="playground" data-title="Cards that wrap" data-devices>
+        <script type="text/plain">
+          <style>
+            body { font-family: system-ui, sans-serif; background: #FFF8F0; }
+            .row {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 16px;
+            }
+            .card {
+              flex: 1 1 200px;  /* grow, shrink, start at 200px */
+              background: white;
+              padding: 20px;
+              border-radius: 16px;
+            }
+            .card .emoji { font-size: 32px; }
+          </style>
+
+          <div class="row">
+            <div class="card"><div class="emoji">🚀</div><h3>Fast</h3><p>Loads in a blink.</p></div>
+            <div class="card"><div class="emoji">🎨</div><h3>Pretty</h3><p>Looks great everywhere.</p></div>
+            <div class="card"><div class="emoji">🔒</div><h3>Safe</h3><p>Your data stays yours.</p></div>
+          </div>
+        </script>
+      </div>
+      <p><code>flex: 1 1 200px</code> is three settings in one: <strong>grow</strong> (1 = yes), <strong>shrink</strong> (1 = yes), and the <strong>starting size</strong> (200px). So each card starts at 200px and then grows to share the row.</p>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>In the navigation bar, add a fourth link called "Contact".</li>
+          <li>Make the logo a different color and bigger.</li>
+          <li>In the cards, add a fourth card. Watch where it goes on Phone and Laptop.</li>
+          <li>Change <code>align-items: flex-start</code> in the comment to <code>center</code>. What moves?</li>
+        </ol>
+      </aside>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Putting <code>display: flex</code> on the items</strong> instead of the container around them.</li>
+          <li><strong>Expecting it to work on grandchildren.</strong> Flexbox only arranges the <em>direct</em> children. For boxes deeper inside, make another flex container (like the links in the nav bar).</li>
+          <li><strong>Mixing up justify-content and align-items.</strong> Just try the other one!</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">Where do you put display: flex?</p>
+        <div class="opts">
+          <button data-correct>On the parent box around the items</button>
+          <button>On each item</button>
+          <button>On the body only</button>
+        </div>
+        <p class="why">Flex goes on the container (the parent). It arranges the items directly inside it.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">Which justify-content value puts the logo on the far left and the menu on the far right?</p>
+        <div class="opts">
+          <button>center</button>
+          <button>flex-end</button>
+          <button data-correct>space-between</button>
+        </div>
+        <p class="why"><code>space-between</code> puts all the free space between the items, pushing the first and last ones to the edges.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>display: flex</code> on the container puts its children side by side.</li>
+          <li><code>justify-content</code> = along the row. <code>align-items</code> = up and down.</li>
+          <li><code>gap</code> for space between. <code>flex-wrap: wrap</code> to wrap.</li>
+          <li>Center anything: <code>display: flex; justify-content: center; align-items: center;</code></li>
+          <li><code>flex: 1</code> on an item makes it fill the leftover space.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../assets/course.js"></script>
+</body>
+</html>

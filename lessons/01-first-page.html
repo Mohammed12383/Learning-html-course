@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your First Web Page · Hello HTML</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".." data-lesson="01-first-page">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 01 &middot; <b>HTML basics</b></p>
+      <div class="hero-code" aria-hidden="true">&lt;html&gt;</div>
+      <h1>Your First Web Page</h1>
+      <p class="lead">HTML is a way of labeling things. You put labels called tags around your words, and the browser knows what each part is: a title, a paragraph, a picture.</p>
+      <ul class="learn">
+        <li>Tags and elements</li>
+        <li>Attributes</li>
+        <li>Putting tags inside tags</li>
+        <li>The page skeleton</li>
+        <li>Comments</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Tags: labels for your content</h2>
+      <p>A <code class="k-tag">tag</code> is a word inside angle brackets <code>&lt; &gt;</code>. Most tags come in pairs: an <strong>opening tag</strong> and a <strong>closing tag</strong>. The closing tag has a slash <code>/</code> in it. The content goes between them.</p>
+
+      <div class="anatomy" role="img" aria-label="A paragraph element: opening tag p, the content Hello!, closing tag slash p">
+        <div class="part tag"><span>&lt;p&gt;</span><small>opening tag</small></div>
+        <div class="part text"><span>Hello!</span><small>content</small></div>
+        <div class="part tag"><span>&lt;/p&gt;</span><small>closing tag<br>(has a /)</small></div>
+      </div>
+
+      <p>The whole thing together (opening tag + content + closing tag) is called an <strong>element</strong>. The <code class="k-tag">p</code> stands for <strong>paragraph</strong>. Tag names are short on purpose, so they're quick to type.</p>
+
+      <div class="playground" data-title="Three elements">
+        <script type="text/plain">
+          <h1>My Trip to the Beach</h1>
+          <p>The water was blue and warm.</p>
+          <p>I saw a crab!</p>
+        </script>
+      </div>
+
+      <p><code class="k-tag">&lt;h1&gt;</code> means "heading 1", the main title. It's big and bold. Each <code class="k-tag">&lt;p&gt;</code> is a paragraph, and each one starts on a new line.</p>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Change the title to something you did this week.</li>
+          <li>Add a third paragraph: type <code>&lt;p&gt;</code>, some words, then <code>&lt;/p&gt;</code>.</li>
+          <li>Delete the <code>&lt;/p&gt;</code> at the end of a line. What happens? (Usually nothing breaks yet, because browsers are forgiving. But always close your tags. Missing ones cause strange problems later.)</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Attributes: extra information</h2>
+      <p>Some tags need more information. For a picture, the browser needs to know <em>which</em> picture. You give that information with an <code class="k-attr">attribute</code>, written inside the opening tag.</p>
+
+      <div class="anatomy" role="img" aria-label="An image tag with two attributes: src equals cat.svg, alt equals A cartoon cat">
+        <div class="part tag"><span>&lt;img</span><small>tag name</small></div>
+        <div class="part attr"><span> src</span><small>attribute name</small></div>
+        <div class="part val"><span>="images/cat.svg"</span><small>value<br>(in quotes)</small></div>
+        <div class="part attr"><span> alt</span><small>another attribute</small></div>
+        <div class="part val"><span>="A cartoon cat"</span><small>its value</small></div>
+        <div class="part tag"><span>&gt;</span><small>end</small></div>
+      </div>
+
+      <p>An attribute always looks like <code><span class="t-attr">name</span>=<span class="t-str">"value"</span></code>. Think of attributes as <strong>settings</strong>. Here, <code class="k-attr">src</code> (short for "source") says which picture file to show, and <code class="k-attr">alt</code> describes it in words.</p>
+
+      <div class="playground" data-title="A tag with attributes">
+        <script type="text/plain">
+          <h1>Meet my cat</h1>
+          <img src="images/cat.svg" alt="A cartoon cat" width="200">
+          <p>Her name is Mochi.</p>
+        </script>
+      </div>
+
+      <p>Try changing <code class="k-val">200</code> to <code class="k-val">100</code> or <code class="k-val">300</code>. Did you notice <code class="k-tag">&lt;img&gt;</code> has <strong>no closing tag</strong>? Some tags have no content inside them, so they don't need one. These are called <strong>empty tags</strong>. Other empty tags are <code class="k-tag">&lt;br&gt;</code> (line break) and <code class="k-tag">&lt;hr&gt;</code> (a line across the page).</p>
+    </section>
+
+    <section>
+      <h2>Tags inside tags</h2>
+      <p>You can put elements inside other elements. This is called <strong>nesting</strong>. It's like boxes inside boxes.</p>
+
+      <div class="nest" role="img" aria-label="Nested boxes: body contains h1 and p, and p contains strong">
+        <span class="lbl">&lt;body&gt;</span>
+        <div class="nest b"><span class="lbl">&lt;h1&gt;</span><span class="nest-text">My Trip to the Beach</span></div>
+        <div class="nest c"><span class="lbl">&lt;p&gt;</span>
+          <span class="nest-text">The water was</span>
+          <div class="nest d"><span class="lbl">&lt;strong&gt;</span><span class="nest-text">really warm</span></div>
+        </div>
+      </div>
+
+      <div class="playground" data-title="Nesting">
+        <script type="text/plain">
+          <h1>My Trip to the Beach</h1>
+          <p>The water was <strong>really warm</strong> and blue.</p>
+        </script>
+      </div>
+
+      <p><code class="k-tag">&lt;strong&gt;</code> makes words bold and important. It sits <em>inside</em> the paragraph. The rule for nesting is simple: <strong>close the inside box before the outside box.</strong></p>
+
+      <script type="text/plain" class="snippet">
+        <!-- Right: strong closes first, then p -->
+        <p>Hello <strong>friend</strong></p>
+
+        <!-- Wrong: the tags cross over each other -->
+        <p>Hello <strong>friend</p></strong>
+      </script>
+
+      <p>To keep nesting easy to see, we push inside elements a little to the right with spaces. This is called <strong>indenting</strong>. The browser doesn't care about it, but it makes code much easier for humans to read.</p>
+    </section>
+
+    <section>
+      <h2>The page skeleton</h2>
+      <p>The playgrounds so far only showed small pieces. A real web page file always has the same basic structure around your content. It's like the frame of a house. Here's the full skeleton:</p>
+
+      <div class="playground" data-title="A complete web page">
+        <script type="text/plain">
+          <!DOCTYPE html>
+          <html lang="en">
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1">
+              <title>My First Website</title>
+            </head>
+            <body>
+              <h1>Welcome!</h1>
+              <p>This is a complete web page.</p>
+            </body>
+          </html>
+        </script>
+      </div>
+
+      <p>Look at the top of the pretend browser: <strong>My First Website</strong> appears there. That comes from the <code class="k-tag">&lt;title&gt;</code>. Change it and watch it update.</p>
+
+      <div class="split2">
+        <div>
+          <h4>&lt;head&gt;</h4>
+          <p><strong>Backstage.</strong> Information <em>about</em> the page, for the browser and for Google. Nothing in here shows on the page itself.</p>
+        </div>
+        <div>
+          <h4>&lt;body&gt;</h4>
+          <p><strong>The stage.</strong> Everything people see: text, pictures, buttons. Almost all of your work goes in here.</p>
+        </div>
+      </div>
+
+      <h3>What each line means</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Line</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td><code>&lt;!DOCTYPE html&gt;</code></td><td>Tells the browser "this is a modern HTML page". Always the very first line.</td></tr>
+            <tr><td><code>&lt;html lang="en"&gt;</code></td><td>Wraps the whole page. <code>lang="en"</code> says the page is in English.</td></tr>
+            <tr><td><code>&lt;head&gt;</code></td><td>Starts the backstage part.</td></tr>
+            <tr><td><code>&lt;meta charset="utf-8"&gt;</code></td><td>Lets your page show every letter and emoji correctly (é, ñ, 你好, 😀).</td></tr>
+            <tr><td><code>&lt;meta name="viewport" …&gt;</code></td><td>Makes the page fit phone screens. Always include it.</td></tr>
+            <tr><td><code>&lt;title&gt;</code></td><td>The name shown on the browser tab and in Google results.</td></tr>
+            <tr><td><code>&lt;body&gt;</code></td><td>Starts the visible part. Your content goes here.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="note tip">
+        <h4>Tip</h4>
+        <p>You don't need to memorize this. In VS Code, type <kbd>!</kbd> and press <kbd>Enter</kbd>, and it writes the whole skeleton for you. There's also a ready-made one in this course's <code>practice/index.html</code>.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Comments: notes for yourself</h2>
+      <p>A <strong>comment</strong> is a note in your code that the browser ignores. It never shows on the page. Use comments to remind yourself what something is for. They start with <code>&lt;!--</code> and end with <code>--&gt;</code>.</p>
+
+      <div class="playground" data-title="Comments are invisible">
+        <script type="text/plain">
+          <!-- This is my menu. Remember to add a contact link! -->
+          <h1>Sunny Bakery</h1>
+          <p>Fresh bread every morning.</p>
+          <!-- <p>This paragraph is switched off for now.</p> -->
+        </script>
+      </div>
+
+      <p>Comments are also handy for switching code off without deleting it. Try removing the <code>&lt;!--</code> and <code>--&gt;</code> around the last paragraph.</p>
+    </section>
+
+    <section>
+      <h2>Spaces and new lines don't count</h2>
+      <p>This surprises everyone: <strong>the browser ignores extra spaces and new lines</strong> in your text. Many spaces become one space. Pressing Enter doesn't start a new line.</p>
+
+      <div class="playground" data-title="Where did my spaces go?">
+        <script type="text/plain">
+          <p>Roses are red,
+          violets are blue,
+          I wrote          this          poem
+          just for you.</p>
+
+          <p>Roses are red,<br>
+          violets are blue.</p>
+        </script>
+      </div>
+
+      <p>To start a new line, use <code class="k-tag">&lt;br&gt;</code> (line break), or start a new paragraph with a new <code class="k-tag">&lt;p&gt;</code>. To add space between things, you'll use CSS later.</p>
+    </section>
+
+    <section>
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Forgetting the slash</strong> in a closing tag: <code>&lt;p&gt;Hi&lt;p&gt;</code> should be <code>&lt;p&gt;Hi&lt;/p&gt;</code>.</li>
+          <li><strong>Typos in tag names</strong>: <code>&lt;h&gt;</code> or <code>&lt;pp&gt;</code> mean nothing to the browser.</li>
+          <li><strong>Missing quotes</strong> around attribute values: write <code>alt="My cat"</code>, not <code>alt=My cat</code>.</li>
+          <li><strong>Putting visible content in the <code>&lt;head&gt;</code></strong>. It goes in the <code>&lt;body&gt;</code>.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">Which one is a closing tag?</p>
+        <div class="opts">
+          <button>&lt;p&gt;</button>
+          <button data-correct>&lt;/p&gt;</button>
+          <button>&lt;p/&gt;</button>
+        </div>
+        <p class="why">The closing tag has a slash right after the <code>&lt;</code>. It tells the browser where the element ends.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">Where do you put the things people should see?</p>
+        <div class="opts">
+          <button>Inside &lt;head&gt;</button>
+          <button data-correct>Inside &lt;body&gt;</button>
+          <button>Before &lt;!DOCTYPE html&gt;</button>
+        </div>
+        <p class="why">The body is the stage. The head is backstage information like the title and settings.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>&lt;tag&gt;content&lt;/tag&gt;</code> makes an <strong>element</strong>.</li>
+          <li>Attributes are settings inside the opening tag: <code>name="value"</code>.</li>
+          <li>Close the inside tag before the outside tag.</li>
+          <li>Every page has a skeleton: <code>&lt;!DOCTYPE&gt;</code>, <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>.</li>
+          <li>Comments <code>&lt;!-- like this --&gt;</code> are notes that don't show.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../assets/course.js"></script>
+</body>
+</html>

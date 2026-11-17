@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hello CSS: Colors · Hello HTML</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".." data-lesson="04-colors">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 04 &middot; <b>Styling with CSS</b></p>
+      <div class="hero-code" aria-hidden="true">color:</div>
+      <h1>Hello CSS: Colors</h1>
+      <p class="lead">Time to make things pretty. CSS is the language that controls how a page looks. You'll start with the most fun part: color.</p>
+      <ul class="learn">
+        <li>What a CSS rule looks like</li>
+        <li>Text and background colors</li>
+        <li>Names, hex, RGB and HSL</li>
+        <li>See-through colors</li>
+        <li>Picking a nice palette</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Your first CSS rule</h2>
+      <p>CSS is a list of <strong>rules</strong>. Each rule says: "find these elements, and make them look like this." Here's one rule that makes every <code>&lt;h1&gt;</code> pink:</p>
+
+      <div class="anatomy" role="img" aria-label="A CSS rule: selector h1, open brace, property color, colon, value hotpink, semicolon, close brace">
+        <div class="part sel"><span>h1</span><small>selector<br>(which elements)</small></div>
+        <div class="part punc"><span> { </span><small>start</small></div>
+        <div class="part prop"><span>color</span><small>property<br>(what to change)</small></div>
+        <div class="part punc"><span>: </span><small>colon</small></div>
+        <div class="part val"><span>hotpink</span><small>value<br>(change it to)</small></div>
+        <div class="part punc"><span>; </span><small>semicolon<br>(end of line)</small></div>
+        <div class="part punc"><span>}</span><small>end</small></div>
+      </div>
+
+      <ul>
+        <li>The <code class="k-sel">selector</code> picks which elements to style. <code class="k-sel">h1</code> means "all h1 headings".</li>
+        <li>Inside the curly braces <code>{ }</code> you write one or more lines.</li>
+        <li>Each line is a <code class="k-prop">property</code> (what to change), a colon <code>:</code>, a <code class="k-val">value</code> (what to change it to), and a semicolon <code>;</code>.</li>
+      </ul>
+
+      <p>Where does CSS go? Inside a <code class="k-tag">&lt;style&gt;</code> tag. In a full page, the <code>&lt;style&gt;</code> goes in the <code>&lt;head&gt;</code>. In these short playgrounds, we just put it at the top.</p>
+
+      <div class="playground" data-title="Styling with colors">
+        <script type="text/plain">
+          <style>
+            body {
+              background-color: lavender;
+            }
+            h1 {
+              color: hotpink;
+            }
+            p {
+              color: rebeccapurple;
+            }
+          </style>
+
+          <h1>My Colorful Page</h1>
+          <p>CSS made this text purple.</p>
+          <p>And the background is lavender.</p>
+        </script>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Change <code>hotpink</code> to <code>tomato</code>, <code>teal</code> or <code>gold</code>.</li>
+          <li>Change the background to <code>lightyellow</code>.</li>
+          <li>Add a new rule at the bottom of the style: <code>h1 { background-color: white; }</code>. What happens?</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Text color and background color</h2>
+      <p>Two properties do most of the coloring:</p>
+      <ul>
+        <li><code class="k-prop">color</code> changes the <strong>text</strong> color.</li>
+        <li><code class="k-prop">background-color</code> changes the color <strong>behind</strong> the element. (You can also write just <code class="k-prop">background</code>.)</li>
+      </ul>
+
+      <div class="explorer" data-title="Pick any two colors">
+        <input type="color" name="bg" data-label="background-color" value="#FFE4EC">
+        <input type="color" name="fg" data-label="color" value="#B3124F">
+        <script type="text/plain">
+          <style>
+            body {
+              background-color: {{bg}};
+              color: {{fg}};
+              font-family: sans-serif;
+            }
+          </style>
+
+          <h1>Hello, colors!</h1>
+          <p>Pick a background and a text color.
+          Can you still read this easily?</p>
+        </script>
+      </div>
+
+      <p>Notice the color is written like <code class="k-val">#FFE4EC</code>. That's a <strong>hex code</strong>. Let's look at all the ways to write a color.</p>
+    </section>
+
+    <section>
+      <h2>Four ways to write a color</h2>
+
+      <h3>1. Color names</h3>
+      <p>The easiest way. CSS knows 140 color names. Click any swatch to copy its name.</p>
+      <div class="swatches">
+        <button class="swatch" type="button" data-copy="tomato" style="--sw: tomato"><i></i><span>tomato</span></button>
+        <button class="swatch" type="button" data-copy="hotpink" style="--sw: hotpink"><i></i><span>hotpink</span></button>
+        <button class="swatch" type="button" data-copy="gold" style="--sw: gold"><i></i><span>gold</span></button>
+        <button class="swatch" type="button" data-copy="mediumseagreen" style="--sw: mediumseagreen"><i></i><span>mediumseagreen</span></button>
+        <button class="swatch" type="button" data-copy="skyblue" style="--sw: skyblue"><i></i><span>skyblue</span></button>
+        <button class="swatch" type="button" data-copy="mediumpurple" style="--sw: mediumpurple"><i></i><span>mediumpurple</span></button>
+        <button class="swatch" type="button" data-copy="peachpuff" style="--sw: peachpuff"><i></i><span>peachpuff</span></button>
+        <button class="swatch" type="button" data-copy="lavender" style="--sw: lavender"><i></i><span>lavender</span></button>
+        <button class="swatch" type="button" data-copy="coral" style="--sw: coral"><i></i><span>coral</span></button>
+        <button class="swatch" type="button" data-copy="teal" style="--sw: teal"><i></i><span>teal</span></button>
+        <button class="swatch" type="button" data-copy="navy" style="--sw: navy"><i></i><span>navy</span></button>
+        <button class="swatch" type="button" data-copy="mintcream" style="--sw: mintcream"><i></i><span>mintcream</span></button>
+      </div>
+      <p>Names are great for practice. Real websites usually use exact codes instead, because there are millions of colors and only 140 names.</p>
+
+      <h3>2. Hex codes</h3>
+      <p>A hex code is a <code>#</code> followed by 6 letters and numbers. It's three pairs: how much <strong>red</strong>, how much <strong>green</strong>, and how much <strong>blue</strong> light to mix.</p>
+
+      <div class="hexbox" role="img" aria-label="The hex code #FF6B8B split into FF red, 6B green, 8B blue">
+        <span style="background:none;padding:0">#</span>
+        <span class="r">FF<small>red</small></span>
+        <span class="gg">6B<small>green</small></span>
+        <span class="bb">8B<small>blue</small></span>
+      </div>
+
+      <p>Each pair goes from <code>00</code> (none) to <code>FF</code> (full). It counts using numbers <em>and</em> letters: 0 1 2 3 4 5 6 7 8 9 A B C D E F. You don't need to do the math! Just remember:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Hex</th><th>Means</th><th>Color</th></tr></thead>
+          <tbody>
+            <tr><td><code>#000000</code></td><td>no light at all</td><td>black</td></tr>
+            <tr><td><code>#FFFFFF</code></td><td>all light, full</td><td>white</td></tr>
+            <tr><td><code>#FF0000</code></td><td>full red only</td><td>red</td></tr>
+            <tr><td><code>#00FF00</code></td><td>full green only</td><td>green</td></tr>
+            <tr><td><code>#0000FF</code></td><td>full blue only</td><td>blue</td></tr>
+            <tr><td><code>#888888</code></td><td>half of each, all equal</td><td>gray</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Hex codes are the most common way designers share colors. When you find a color you like online, it will usually be a hex code you can copy.</p>
+
+      <h3>3. RGB</h3>
+      <p>RGB is the same idea as hex, but with normal numbers from <code>0</code> to <code>255</code>. Move the sliders and mix your own color:</p>
+
+      <div class="explorer" data-title="Mix red, green and blue light">
+        <input type="range" name="r" data-label="red" min="0" max="255" value="255">
+        <input type="range" name="g" data-label="green" min="0" max="255" value="107">
+        <input type="range" name="b" data-label="blue" min="0" max="255" value="139">
+        <script type="text/plain">
+          <style>
+            .paint {
+              background-color: rgb({{r}}, {{g}}, {{b}});
+              height: 150px;
+              border-radius: 20px;
+            }
+          </style>
+
+          <div class="paint"></div>
+        </script>
+      </div>
+
+      <p>Try: all three at 0 (black), all at 255 (white), only red and green high (yellow!). Screens make every color by mixing these three lights.</p>
+
+      <h3>4. HSL: the friendliest one</h3>
+      <p>HSL describes color the way people think about it:</p>
+      <ul>
+        <li><strong>Hue</strong>: which color, as a position on the color wheel from <code>0</code> to <code>360</code>.</li>
+        <li><strong>Saturation</strong>: how colorful. <code>0%</code> is gray, <code>100%</code> is very bright.</li>
+        <li><strong>Lightness</strong>: how light. <code>0%</code> is black, <code>50%</code> is normal, <code>100%</code> is white.</li>
+      </ul>
+
+      <div class="hue-strip" role="img" aria-label="The color wheel laid out as a strip: red at 0, yellow at 60, green at 120, cyan at 180, blue at 240, pink-purple at 300, red again at 360"></div>
+      <div class="hue-marks" aria-hidden="true"><span>0 red</span><span>60</span><span>120 green</span><span>180</span><span>240 blue</span><span>300</span><span>360</span></div>
+
+      <div class="explorer" data-title="One hue, a whole matching design">
+        <input type="range" name="h" data-label="hue" min="0" max="360" value="330">
+        <input type="range" name="s" data-label="saturation" min="0" max="100" value="80" data-unit="%">
+        <input type="range" name="l" data-label="lightness" min="20" max="80" value="60" data-unit="%">
+        <script type="text/plain">
+          <style>
+            body {
+              background-color: hsl({{h}}, {{s}}, 95%);
+              color: hsl({{h}}, {{s}}, 20%);
+              font-family: sans-serif;
+              padding: 10px;
+            }
+            button {
+              background-color: hsl({{h}}, {{s}}, {{l}});
+              color: white;
+              border: none;
+              padding: 12px 22px;
+              border-radius: 99px;
+              font-size: 16px;
+            }
+          </style>
+
+          <h2>Matching colors</h2>
+          <p>Everything here uses the same hue.</p>
+          <button>A matching button</button>
+        </script>
+      </div>
+
+      <p>That's the magic of HSL: keep the <strong>hue</strong> the same and change only the lightness, and you get colors that always match. A light version for backgrounds, a dark version for text, and a strong version for buttons.</p>
+    </section>
+
+    <section>
+      <h2>See-through colors</h2>
+      <p>Add a fourth number to make a color see-through. In <code class="k-val">rgba()</code>, the last number goes from <code>0</code> (invisible) to <code>1</code> (solid). The "a" stands for <strong>alpha</strong>, which means transparency.</p>
+
+      <div class="explorer" data-title="Transparency">
+        <input type="range" name="a" data-label="alpha" min="0" max="1" step="0.05" value="0.5">
+        <script type="text/plain">
+          <style>
+            body {
+              background-image: url(images/mountains.svg);
+              background-size: cover;
+              font-family: sans-serif;
+              padding: 30px 16px;
+            }
+            .glass {
+              background-color: rgba(255, 255, 255, {{a}});
+              padding: 20px;
+              border-radius: 16px;
+            }
+          </style>
+
+          <div class="glass">
+            <h2>See-through box</h2>
+            <p>Can you see the mountains behind me?</p>
+          </div>
+        </script>
+      </div>
+
+      <p>You can also write see-through hex codes by adding two more characters (<code>#FF6B8B80</code> is half see-through), or make a whole element see-through with <code><span class="t-prop">opacity</span>: <span class="t-val">0.5</span>;</code>.</p>
+    </section>
+
+    <section>
+      <h2>Picking colors that look good</h2>
+      <p>Fun, friendly websites usually use <strong>soft, light colors</strong> for backgrounds and one or two <strong>strong colors</strong> for buttons and important things. Here's a ready-made pastel palette. Click to copy.</p>
+
+      <div class="swatches">
+        <button class="swatch" type="button" data-copy="#FFE4EC" style="--sw:#FFE4EC"><i></i><span>#FFE4EC<small>soft pink background</small></span></button>
+        <button class="swatch" type="button" data-copy="#FFF4D6" style="--sw:#FFF4D6"><i></i><span>#FFF4D6<small>soft yellow background</small></span></button>
+        <button class="swatch" type="button" data-copy="#E3F6EC" style="--sw:#E3F6EC"><i></i><span>#E3F6EC<small>soft mint background</small></span></button>
+        <button class="swatch" type="button" data-copy="#E6E9FF" style="--sw:#E6E9FF"><i></i><span>#E6E9FF<small>soft blue background</small></span></button>
+        <button class="swatch" type="button" data-copy="#FF5C8A" style="--sw:#FF5C8A"><i></i><span>#FF5C8A<small>strong pink for buttons</small></span></button>
+        <button class="swatch" type="button" data-copy="#5B6CFF" style="--sw:#5B6CFF"><i></i><span>#5B6CFF<small>strong blue for buttons</small></span></button>
+        <button class="swatch" type="button" data-copy="#1F1D2E" style="--sw:#1F1D2E"><i></i><span>#1F1D2E<small>text (softer than black)</small></span></button>
+        <button class="swatch" type="button" data-copy="#6B6880" style="--sw:#6B6880"><i></i><span>#6B6880<small>gray text for details</small></span></button>
+      </div>
+
+      <aside class="note tip">
+        <h4>Color tips</h4>
+        <ul>
+          <li><strong>Pick one main color</strong> for buttons and links. Use it often so your site feels like one thing.</li>
+          <li><strong>Use very dark gray for text</strong>, like <code>#1F1D2E</code>. Pure black can look harsh.</li>
+          <li><strong>Check that text is easy to read.</strong> Light text on a light background is the most common beginner mistake.</li>
+          <li><strong>Get ideas</strong> from palette sites like <strong>coolors.co</strong>.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section>
+      <h2>A quick peek: gradients</h2>
+      <p>A gradient smoothly blends colors together. You'll learn more in the "Make It Beautiful" lesson, but they're too fun not to show now:</p>
+
+      <div class="playground" data-title="A gradient background">
+        <script type="text/plain">
+          <style>
+            body {
+              background: linear-gradient(135deg, #FFD6E7, #D6E4FF);
+              font-family: sans-serif;
+              text-align: center;
+              padding: 40px 10px;
+            }
+          </style>
+
+          <h1>Ooh, gradients ✨</h1>
+          <p>Pink fades into blue.</p>
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Missing semicolon</strong> <code>;</code> at the end of a line. The next line may stop working.</li>
+          <li><strong>Missing <code>#</code></strong> in hex codes: write <code>#FF6B8B</code>, not <code>FF6B8B</code>.</li>
+          <li><strong>British spelling</strong>: CSS only understands <code>color</code>, not <code>colour</code>.</li>
+          <li><strong>Missing curly brace</strong> <code>}</code>. Every rule needs to close.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">Which property changes the color of the text?</p>
+        <div class="opts">
+          <button>background-color</button>
+          <button data-correct>color</button>
+          <button>text-color</button>
+        </div>
+        <p class="why">Just <code>color</code>. There's no property called <code>text-color</code>.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">What color is #FFFFFF?</p>
+        <div class="opts">
+          <button>Black</button>
+          <button data-correct>White</button>
+          <button>Red</button>
+        </div>
+        <p class="why"><code>FF</code> is the most light possible, and all three (red, green, blue) are full. Full light of every color makes white.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>A CSS rule: <code>selector { property: value; }</code></li>
+          <li>CSS goes in a <code>&lt;style&gt;</code> tag inside the <code>&lt;head&gt;</code>.</li>
+          <li><code>color</code> is text, <code>background-color</code> is behind.</li>
+          <li>Colors: names (<code>tomato</code>), hex (<code>#FF6B8B</code>), <code>rgb()</code>, <code>hsl()</code>. Add alpha for see-through.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../assets/course.js"></script>
+</body>
+</html>

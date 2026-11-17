@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Classes, Divs &amp; Sections · Hello HTML</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".." data-lesson="05-classes">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 05 &middot; <b>Styling with CSS</b></p>
+      <div class="hero-code" aria-hidden="true">.class</div>
+      <h1>Classes, Divs &amp; Sections</h1>
+      <p class="lead">So far, a CSS rule changed <em>every</em> element of a kind. Real websites need to style just <em>some</em> things. Classes let you do that, and divs let you group things into boxes you can style.</p>
+      <ul class="learn">
+        <li>Classes and ids</li>
+        <li>div and span</li>
+        <li>Block vs inline</li>
+        <li>Page sections</li>
+        <li>Which rule wins</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>The problem: styling only some things</h2>
+      <p>This rule makes <strong>every</strong> paragraph red. But what if only <em>one</em> paragraph is a warning?</p>
+      <script type="text/plain" class="snippet" data-lang="css">
+        p {
+          color: red; /* every single paragraph turns red */
+        }
+      </script>
+      <p>The answer is a <code class="k-attr">class</code>. A class is a name you make up and stick on elements, like a label on a box. Then CSS can find everything with that label.</p>
+    </section>
+
+    <section>
+      <h2>Classes</h2>
+      <p>In HTML, add a <code class="k-attr">class</code> attribute. In CSS, write the class name with a <strong>dot</strong> in front. The dot means "class".</p>
+
+      <div class="split2">
+        <div>
+          <h4>In HTML</h4>
+          <p><code><span class="t-punc">&lt;</span><span class="t-tag">p</span> <span class="t-attr">class</span>=<span class="t-str">"warning"</span><span class="t-punc">&gt;</span></code></p>
+        </div>
+        <div>
+          <h4>In CSS</h4>
+          <p><code><span class="t-sel">.warning</span> { <span class="t-prop">color</span>: <span class="t-val">red</span>; }</code></p>
+        </div>
+      </div>
+
+      <div class="playground" data-title="A class for warnings">
+        <script type="text/plain">
+          <style>
+            .warning {
+              color: crimson;
+              background-color: mistyrose;
+            }
+            .happy {
+              color: seagreen;
+            }
+          </style>
+
+          <p>Welcome to the pool!</p>
+          <p class="warning">No running near the water.</p>
+          <p>Towels are free.</p>
+          <p class="happy">Have fun and stay cool!</p>
+          <p class="warning">Children must swim with an adult.</p>
+        </script>
+      </div>
+
+      <p>Notice the class <code class="k-sel">.warning</code> is used <strong>twice</strong>. That's the power of classes: write the style once, use it as many times as you want.</p>
+
+      <h3>More than one class</h3>
+      <p>An element can have several classes. Separate them with spaces. Each class adds its own styles.</p>
+
+      <div class="playground" data-title="Combining classes">
+        <script type="text/plain">
+          <style>
+            .tag {
+              padding: 4px 12px;
+              border-radius: 99px;
+              font-family: sans-serif;
+            }
+            .pink { background-color: #FFD6E7; }
+            .blue { background-color: #D6E4FF; }
+            .big { font-size: 24px; }
+          </style>
+
+          <span class="tag pink">Pink</span>
+          <span class="tag blue">Blue</span>
+          <span class="tag pink big">Big and pink</span>
+        </script>
+      </div>
+
+      <aside class="note tip">
+        <h4>Naming classes</h4>
+        <p>Use lowercase words. Use dashes instead of spaces: <code>.main-title</code>, <code>.price-tag</code>, <code>.big-button</code>. Name things by what they <em>are</em> (<code>.warning</code>), not how they look (<code>.red-text</code>), so the name still makes sense if you change the color later.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Ids</h2>
+      <p>An <code class="k-attr">id</code> is like a class, but it's <strong>unique</strong>: only one element on the page can have it, like a passport number. In CSS, you write it with a <strong>hash</strong> <code class="k-sel">#</code>.</p>
+      <script type="text/plain" class="snippet">
+        <h1 id="top">My Page</h1>
+
+        <style>
+          #top { color: purple; }
+        </style>
+      </script>
+      <p>Ids are mostly used for jump links (<code>href="#top"</code>, from the last lesson). <strong>For styling, use classes.</strong> They're more flexible.</p>
+    </section>
+
+    <section>
+      <h2>div and span: boxes for grouping</h2>
+      <p>Sometimes you need a box to hold several things together, like a card with a title, a picture and a button. That's what <code class="k-tag">&lt;div&gt;</code> is for. It means "division" (a section). On its own, it doesn't look like anything. It's an invisible box you can style.</p>
+      <p><code class="k-tag">&lt;span&gt;</code> is the small version: it wraps a few words <em>inside</em> a line of text.</p>
+
+      <h3>Block and inline</h3>
+      <p>Every element is one of two kinds:</p>
+      <div class="flow-demo" role="img" aria-label="Block elements stack and take the full width. Inline elements sit inside a line of text.">
+        <div class="blk">Block: takes the whole width <code>&lt;div&gt; &lt;p&gt; &lt;h1&gt; &lt;ul&gt;</code></div>
+        <div class="blk">Each block starts on a new line, stacked like bricks</div>
+        <div>Inline elements sit <span class="inl">inside the line</span> like words, such as <span class="inl">span</span>, <span class="inl">a</span> and <span class="inl">strong</span>.</div>
+      </div>
+
+      <div class="playground" data-title="Turn on X-ray to see the boxes">
+        <script type="text/plain">
+          <style>
+            .card {
+              background-color: #FFF4D6;
+              border-radius: 16px;
+              padding: 16px;
+              font-family: sans-serif;
+            }
+            .price {
+              background-color: gold;
+              font-weight: bold;
+            }
+          </style>
+
+          <div class="card">
+            <h2>Lemon Cake</h2>
+            <p>Soft, sweet and sunny. Only <span class="price">$4</span> a slice!</p>
+          </div>
+        </script>
+      </div>
+
+      <p>Press <strong>X-ray</strong> and point at things. The <code>div.card</code> is as wide as the whole preview, because it's a <strong>block</strong>. The <code>span.price</code> is only as wide as "$4", because it's <strong>inline</strong>.</p>
+    </section>
+
+    <section>
+      <h2>Page sections</h2>
+      <p>HTML has special boxes that work just like <code>&lt;div&gt;</code> but have a <strong>meaning</strong>. They tell the browser (and Google, and screen readers) what each part of the page is. Most websites are built from these:</p>
+
+      <div class="wire" role="img" aria-label="A web page made of sections: header at the top, nav below it, main content and an aside side by side, footer at the bottom">
+        <div class="w-h">&lt;header&gt;<small>logo and site name</small></div>
+        <div class="w-n">&lt;nav&gt;<small>menu links</small></div>
+        <div class="w-a">&lt;aside&gt;<small>extra info</small></div>
+        <div class="w-m">&lt;main&gt;<small>the main content, made of &lt;section&gt;s</small></div>
+        <div class="w-f">&lt;footer&gt;<small>copyright, contact, links</small></div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tag</th><th>Use it for</th></tr></thead>
+          <tbody>
+            <tr><td><code>&lt;header&gt;</code></td><td>The top of the page: logo, site name, often the menu.</td></tr>
+            <tr><td><code>&lt;nav&gt;</code></td><td>A group of navigation links (the menu).</td></tr>
+            <tr><td><code>&lt;main&gt;</code></td><td>The main content. Only one per page.</td></tr>
+            <tr><td><code>&lt;section&gt;</code></td><td>A part of the page with its own heading, like "Features" or "Prices".</td></tr>
+            <tr><td><code>&lt;article&gt;</code></td><td>Something that makes sense on its own: a blog post, a product, a news story.</td></tr>
+            <tr><td><code>&lt;aside&gt;</code></td><td>Extra side information.</td></tr>
+            <tr><td><code>&lt;footer&gt;</code></td><td>The bottom of the page.</td></tr>
+            <tr><td><code>&lt;div&gt;</code></td><td>Any other box, when none of the above fits.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="playground" data-title="A page made of sections">
+        <script type="text/plain">
+          <style>
+            body { font-family: sans-serif; margin: 0; }
+            header { background-color: #FFD6E7; padding: 12px; }
+            nav { background-color: #FFF4D6; padding: 8px 12px; }
+            main { background-color: #E6E9FF; padding: 12px; }
+            section { background-color: white; padding: 8px 12px; margin-bottom: 8px; }
+            footer { background-color: #E3F6EC; padding: 12px; }
+          </style>
+
+          <header>
+            <h1>Sunny Bakery</h1>
+          </header>
+          <nav>
+            <a href="#">Home</a> · <a href="#">Menu</a> · <a href="#">Contact</a>
+          </nav>
+          <main>
+            <section>
+              <h2>Fresh bread</h2>
+              <p>Baked every morning.</p>
+            </section>
+            <section>
+              <h2>Cakes</h2>
+              <p>For birthdays and every day.</p>
+            </section>
+          </main>
+          <footer>
+            <p>© 2026 Sunny Bakery</p>
+          </footer>
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>All the ways to select things</h2>
+      <p>A <code class="k-sel">selector</code> is how CSS finds elements. These are the ones you'll use 95% of the time:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Selector</th><th>Finds</th></tr></thead>
+          <tbody>
+            <tr><td><code>p</code></td><td>Every <code>&lt;p&gt;</code></td></tr>
+            <tr><td><code>.card</code></td><td>Everything with <code>class="card"</code></td></tr>
+            <tr><td><code>#top</code></td><td>The one element with <code>id="top"</code></td></tr>
+            <tr><td><code>.card p</code></td><td>Every <code>&lt;p&gt;</code> <strong>inside</strong> a <code>.card</code> (note the space)</td></tr>
+            <tr><td><code>h1, h2</code></td><td>Every <code>&lt;h1&gt;</code> <strong>and</strong> every <code>&lt;h2&gt;</code> (note the comma)</td></tr>
+            <tr><td><code>a:hover</code></td><td>A link while the mouse is over it (more in the Buttons lesson)</td></tr>
+            <tr><td><code>*</code></td><td>Every element</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="playground" data-title="Selecting things inside other things">
+        <script type="text/plain">
+          <style>
+            .card p {
+              color: purple;
+            }
+            h1, h2 {
+              font-family: Georgia, serif;
+            }
+          </style>
+
+          <h1>My page</h1>
+          <p>I'm outside the card, so I stay black.</p>
+
+          <div class="card">
+            <h2>A card</h2>
+            <p>I'm inside the card, so I'm purple.</p>
+          </div>
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>When two rules disagree</h2>
+      <p>What if one rule says "red" and another says "blue" for the same element? CSS has simple rules for who wins:</p>
+      <ol>
+        <li><strong>The more specific selector wins.</strong> An id beats a class, and a class beats a tag name: <code>#id</code> &gt; <code>.class</code> &gt; <code>p</code>.</li>
+        <li><strong>If they're equally specific, the one written last wins.</strong></li>
+      </ol>
+      <p>That's why it's called <strong>C</strong>SS: <strong>Cascading</strong> Style Sheets. Styles flow down like a waterfall, and later or more specific ones win.</p>
+
+      <div class="playground" data-title="Who wins?">
+        <script type="text/plain">
+          <style>
+            p { color: blue; }
+            .special { color: green; }
+            p { color: orange; }
+          </style>
+
+          <p>I'm orange (the last p rule wins over the first).</p>
+          <p class="special">I'm green (a class beats a tag).</p>
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn: a profile card</h4>
+        <p>Make a card about yourself in the playground below:</p>
+        <ol>
+          <li>Change the name and the text.</li>
+          <li>Change the card's <code>background-color</code>.</li>
+          <li>Add a class <code>.hobby</code> with a background color, and wrap one of your hobbies in <code>&lt;span class="hobby"&gt;</code>.</li>
+          <li>Make a second card by copying the whole <code>&lt;div class="profile"&gt;</code>.</li>
+        </ol>
+      </aside>
+
+      <div class="playground" data-title="Your profile card">
+        <script type="text/plain">
+          <style>
+            body {
+              font-family: sans-serif;
+              background-color: #F5F3FF;
+            }
+            .profile {
+              background-color: white;
+              padding: 20px;
+              border-radius: 20px;
+            }
+            .name {
+              color: #6C4CE0;
+            }
+          </style>
+
+          <div class="profile">
+            <img src="images/avatar.svg" alt="Profile picture" width="80">
+            <h2 class="name">Sam Rivers</h2>
+            <p>I like drawing, football and making websites.</p>
+          </div>
+        </script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Forgetting the dot</strong> in CSS: <code>warning { }</code> looks for a <code>&lt;warning&gt;</code> tag, which doesn't exist. Write <code>.warning { }</code>.</li>
+          <li><strong>Putting the dot in HTML</strong>: write <code>class="warning"</code>, not <code>class=".warning"</code>.</li>
+          <li><strong>Spaces in class names</strong>: <code>class="big title"</code> is two classes. Use <code>big-title</code> for one.</li>
+          <li><strong>Using the same id twice.</strong> Ids must be unique. Use a class instead.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">How do you select class="price" in CSS?</p>
+        <div class="opts">
+          <button>price { }</button>
+          <button>#price { }</button>
+          <button data-correct>.price { }</button>
+        </div>
+        <p class="why">A dot means class. A hash <code>#</code> means id.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">Which element is inline (sits inside a line of text)?</p>
+        <div class="opts">
+          <button>&lt;div&gt;</button>
+          <button data-correct>&lt;span&gt;</button>
+          <button>&lt;section&gt;</button>
+        </div>
+        <p class="why"><code>&lt;span&gt;</code> wraps words inside a line. <code>&lt;div&gt;</code> and <code>&lt;section&gt;</code> are blocks that take the whole width.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>class="name"</code> in HTML, <code>.name { }</code> in CSS. Use classes for styling.</li>
+          <li><code>id="name"</code> is unique. <code>#name { }</code> in CSS.</li>
+          <li><code>&lt;div&gt;</code> is a block box for grouping, <code>&lt;span&gt;</code> wraps words.</li>
+          <li>Use <code>header</code>, <code>nav</code>, <code>main</code>, <code>section</code>, <code>footer</code> to build pages.</li>
+          <li>More specific wins. If equal, the last one wins.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../assets/course.js"></script>
+</body>
+</html>

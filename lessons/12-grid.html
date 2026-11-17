@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Layout with Grid · Hello HTML</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".." data-lesson="12-grid">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 12 &middot; <b>Layout &amp; pages</b></p>
+      <div class="hero-code" aria-hidden="true">grid</div>
+      <h1>Layout with Grid</h1>
+      <p class="lead">Flexbox arranges things in one line. Grid arranges things in rows <em>and</em> columns at the same time, like a table or a chessboard. It's perfect for photo galleries, card layouts and whole pages.</p>
+      <ul class="learn">
+        <li>Making columns</li>
+        <li>The fr unit</li>
+        <li>Grids that fit any screen</li>
+        <li>Big tiles that span</li>
+        <li>Flexbox or grid?</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Your first grid</h2>
+      <p>Put <code><span class="t-prop">display</span>: <span class="t-val">grid</span></code> on the container, then say how many columns you want with <code class="k-prop">grid-template-columns</code>. The items fill the columns in order, left to right, and start new rows by themselves.</p>
+
+      <div class="explorer" data-title="Choose the number of columns">
+        <input type="range" name="n" data-label="columns" min="1" max="6" value="3">
+        <input type="range" name="gap" data-label="gap" min="0" max="30" value="12" data-unit="px">
+        <script type="text/plain">
+          <style>
+            .grid {
+              display: grid;
+              grid-template-columns: repeat({{n}}, 1fr);
+              gap: {{gap}};
+            }
+            .grid div {
+              background-color: #C9F0DC;
+              padding: 22px 0;
+              border-radius: 12px;
+              text-align: center;
+              font-family: sans-serif;
+              font-weight: bold;
+              color: #1E7A4C;
+            }
+          </style>
+
+          <div class="grid">
+            <div>1</div><div>2</div><div>3</div>
+            <div>4</div><div>5</div><div>6</div>
+            <div>7</div><div>8</div><div>9</div>
+          </div>
+        </script>
+      </div>
+
+      <p><code>repeat(3, 1fr)</code> is a short way to write <code>1fr 1fr 1fr</code>, which means three equal columns.</p>
+
+      <h3>What is fr?</h3>
+      <p><code>fr</code> means <strong>fraction</strong>: a share of the free space. <code>1fr 1fr 1fr</code> is three equal shares. <code>2fr 1fr</code> makes the first column twice as wide as the second. You can mix it with pixels too.</p>
+
+      <div class="explorer" data-title="Different column sizes">
+        <select name="cols" data-label="grid-template-columns">
+          <option>1fr 1fr</option>
+          <option selected>2fr 1fr</option>
+          <option>1fr 2fr 1fr</option>
+          <option>200px 1fr</option>
+          <option>1fr 1fr 1fr 1fr</option>
+          <option>100px 1fr 100px</option>
+        </select>
+        <script type="text/plain">
+          <style>
+            .grid {
+              display: grid;
+              grid-template-columns: {{cols}};
+              gap: 10px;
+              font-family: sans-serif;
+            }
+            .grid div {
+              background-color: #E6E0FF;
+              padding: 24px 8px;
+              border-radius: 12px;
+              text-align: center;
+            }
+          </style>
+
+          <div class="grid">
+            <div>A</div><div>B</div><div>C</div><div>D</div>
+          </div>
+        </script>
+      </div>
+
+      <p>Turn on <strong>X-ray</strong> and compare the widths of each column. With <code>200px 1fr</code>, the first column is exactly 200px and the second takes everything else. That's a classic "sidebar + content" layout.</p>
+    </section>
+
+    <section>
+      <h2>A grid that fits every screen</h2>
+      <p>This one line is the most famous grid trick. It makes as many columns as will fit, each at least 160px wide, and stretches them to fill the row. On a phone you get 2 columns, on a laptop 6 or more, with no extra code.</p>
+
+      <script type="text/plain" class="snippet" data-lang="css">
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      </script>
+
+      <ul>
+        <li><code>repeat(auto-fit, ...)</code>: "make as many columns as fit".</li>
+        <li><code>minmax(160px, 1fr)</code>: "each column is at least 160px, and at most an equal share".</li>
+      </ul>
+
+      <div class="playground" data-title="A photo gallery" data-devices>
+        <script type="text/plain">
+          <style>
+            body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; }
+            .gallery {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+              gap: 12px;
+            }
+            .gallery img {
+              width: 100%;
+              height: 140px;
+              object-fit: cover;
+              border-radius: 14px;
+              display: block;
+            }
+          </style>
+
+          <h2>My gallery</h2>
+          <div class="gallery">
+            <img src="images/mountains.svg" alt="Mountains">
+            <img src="images/flower.svg" alt="Flower">
+            <img src="images/cat.svg" alt="Cat">
+            <img src="images/avatar.svg" alt="Me">
+            <img src="images/flower.svg" alt="Flower again">
+            <img src="images/mountains.svg" alt="More mountains">
+          </div>
+        </script>
+      </div>
+      <p>Press Phone, Tablet and Laptop under the preview and watch the columns change by themselves.</p>
+    </section>
+
+    <section>
+      <h2>Big tiles: spanning</h2>
+      <p>An item can stretch across several columns or rows. On the item, write <code><span class="t-prop">grid-column</span>: <span class="t-val">span 2</span></code> to take two columns, or <code><span class="t-prop">grid-row</span>: <span class="t-val">span 2</span></code> to take two rows. This makes the "bento box" layouts that modern app websites love.</p>
+
+      <div class="playground" data-title="A bento grid" data-stack>
+        <script type="text/plain">
+          <style>
+            body {
+              font-family: system-ui, sans-serif;
+              background: #F6F4FB;
+              margin: 0;
+              padding: 20px;
+            }
+            .bento {
+              display: grid;
+              grid-template-columns: repeat(3, 1fr);
+              grid-auto-rows: 130px;
+              gap: 14px;
+            }
+            .tile {
+              border-radius: 22px;
+              padding: 18px;
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-end;
+            }
+            .tile h3 { margin: 0; }
+            .tile p { margin: 4px 0 0; opacity: 0.75; }
+
+            .big  { grid-column: span 2; grid-row: span 2; background: #FFD6E7; }
+            .tall { grid-row: span 2; background: #D6E4FF; }
+            .wide { grid-column: span 2; background: #FFF1B8; }
+            .one  { background: #D6F5E3; }
+          </style>
+
+          <div class="bento">
+            <div class="tile big"><h3>📅 Plan your week</h3><p>Everything in one calm place.</p></div>
+            <div class="tile tall"><h3>✅ To-dos</h3><p>Tick them off.</p></div>
+            <div class="tile one"><h3>🔔 Reminders</h3></div>
+            <div class="tile wide"><h3>👯 Share with friends</h3><p>Plan things together.</p></div>
+          </div>
+        </script>
+      </div>
+
+      <p>Turn on <strong>X-ray</strong>: every tile lines up with the same invisible columns, even though they're different sizes. That's what makes grid layouts look so tidy.</p>
+    </section>
+
+    <section>
+      <h2>A whole page layout</h2>
+      <p>Grid can also lay out a whole page. <code class="k-prop">grid-template-areas</code> lets you <em>draw</em> the layout with words:</p>
+
+      <div class="playground" data-title="Page layout with named areas">
+        <script type="text/plain">
+          <style>
+            body { margin: 0; font-family: sans-serif; }
+            .page {
+              display: grid;
+              grid-template-columns: 140px 1fr;
+              grid-template-areas:
+                "header header"
+                "side   main"
+                "footer footer";
+              gap: 8px;
+              padding: 8px;
+              min-height: 280px;
+            }
+            header { grid-area: header; background: #FFD6E7; }
+            aside  { grid-area: side;   background: #FFF1B8; }
+            main   { grid-area: main;   background: #D6E4FF; }
+            footer { grid-area: footer; background: #D6F5E3; }
+            header, aside, main, footer { padding: 14px; border-radius: 10px; }
+          </style>
+
+          <div class="page">
+            <header>Header</header>
+            <aside>Sidebar</aside>
+            <main>Main content</main>
+            <footer>Footer</footer>
+          </div>
+        </script>
+      </div>
+      <p>Each word in <code>grid-template-areas</code> is a cell. Repeating a word ("header header") makes that area cover both columns. Then each element says which area it goes in with <code>grid-area</code>.</p>
+    </section>
+
+    <section>
+      <h2>Flexbox or grid?</h2>
+      <div class="split2">
+        <div>
+          <h4>flex</h4>
+          <p><strong>One direction.</strong> A row <em>or</em> a column. Best for small groups: a menu, buttons in a row, an icon next to text, centering something.</p>
+        </div>
+        <div>
+          <h4>grid</h4>
+          <p><strong>Two directions.</strong> Rows <em>and</em> columns. Best for card layouts, galleries, dashboards and whole pages.</p>
+        </div>
+      </div>
+      <p>Real websites use both together: grid for the big layout, flexbox for the small pieces inside. There's no wrong answer. If one feels hard, try the other.</p>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>In the bento grid, change <code>repeat(3, 1fr)</code> to <code>repeat(4, 1fr)</code>. Add a new tile to fill the gap.</li>
+          <li>Make the <code>.one</code> tile span two columns.</li>
+          <li>In the gallery, change <code>160px</code> to <code>100px</code>. What happens on the Phone size?</li>
+        </ol>
+      </aside>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Writing <code>grid-template-column</code></strong> without the <strong>s</strong>. It's <code>grid-template-columns</code>.</li>
+          <li><strong>Using margins between grid items.</strong> Use <code>gap</code> instead.</li>
+          <li><strong>Spanning more columns than exist</strong>, which makes extra columns appear.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">What does grid-template-columns: 1fr 1fr 1fr; make?</p>
+        <div class="opts">
+          <button>Three rows</button>
+          <button data-correct>Three equal columns</button>
+          <button>One column, 3 pixels wide</button>
+        </div>
+        <p class="why">Each <code>1fr</code> is one equal share of the space, so three of them make three equal columns.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">How do you make a tile two columns wide?</p>
+        <div class="opts">
+          <button data-correct>grid-column: span 2;</button>
+          <button>width: 2fr;</button>
+          <button>columns: 2;</button>
+        </div>
+        <p class="why"><code>span 2</code> stretches the item across two columns. Use <code>grid-row: span 2</code> for two rows.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>display: grid</code> + <code>grid-template-columns</code> on the container.</li>
+          <li><code>fr</code> = a share of the free space. <code>repeat(3, 1fr)</code> = 3 equal columns.</li>
+          <li><code>repeat(auto-fit, minmax(160px, 1fr))</code> fits any screen.</li>
+          <li><code>grid-column: span 2</code> makes a big tile. <code>gap</code> for spacing.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../assets/course.js"></script>
+</body>
+</html>

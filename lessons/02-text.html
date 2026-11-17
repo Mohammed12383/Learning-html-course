@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Headings, Paragraphs &amp; Lists · Hello HTML</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".." data-lesson="02-text">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 02 &middot; <b>HTML basics</b></p>
+      <div class="hero-code" aria-hidden="true">&lt;h1&gt;</div>
+      <h1>Headings, Paragraphs &amp; Lists</h1>
+      <p class="lead">Most of a website is text. In this lesson you'll learn the tags for titles, paragraphs, important words and lists. With just these, you can already make a real page.</p>
+      <ul class="learn">
+        <li>Six sizes of headings</li>
+        <li>Paragraphs and line breaks</li>
+        <li>Bold, italic and highlight</li>
+        <li>Bullet and numbered lists</li>
+        <li>Special characters</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Headings: h1 to h6</h2>
+      <p>Headings are titles. There are six levels, from <code class="k-tag">&lt;h1&gt;</code> (the biggest, most important) to <code class="k-tag">&lt;h6&gt;</code> (the smallest). The number is the level of importance, like chapters and sub-chapters in a book.</p>
+
+      <div class="playground" data-title="All six headings">
+        <script type="text/plain">
+          <h1>Heading 1: the page title</h1>
+          <h2>Heading 2: a section</h2>
+          <h3>Heading 3: a part of a section</h3>
+          <h4>Heading 4</h4>
+          <h5>Heading 5</h5>
+          <h6>Heading 6</h6>
+        </script>
+      </div>
+
+      <p>Turn on <strong>X-ray</strong> in the preview and point at each heading to see how tall it is in pixels. Without any styling, browsers make headings these sizes:</p>
+
+      <div class="type-scale" role="img" aria-label="Default heading sizes from 32 pixels for h1 down to about 11 pixels for h6">
+        <div><code>h1 32px</code><span style="font-size:32px;font-weight:700">Big title</span></div>
+        <div><code>h2 24px</code><span style="font-size:24px;font-weight:700">Section title</span></div>
+        <div><code>h3 19px</code><span style="font-size:18.7px;font-weight:700">Smaller title</span></div>
+        <div><code>h4 16px</code><span style="font-size:16px;font-weight:700">Same as normal text, but bold</span></div>
+        <div><code>h5 13px</code><span style="font-size:13.3px;font-weight:700">Small</span></div>
+        <div><code>h6 11px</code><span style="font-size:10.7px;font-weight:700">Tiny</span></div>
+      </div>
+
+      <aside class="note tip">
+        <h4>Tip</h4>
+        <p>Use <strong>one <code>&lt;h1&gt;</code> per page</strong> for the main title. Then use <code>&lt;h2&gt;</code> for each section, and <code>&lt;h3&gt;</code> inside sections. Don't pick a heading just because of its size. Google and people who use screen readers rely on headings to understand your page. You'll change sizes with CSS later.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Paragraphs, line breaks and lines</h2>
+      <p>You already know <code class="k-tag">&lt;p&gt;</code>. Each paragraph starts on a new line with a little space above and below it. Two more useful tags:</p>
+      <ul>
+        <li><code class="k-tag">&lt;br&gt;</code> breaks the line, like pressing Enter. Good for addresses and poems.</li>
+        <li><code class="k-tag">&lt;hr&gt;</code> draws a line across the page to separate parts.</li>
+      </ul>
+
+      <div class="playground" data-title="Paragraphs, br and hr">
+        <script type="text/plain">
+          <p>Our bakery opens every day at 7 in the morning.
+          We bake bread, cakes and cookies.</p>
+
+          <hr>
+
+          <p>
+            Sunny Bakery<br>
+            12 Lemon Street<br>
+            Muscat
+          </p>
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Bold, italic and more</h2>
+      <p>Inside a paragraph, you can mark special words. These tags sit <em>inside</em> your text and don't start a new line.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Tag</th><th>What it means</th><th>Looks like</th></tr></thead>
+          <tbody>
+            <tr><td><code>&lt;strong&gt;</code></td><td>Important</td><td><strong>bold</strong></td></tr>
+            <tr><td><code>&lt;em&gt;</code></td><td>Emphasis (say it differently)</td><td><em>italic</em></td></tr>
+            <tr><td><code>&lt;mark&gt;</code></td><td>Highlighted</td><td><mark>yellow marker</mark></td></tr>
+            <tr><td><code>&lt;small&gt;</code></td><td>Small print</td><td><small>smaller text</small></td></tr>
+            <tr><td><code>&lt;s&gt;</code></td><td>No longer true</td><td><s>crossed out</s></td></tr>
+            <tr><td><code>&lt;sup&gt;</code></td><td>Superscript</td><td>x<sup>2</sup></td></tr>
+            <tr><td><code>&lt;sub&gt;</code></td><td>Subscript</td><td>H<sub>2</sub>O</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="playground" data-title="Marking words">
+        <script type="text/plain">
+          <p>This cake is <strong>very</strong> sweet.</p>
+          <p>I <em>really</em> mean it.</p>
+          <p>Today only: <mark>50% off</mark> all cookies!</p>
+          <p>Price: <s>$10</s> $5 <small>(while they last)</small></p>
+          <p>Water is H<sub>2</sub>O. A square is x<sup>2</sup>.</p>
+        </script>
+      </div>
+
+      <aside class="note idea">
+        <h4>Good to know</h4>
+        <p>You might also see <code>&lt;b&gt;</code> (bold) and <code>&lt;i&gt;</code> (italic). They look the same as <code>&lt;strong&gt;</code> and <code>&lt;em&gt;</code>, but <code>&lt;strong&gt;</code> and <code>&lt;em&gt;</code> also tell the browser the words are important. Prefer those.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Lists</h2>
+      <p>Lists are everywhere on websites: menus, features, steps, ingredients. There are two kinds.</p>
+
+      <div class="split2">
+        <div>
+          <h4>&lt;ul&gt;</h4>
+          <p><strong>Unordered list.</strong> Bullet points. Use it when the order doesn't matter, like a shopping list.</p>
+        </div>
+        <div>
+          <h4>&lt;ol&gt;</h4>
+          <p><strong>Ordered list.</strong> Numbers. Use it when the order matters, like steps in a recipe.</p>
+        </div>
+      </div>
+
+      <p>Each item in either list goes inside <code class="k-tag">&lt;li&gt;</code> (list item). The <code class="k-tag">&lt;li&gt;</code> tags always sit inside the <code class="k-tag">&lt;ul&gt;</code> or <code class="k-tag">&lt;ol&gt;</code>.</p>
+
+      <div class="nest" role="img" aria-label="A ul box containing three li boxes">
+        <span class="lbl">&lt;ul&gt;</span>
+        <div class="nest b"><span class="lbl">&lt;li&gt;</span><span class="nest-text">Flour</span></div>
+        <div class="nest b"><span class="lbl">&lt;li&gt;</span><span class="nest-text">Eggs</span></div>
+        <div class="nest b"><span class="lbl">&lt;li&gt;</span><span class="nest-text">Milk</span></div>
+      </div>
+
+      <div class="playground" data-title="Two kinds of lists">
+        <script type="text/plain">
+          <h3>Shopping list</h3>
+          <ul>
+            <li>Flour</li>
+            <li>Eggs</li>
+            <li>Milk</li>
+          </ul>
+
+          <h3>How to make tea</h3>
+          <ol>
+            <li>Boil the water</li>
+            <li>Add the tea bag</li>
+            <li>Wait 3 minutes</li>
+          </ol>
+        </script>
+      </div>
+
+      <h3>Lists inside lists</h3>
+      <p>You can put a whole list inside a list item. This is how websites make menus with sub-menus.</p>
+
+      <div class="playground" data-title="A nested list">
+        <script type="text/plain">
+          <ul>
+            <li>Fruit
+              <ul>
+                <li>Apples</li>
+                <li>Bananas</li>
+              </ul>
+            </li>
+            <li>Vegetables</li>
+          </ul>
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Special characters and emoji</h2>
+      <p>Because <code>&lt;</code> and <code>&gt;</code> are used for tags, you can't type them directly in your text. Use these short codes instead. They're called <strong>entities</strong> and they start with <code>&amp;</code> and end with <code>;</code>.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Type this</th><th>To get</th></tr></thead>
+          <tbody>
+            <tr><td><code>&amp;lt;</code></td><td>&lt; (less than)</td></tr>
+            <tr><td><code>&amp;gt;</code></td><td>&gt; (greater than)</td></tr>
+            <tr><td><code>&amp;amp;</code></td><td>&amp; (and)</td></tr>
+            <tr><td><code>&amp;copy;</code></td><td>&copy; (copyright)</td></tr>
+            <tr><td><code>&amp;nbsp;</code></td><td>a space that never breaks onto a new line</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Emoji work directly. Just paste them in: 🍰 🌸 ✨. (That's why the skeleton has <code>&lt;meta charset="utf-8"&gt;</code>.)</p>
+    </section>
+
+    <section>
+      <h2>Put it all together</h2>
+      <p>Here's a full recipe page using everything from this lesson. Read it line by line and see how each part shows up on the right.</p>
+
+      <div class="playground" data-title="A recipe page">
+        <script type="text/plain">
+          <h1>Fluffy Pancakes 🥞</h1>
+          <p>Soft, golden pancakes ready in <strong>20 minutes</strong>.
+          Perfect for a <em>lazy</em> weekend.</p>
+
+          <hr>
+
+          <h2>Ingredients</h2>
+          <ul>
+            <li>1 cup of flour</li>
+            <li>1 egg</li>
+            <li>1 cup of milk</li>
+            <li>2 spoons of sugar</li>
+          </ul>
+
+          <h2>Steps</h2>
+          <ol>
+            <li>Mix everything in a bowl.</li>
+            <li>Heat a pan with a little butter.</li>
+            <li>Pour in some batter and wait for bubbles.</li>
+            <li>Flip it and cook one more minute.</li>
+          </ol>
+
+          <p><mark>Tip:</mark> add blueberries for extra fun!</p>
+          <p><small>&copy; 2026 My Recipe Box</small></p>
+        </script>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Change the recipe to your favorite food.</li>
+          <li>Add a new ingredient to the bullet list.</li>
+          <li>Add a 5th step at the end of the numbered list.</li>
+          <li>Make one word in the description bold with <code>&lt;strong&gt;</code>.</li>
+          <li>Add an <code>&lt;h2&gt;Tips&lt;/h2&gt;</code> section with a list of 2 tips.</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section>
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Using a heading to make text big.</strong> Pick headings for their meaning. Size comes from CSS.</li>
+          <li><strong>Putting <code>&lt;li&gt;</code> without a <code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code> around it.</strong> List items always live inside a list.</li>
+          <li><strong>Pressing Enter to make a new line.</strong> Use a new <code>&lt;p&gt;</code> or a <code>&lt;br&gt;</code>.</li>
+          <li><strong>Skipping heading levels</strong> (h1 then h4). Go in order: h1, h2, h3.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">Which list would you use for the steps of a recipe?</p>
+        <div class="opts">
+          <button>&lt;ul&gt;</button>
+          <button data-correct>&lt;ol&gt;</button>
+          <button>&lt;li&gt; on its own</button>
+        </div>
+        <p class="why">Steps have an order, so use an ordered list <code>&lt;ol&gt;</code>. It numbers them for you: 1, 2, 3.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">How many &lt;h1&gt; headings should a page usually have?</p>
+        <div class="opts">
+          <button data-correct>One</button>
+          <button>One per section</button>
+          <button>As many as you like</button>
+        </div>
+        <p class="why">One <code>&lt;h1&gt;</code> for the main title. Sections use <code>&lt;h2&gt;</code>.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code> for titles, most important first.</li>
+          <li><code>&lt;p&gt;</code> for paragraphs, <code>&lt;br&gt;</code> for a new line, <code>&lt;hr&gt;</code> for a dividing line.</li>
+          <li><code>&lt;strong&gt;</code> bold, <code>&lt;em&gt;</code> italic, <code>&lt;mark&gt;</code> highlight.</li>
+          <li><code>&lt;ul&gt;</code> bullets, <code>&lt;ol&gt;</code> numbers, <code>&lt;li&gt;</code> for each item.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../assets/course.js"></script>
+</body>
+</html>

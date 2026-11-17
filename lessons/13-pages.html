@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Multiple Pages · Hello HTML</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".." data-lesson="13-pages">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 13 &middot; <b>Layout &amp; pages</b></p>
+      <div class="hero-code" aria-hidden="true">href</div>
+      <h1>Multiple Pages</h1>
+      <p class="lead">A website is usually more than one page: Home, About, Contact. In this lesson you'll build a real three-page website with a menu that connects the pages and one CSS file that styles them all.</p>
+      <ul class="learn">
+        <li>A website is a folder</li>
+        <li>Linking pages together</li>
+        <li>Paths and folders</li>
+        <li>One CSS file for every page</li>
+        <li>Putting your site online</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>A website is a folder of files</h2>
+      <p>Each page of a website is its own <code>.html</code> file. All the files live together in one folder:</p>
+
+<pre class="tree"><span class="dir">little-leaf-cafe/</span>
+├── <span class="html">index.html</span>      <span class="c">← the home page (always called index.html)</span>
+├── <span class="html">about.html</span>      <span class="c">← the About page</span>
+├── <span class="html">contact.html</span>    <span class="c">← the Contact page</span>
+├── <span class="css">style.css</span>       <span class="c">← the design, shared by every page</span>
+└── <span class="dir">images/</span>
+    ├── <span class="img">logo.png</span>
+    └── <span class="img">cake.jpg</span></pre>
+
+      <p>When someone visits <code>littleleafcafe.com</code>, the browser automatically opens <code>index.html</code>. That's why the home page always has that name. The other pages have names you choose, and their address is the file name: <code>littleleafcafe.com/about.html</code>.</p>
+    </section>
+
+    <section>
+      <h2>Linking the pages together</h2>
+      <p>To go from one page to another, use a normal link with the <strong>file name</strong> as the <code class="k-attr">href</code>:</p>
+      <script type="text/plain" class="snippet">
+        <a href="about.html">About us</a>
+      </script>
+      <p>Below is a complete three-page website. Each tab at the top of the code is a separate file. <strong>Click the menu links in the preview</strong> to move between pages, and watch the code switch to that page's file too.</p>
+
+      <div class="playground" data-title="A three-page website" data-hint="Click Home, About and Contact in the preview. Then open style.css and change the colors: every page changes at once.">
+        <script type="text/plain" data-name="index.html">
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Little Leaf Café</title>
+            <link rel="stylesheet" href="style.css">
+          </head>
+          <body>
+            <nav class="nav">
+              <a class="logo" href="index.html">🌿 Little Leaf</a>
+              <div class="links">
+                <a class="active" href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+              </div>
+            </nav>
+
+            <main class="page">
+              <h1>Cozy coffee &amp; fresh cakes</h1>
+              <p>A small café with big windows, soft music and the best lemon cake in town.</p>
+              <a class="btn" href="contact.html">Visit us</a>
+            </main>
+
+            <footer>© 2026 Little Leaf Café</footer>
+          </body>
+          </html>
+        </script>
+        <script type="text/plain" data-name="about.html">
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>About · Little Leaf Café</title>
+            <link rel="stylesheet" href="style.css">
+          </head>
+          <body>
+            <nav class="nav">
+              <a class="logo" href="index.html">🌿 Little Leaf</a>
+              <div class="links">
+                <a href="index.html">Home</a>
+                <a class="active" href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+              </div>
+            </nav>
+
+            <main class="page">
+              <h1>Our story</h1>
+              <p>Little Leaf started in 2019 with one coffee machine and a dream.
+              Today we bake everything fresh every morning.</p>
+              <img src="images/flower.svg" alt="A flower from our garden" width="160">
+            </main>
+
+            <footer>© 2026 Little Leaf Café</footer>
+          </body>
+          </html>
+        </script>
+        <script type="text/plain" data-name="contact.html">
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Contact · Little Leaf Café</title>
+            <link rel="stylesheet" href="style.css">
+          </head>
+          <body>
+            <nav class="nav">
+              <a class="logo" href="index.html">🌿 Little Leaf</a>
+              <div class="links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a class="active" href="contact.html">Contact</a>
+              </div>
+            </nav>
+
+            <main class="page">
+              <h1>Come say hi</h1>
+              <p>📍 12 Garden Street</p>
+              <p>🕗 Open every day, 8:00 to 18:00</p>
+              <a class="btn" href="index.html">← Back home</a>
+            </main>
+
+            <footer>© 2026 Little Leaf Café</footer>
+          </body>
+          </html>
+        </script>
+        <script type="text/plain" data-name="style.css">
+          /* One file styles every page */
+          body {
+            margin: 0;
+            font-family: system-ui, sans-serif;
+            background-color: #F4FAF5;
+            color: #1F2E25;
+          }
+
+          .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background-color: white;
+          }
+          .logo {
+            font-weight: 800;
+            color: #2F8F5B;
+            text-decoration: none;
+          }
+          .links {
+            display: flex;
+            gap: 6px;
+          }
+          .links a {
+            color: #1F2E25;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 999px;
+          }
+          .links a.active {
+            background-color: #DDF2E4;
+            color: #2F8F5B;
+            font-weight: 600;
+          }
+
+          .page {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px 24px;
+          }
+          h1 { font-size: 34px; margin-top: 0; }
+
+          .btn {
+            display: inline-block;
+            background-color: #2F8F5B;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 999px;
+            text-decoration: none;
+          }
+
+          footer {
+            text-align: center;
+            padding: 20px;
+            color: #6B7C70;
+            font-size: 14px;
+          }
+        </script>
+      </div>
+
+      <h3>What to notice</h3>
+      <ul>
+        <li><strong>The menu is copied onto every page.</strong> Each page needs its own menu so people can always move around.</li>
+        <li><strong>The <code>active</code> class</strong> moves to a different link on each page. That's how the menu shows which page you're on.</li>
+        <li><strong>Every page links to <code>style.css</code></strong>. Change a color there once, and all three pages change.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>One CSS file for the whole site</h2>
+      <p>Until now, the CSS was inside a <code>&lt;style&gt;</code> tag on the page. For a website with several pages, put the CSS in its own file ending in <code>.css</code>, and connect each page to it with a <code class="k-tag">&lt;link&gt;</code> in the <code>&lt;head&gt;</code>:</p>
+
+      <div class="anatomy" role="img" aria-label="A link tag with rel stylesheet and href style.css">
+        <div class="part tag"><span>&lt;link</span><small>tag</small></div>
+        <div class="part attr"><span> rel</span><small>relationship</small></div>
+        <div class="part val"><span>="stylesheet"</span><small>"this is my CSS"</small></div>
+        <div class="part attr"><span> href</span><small>where</small></div>
+        <div class="part val"><span>="style.css"</span><small>the CSS file</small></div>
+        <div class="part tag"><span>&gt;</span><small></small></div>
+      </div>
+
+      <p>A <code>.css</code> file contains only CSS rules, with no <code>&lt;style&gt;</code> tags around them. Look at the <strong>style.css</strong> tab in the playground above.</p>
+
+      <aside class="note tip">
+        <h4>Why a separate file is better</h4>
+        <ul>
+          <li><strong>Change once, update everywhere.</strong> A new brand color means editing one line, not ten pages.</li>
+          <li><strong>Faster.</strong> The browser downloads the CSS once and remembers it for the other pages.</li>
+          <li><strong>Tidier.</strong> HTML files hold content, the CSS file holds design.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Paths: finding files in folders</h2>
+      <p>A <strong>path</strong> is directions from the current page to another file. It works for links, pictures and CSS files. Imagine this website:</p>
+
+<pre class="tree"><span class="dir">my-website/</span>
+├── <span class="html">index.html</span>
+├── <span class="css">style.css</span>
+├── <span class="dir">images/</span>
+│   └── <span class="img">cat.jpg</span>
+└── <span class="dir">blog/</span>
+    └── <span class="html">first-post.html</span></pre>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>From</th><th>To</th><th>Path</th><th>Means</th></tr></thead>
+          <tbody>
+            <tr><td>index.html</td><td>style.css</td><td><code>style.css</code></td><td>Same folder: just the name.</td></tr>
+            <tr><td>index.html</td><td>cat.jpg</td><td><code>images/cat.jpg</code></td><td>Go <strong>into</strong> the images folder.</td></tr>
+            <tr><td>index.html</td><td>first-post.html</td><td><code>blog/first-post.html</code></td><td>Go into the blog folder.</td></tr>
+            <tr><td>first-post.html</td><td>index.html</td><td><code>../index.html</code></td><td><code>..</code> means go <strong>up</strong> one folder.</td></tr>
+            <tr><td>first-post.html</td><td>cat.jpg</td><td><code>../images/cat.jpg</code></td><td>Up one folder, then into images.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="note idea">
+        <h4>Think of it like this</h4>
+        <p>A path is like giving directions in a building. <code>images/cat.jpg</code> means "go into the room called images and get cat.jpg". <code>../</code> means "go back out to the hallway first".</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Putting your website online</h2>
+      <p>Right now your website only lives on your computer. To let anyone in the world visit it, you put the folder on a <strong>web host</strong>: a computer that's always online. For simple HTML and CSS sites, there are great free options:</p>
+
+      <ol class="steps">
+        <li><div><p><strong>Netlify Drop</strong> (easiest): go to <strong>app.netlify.com/drop</strong> and drag your website folder onto the page. In a few seconds you get a real web address you can share.</p></div></li>
+        <li><div><p><strong>GitHub Pages</strong>: put your files in a GitHub repository (like this course!). In the repository's <strong>Settings &rarr; Pages</strong>, choose your main branch and press Save. Your site appears at <code>your-name.github.io/repository-name</code>.</p></div></li>
+        <li><div><p><strong>Your own name</strong>: later, you can buy an address like <code>yourname.com</code> (about $10 to $15 a year) and connect it to Netlify or GitHub Pages.</p></div></li>
+      </ol>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>In <code>style.css</code>, change the green <code>#2F8F5B</code> to another color in all three places. Visit every page.</li>
+          <li>On the About page, add a paragraph about the café's owner.</li>
+          <li>On the Contact page, add a phone link: <code>&lt;a href="tel:+96812345678"&gt;Call us&lt;/a&gt;</code>.</li>
+          <li>Rename "Contact" to "Visit" in the menu. (You have to change it on all three pages!)</li>
+        </ol>
+      </aside>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Wrong file name in the link</strong>: <code>href="About.html"</code> won't find <code>about.html</code>.</li>
+          <li><strong>Forgetting <code>rel="stylesheet"</code></strong> in the link tag, so the CSS doesn't load.</li>
+          <li><strong>Putting <code>&lt;style&gt;</code> tags inside a .css file.</strong> A CSS file holds only the rules.</li>
+          <li><strong>Forgetting <code>../</code></strong> when a page inside a folder links to files outside it.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">What should the home page file be called?</p>
+        <div class="opts">
+          <button>home.html</button>
+          <button data-correct>index.html</button>
+          <button>main.html</button>
+        </div>
+        <p class="why">Web servers open <code>index.html</code> automatically when someone visits your site's address.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">A page is inside a folder called blog. How does it link to style.css in the main folder?</p>
+        <div class="opts">
+          <button>style.css</button>
+          <button>blog/style.css</button>
+          <button data-correct>../style.css</button>
+        </div>
+        <p class="why"><code>../</code> goes up out of the blog folder to the main folder, where style.css is.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>A website is a folder. The home page is <code>index.html</code>.</li>
+          <li>Link pages with <code>&lt;a href="about.html"&gt;</code>. Put the menu on every page.</li>
+          <li>Share one design: <code>&lt;link rel="stylesheet" href="style.css"&gt;</code> in every head.</li>
+          <li>Paths: <code>folder/file</code> goes in, <code>../</code> goes up.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../assets/course.js"></script>
+</body>
+</html>

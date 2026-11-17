@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hello HTML</title>
+  <meta name="description" content="A visual HTML and CSS course for total beginners: code, explanation and the live website side by side.">
+  <link rel="stylesheet" href="assets/course.css">
+</head>
+<body data-root=".">
+
+  <section class="home-hero">
+    <div>
+      <p class="eyebrow">A visual course for total beginners</p>
+      <h1>Build <span class="tagword">&lt;websites&gt;</span> from zero</h1>
+      <p class="lead">Every lesson shows a short explanation, the code, and the real website side by side. Change the code and watch the website change right away. No experience needed.</p>
+      <div class="cta-row">
+        <a class="btn" href="lessons/00-start-here.html">Start lesson 0</a>
+        <a class="btn ghost" href="lessons/cheatsheet.html">Open the cheat sheet</a>
+      </div>
+    </div>
+
+    <div class="playground" data-title="This is real code. Try it!" data-hint="Change Sam to your name, or change #FF6B8B to #4F7CFF. The website updates as you type.">
+      <script type="text/plain">
+        <style>
+          body {
+            font-family: system-ui, sans-serif;
+            background: #FFF4E8;
+            padding: 24px;
+          }
+          .card {
+            background: white;
+            padding: 28px;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 12px 30px rgba(255, 120, 80, 0.2);
+          }
+          button {
+            background: #FF6B8B;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 999px;
+            font-size: 16px;
+          }
+        </style>
+
+        <div class="card">
+          <h1>Hi, I'm Sam 👋</h1>
+          <p>I'm learning to build websites.</p>
+          <button>Say hello</button>
+        </div>
+      </script>
+    </div>
+  </section>
+
+  <section class="home-section">
+    <h2>How every lesson works</h2>
+    <p>You learn by looking and trying. Each idea comes with a small piece of code you can change.</p>
+    <div class="how">
+      <div>
+        <span class="glyph">1 &middot; read</span>
+        <h3>A short, simple explanation</h3>
+        <p>Plain words and pictures. Every new word is explained the first time you meet it.</p>
+      </div>
+      <div>
+        <span class="glyph">2 &middot; see</span>
+        <h3>Code and website side by side</h3>
+        <p>The code is on the left, the website it makes is on the right. Sliders let you change sizes and colors and watch both update.</p>
+      </div>
+      <div>
+        <span class="glyph">3 &middot; try</span>
+        <h3>Change it, break it, fix it</h3>
+        <p>Small tasks and quick quizzes help it stick. You can't break anything here: the Reset button brings the code back.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section">
+    <h2>The course</h2>
+    <p>17 lessons, in order. Each one takes about 15 to 30 minutes. Your progress is saved in this browser.</p>
+    <div id="course-map"></div>
+  </section>
+
+  <section class="home-section">
+    <h2>The files in this course</h2>
+    <p>The course is itself a website made with HTML and CSS, so you can open any file and see how it was built.</p>
+<pre class="tree"><span class="dir">Learning-html-course/</span>
+├── <span class="html">index.html</span>          <span class="c">← this page</span>
+├── <span class="dir">lessons/</span>            <span class="c">← one file per lesson</span>
+├── <span class="dir">practice/</span>
+│   └── <span class="html">index.html</span>      <span class="c">← a blank page for you to practice in</span>
+├── <span class="dir">my-site/</span>            <span class="c">← the finished final project</span>
+│   ├── <span class="html">index.html</span>
+│   ├── <span class="html">about.html</span>
+│   └── <span class="css">style.css</span>
+└── <span class="dir">assets/</span>             <span class="c">← the course's own design and code</span></pre>
+  </section>
+
+  <footer class="footer">
+    Hello HTML &middot; a beginner course for HTML and CSS. Made to be changed: open any file and play.
+  </footer>
+
+  <script src="assets/course.js"></script>
+</body>
+</html>

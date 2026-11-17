@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Phones &amp; Tablets · Hello HTML</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".." data-lesson="15-responsive">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 15 &middot; <b>Polish</b></p>
+      <div class="hero-code" aria-hidden="true">@media</div>
+      <h1>Phones &amp; Tablets</h1>
+      <p class="lead">More than half of all website visits happen on phones. A <strong>responsive</strong> website changes its layout to fit any screen: one column on a phone, several columns on a laptop. Here's how.</p>
+      <ul class="learn">
+        <li>The viewport tag</li>
+        <li>Layouts that stretch</li>
+        <li>Media queries</li>
+        <li>Text that grows with the screen</li>
+        <li>Testing on a phone size</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Why it matters</h2>
+      <div class="screens" role="img" aria-label="Screen widths to scale: phone 390 pixels, tablet 820, laptop 1440">
+        <div class="screen-row"><span class="name">Phone</span><span class="bar" style="width: 27%">390px</span></div>
+        <div class="screen-row"><span class="name">Tablet</span><span class="bar" style="width: 57%">820px</span></div>
+        <div class="screen-row"><span class="name">Laptop</span><span class="bar" style="width: 100%">1440px</span></div>
+      </div>
+      <p>A laptop is almost <strong>four times wider</strong> than a phone. A layout with three cards side by side looks great on a laptop, but on a phone each card would be squeezed to a thin strip. So we tell the browser: "on small screens, stack them instead".</p>
+      <p>In this lesson, use the <strong>Phone</strong>, <strong>Tablet</strong> and <strong>Laptop</strong> buttons under each preview to switch screen sizes. The current width is shown on the right.</p>
+    </section>
+
+    <section>
+      <h2>Step 1: the viewport tag</h2>
+      <p>Without this tag in the <code>&lt;head&gt;</code>, phones pretend to be a 980px-wide computer and shrink the whole page down until it's tiny. Always include it. (It's already in the VS Code <kbd>!</kbd> skeleton.)</p>
+      <script type="text/plain" class="snippet">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+      </script>
+      <p>It means: "make the page as wide as the device's screen, and don't zoom".</p>
+    </section>
+
+    <section>
+      <h2>Step 2: layouts that stretch</h2>
+      <p>Many things you've already learned are responsive by themselves. Use them and most of your site will just work:</p>
+      <ul>
+        <li><code>max-width</code> instead of <code>width</code> for containers.</li>
+        <li><code>img { max-width: 100%; height: auto; }</code> so pictures never stick out.</li>
+        <li><code>flex-wrap: wrap</code> so rows break onto new lines.</li>
+        <li><code>repeat(auto-fit, minmax(200px, 1fr))</code> for grids that pick their own number of columns.</li>
+        <li><code>%</code>, <code>rem</code> and <code>vw</code> instead of large fixed pixel sizes.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Step 3: media queries</h2>
+      <p>Sometimes you need different rules for different screen sizes. A <strong>media query</strong> is a set of CSS rules that only works when a condition is true, like "the screen is 600px wide or less".</p>
+
+      <div class="anatomy" role="img" aria-label="A media query: at-media, then the condition max-width 600px, then the rules inside braces only apply when the screen is 600 pixels or narrower">
+        <div class="part sel"><span>@media </span><small>"only when..."</small></div>
+        <div class="part val"><span>(max-width: 600px)</span><small>the screen is 600px<br>or narrower</small></div>
+        <div class="part punc"><span> { </span><small></small></div>
+        <div class="part prop"><span>...rules...</span><small>use these rules</small></div>
+        <div class="part punc"><span> }</span><small></small></div>
+      </div>
+
+      <div class="playground" data-title="Three columns on a laptop, one on a phone" data-devices>
+        <script type="text/plain">
+          <style>
+            body { font-family: system-ui, sans-serif; background: #FFF8F0; margin: 0; padding: 16px; }
+            .features {
+              display: grid;
+              grid-template-columns: 1fr 1fr 1fr;
+              gap: 16px;
+            }
+            .card { background: white; border-radius: 18px; padding: 20px; }
+            h1 { font-size: 40px; }
+
+            /* Phones: one column and a smaller title */
+            @media (max-width: 600px) {
+              .features {
+                grid-template-columns: 1fr;
+              }
+              h1 {
+                font-size: 28px;
+              }
+            }
+          </style>
+
+          <h1>Why you'll love it</h1>
+          <div class="features">
+            <div class="card"><h3>☁️ Light</h3><p>Weighs less than a cloud.</p></div>
+            <div class="card"><h3>🔋 Lasts</h3><p>Battery for a whole week.</p></div>
+            <div class="card"><h3>💧 Tough</h3><p>Rain? No problem.</p></div>
+          </div>
+        </script>
+      </div>
+
+      <p>Press <strong>Phone 375</strong> and the cards stack. Press <strong>Laptop 1280</strong> and they sit side by side. The rules inside <code>@media (max-width: 600px)</code> only apply on screens 600px wide or less. Everywhere else, the normal rules are used.</p>
+
+      <h3>Where to switch: breakpoints</h3>
+      <p>The width where your layout changes is called a <strong>breakpoint</strong>. You don't need many. These are the common ones:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Breakpoint</th><th>Catches</th></tr></thead>
+          <tbody>
+            <tr><td><code>(max-width: 600px)</code></td><td>Phones</td></tr>
+            <tr><td><code>(max-width: 900px)</code></td><td>Phones and small tablets</td></tr>
+            <tr><td><code>(min-width: 1200px)</code></td><td>Big screens only</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <aside class="note tip">
+        <h4>Choose breakpoints by looking</h4>
+        <p>Don't think "iPhone" or "iPad". Make the preview narrower and wider, and add a breakpoint wherever your design starts to look squeezed. That's the right number for <em>your</em> design.</p>
+      </aside>
+
+      <h3>max-width vs min-width</h3>
+      <div class="split2">
+        <div>
+          <h4>max-width</h4>
+          <p>"<strong>This wide or smaller.</strong>" Design for laptops first, then fix things for phones.</p>
+        </div>
+        <div>
+          <h4>min-width</h4>
+          <p>"<strong>This wide or bigger.</strong>" Design for phones first, then add columns for bigger screens. Many pros prefer this ("mobile first").</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>A menu that adapts</h2>
+      <p>Navigation bars are the classic problem: five links fit on a laptop, but not on a phone. One simple fix is to let the menu go underneath the logo on small screens:</p>
+
+      <div class="playground" data-title="Responsive navigation" data-devices>
+        <script type="text/plain">
+          <style>
+            body { margin: 0; font-family: system-ui, sans-serif; }
+            .nav {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 16px 24px;
+              background: #1F1D2E;
+            }
+            .logo { color: #FFD84D; font-weight: 800; font-size: 20px; }
+            .links { display: flex; gap: 18px; }
+            .links a { color: white; text-decoration: none; }
+
+            @media (max-width: 600px) {
+              .nav {
+                flex-direction: column;
+                gap: 12px;
+              }
+              .links {
+                gap: 12px;
+                flex-wrap: wrap;
+                justify-content: center;
+              }
+            }
+          </style>
+
+          <nav class="nav">
+            <div class="logo">★ Starlight</div>
+            <div class="links">
+              <a href="#">Home</a>
+              <a href="#">Shows</a>
+              <a href="#">Tickets</a>
+              <a href="#">Gallery</a>
+              <a href="#">Contact</a>
+            </div>
+          </nav>
+        </script>
+      </div>
+      <p>Bigger websites use a "hamburger" button (☰) that opens the menu. That needs a little JavaScript, which is a great thing to learn next.</p>
+    </section>
+
+    <section>
+      <h2>Text that grows with the screen</h2>
+      <p>A big title that looks perfect on a laptop is often too big for a phone. <code>clamp()</code> picks a size that grows with the screen, but never goes below a minimum or above a maximum:</p>
+
+      <div class="anatomy" role="img" aria-label="clamp with three values: minimum 28 pixels, preferred 6vw, maximum 64 pixels">
+        <div class="part prop"><span>font-size: </span><small></small></div>
+        <div class="part val"><span>clamp(</span><small></small></div>
+        <div class="part val"><span>28px, </span><small>smallest</small></div>
+        <div class="part val"><span>6vw, </span><small>grows with<br>the screen</small></div>
+        <div class="part val"><span>64px</span><small>biggest</small></div>
+        <div class="part val"><span>)</span><small></small></div>
+      </div>
+
+      <div class="playground" data-title="A title that scales" data-devices>
+        <script type="text/plain">
+          <style>
+            body { font-family: system-ui, sans-serif; text-align: center; padding: 30px 16px; }
+            h1 {
+              font-size: clamp(28px, 6vw, 64px);
+              line-height: 1.1;
+              margin: 0;
+            }
+          </style>
+
+          <h1>Make something wonderful today</h1>
+        </script>
+      </div>
+      <p>Switch between Phone and Laptop. No media query needed!</p>
+    </section>
+
+    <section>
+      <h2>Testing on your own computer</h2>
+      <p>Chrome has a phone simulator built in:</p>
+      <ol class="steps">
+        <li><div><p>Open your page in Chrome and press <kbd>F12</kbd> (or right-click &rarr; <strong>Inspect</strong>).</p></div></li>
+        <li><div><p>Click the little phone-and-tablet icon at the top of the panel, or press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> (<kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> on a Mac).</p></div></li>
+        <li><div><p>Pick a phone from the list at the top, or drag the edges to any width.</p></div></li>
+      </ol>
+      <p>And of course: open your site on your real phone too. Nothing beats testing with your own thumb.</p>
+
+      <aside class="note tip">
+        <h4>Phone checklist</h4>
+        <ul>
+          <li>Nothing scrolls sideways.</li>
+          <li>Text is at least 16px and easy to read.</li>
+          <li>Buttons and links are big enough to tap (44px tall).</li>
+          <li>Pictures fit the screen.</li>
+          <li>Nothing important only works with hover.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>In the three-column example, add a tablet breakpoint: at <code>(max-width: 900px)</code>, use <strong>two</strong> columns. (Put it <em>above</em> the 600px one, so the phone rule wins on phones.)</li>
+          <li>In the navigation, hide the Gallery link on phones. Give it <code>class="extra"</code> and use <code>.extra { display: none; }</code> inside the media query.</li>
+          <li>Give the scaling title a different minimum and maximum.</li>
+        </ol>
+      </aside>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Forgetting the viewport meta tag.</strong> The page looks tiny on phones.</li>
+          <li><strong>Fixed widths</strong> like <code>width: 900px</code>. Use <code>max-width</code>.</li>
+          <li><strong>Media query in the wrong place.</strong> Put media queries at the <em>end</em> of your CSS, so they win over the normal rules above them.</li>
+          <li><strong>A missing brace.</strong> A media query has its own <code>{ }</code> around the rules, which have their own <code>{ }</code> too.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">When do the rules inside @media (max-width: 600px) apply?</p>
+        <div class="opts">
+          <button>When the screen is wider than 600px</button>
+          <button data-correct>When the screen is 600px wide or narrower</button>
+          <button>Always</button>
+        </div>
+        <p class="why"><code>max-width: 600px</code> means "up to 600px", so phones and small screens.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>Always include <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code>.</li>
+          <li>Use <code>max-width</code>, <code>flex-wrap</code>, <code>auto-fit</code> grids and <code>max-width: 100%</code> images.</li>
+          <li><code>@media (max-width: 600px) { ... }</code> for phone-only rules. Put them at the end.</li>
+          <li><code>font-size: clamp(min, vw, max)</code> for titles that scale.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../assets/course.js"></script>
+</body>
+</html>

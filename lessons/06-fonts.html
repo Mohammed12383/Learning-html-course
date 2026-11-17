@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fonts &amp; Text Style · Hello HTML</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".." data-lesson="06-fonts">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 06 &middot; <b>Styling with CSS</b></p>
+      <div class="hero-code" aria-hidden="true">font</div>
+      <h1>Fonts &amp; Text Style</h1>
+      <p class="lead">The font is the personality of your website. A round, friendly font feels fun. A thin, elegant font feels fancy. In this lesson you'll learn to choose fonts and control size, weight and spacing.</p>
+      <ul class="learn">
+        <li>Choosing a font</li>
+        <li>Free Google Fonts</li>
+        <li>Size, weight and line height</li>
+        <li>Alignment and spacing</li>
+        <li>Good font pairs</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>font-family: choosing a font</h2>
+      <p>The <code class="k-prop">font-family</code> property picks the font. You give a list, separated by commas. The browser uses the first one it has. If it doesn't have that font, it tries the next one. These backups are called <strong>fallbacks</strong>.</p>
+
+      <div class="anatomy" role="img" aria-label="font-family with three choices: Georgia first, then Times New Roman in quotes, then the general family serif">
+        <div class="part prop"><span>font-family: </span><small>property</small></div>
+        <div class="part val"><span>Georgia, </span><small>1st choice</small></div>
+        <div class="part val"><span>"Times New Roman", </span><small>2nd choice<br>(quotes: has spaces)</small></div>
+        <div class="part val"><span>serif</span><small>last resort:<br>any serif font</small></div>
+        <div class="part punc"><span>;</span><small></small></div>
+      </div>
+
+      <p>Always end the list with a general family, so there's always something that works:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>General family</th><th>What it looks like</th></tr></thead>
+          <tbody>
+            <tr><td><code>sans-serif</code></td><td style="font-family: sans-serif">Clean, modern letters without little feet. Most websites use this.</td></tr>
+            <tr><td><code>serif</code></td><td style="font-family: serif">Letters with little "feet", like in books and newspapers.</td></tr>
+            <tr><td><code>monospace</code></td><td style="font-family: monospace">Every letter is the same width, like code.</td></tr>
+            <tr><td><code>cursive</code></td><td style="font-family: cursive">Like handwriting.</td></tr>
+            <tr><td><code>system-ui</code></td><td style="font-family: system-ui">The font your phone or computer uses for its menus.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="playground" data-title="Fonts every computer has">
+        <script type="text/plain">
+          <style>
+            .a { font-family: Arial, sans-serif; }
+            .b { font-family: Georgia, serif; }
+            .c { font-family: "Courier New", monospace; }
+            .d { font-family: Verdana, sans-serif; }
+            .e { font-family: system-ui, sans-serif; }
+          </style>
+
+          <p class="a">Arial: plain and simple</p>
+          <p class="b">Georgia: classic, like a book</p>
+          <p class="c">Courier New: like a typewriter</p>
+          <p class="d">Verdana: wide and easy to read</p>
+          <p class="e">system-ui: looks like your device</p>
+        </script>
+      </div>
+
+      <aside class="note tip">
+        <h4>Set the font once, on the body</h4>
+        <p>Text styles are <strong>inherited</strong>: elements inside another element get its font and color too. So put your main font on <code>body</code>, and the whole page uses it. Then only change the font for headings if you want something different.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Google Fonts: 1,500+ free fonts</h2>
+      <p>The fonts above are already on every computer, but they're a bit boring. <strong>Google Fonts</strong> has more than a thousand free fonts you can use on any website. Here's how:</p>
+
+      <ol class="steps">
+        <li><div><p>Go to <a href="https://fonts.google.com" target="_blank" rel="noopener">fonts.google.com</a> and click a font you like, for example <strong>Poppins</strong>.</p></div></li>
+        <li><div><p>Click <strong>Get font</strong>, then <strong>Get embed code</strong>.</p></div></li>
+        <li><div><p>Copy the <code>&lt;link&gt;</code> lines and paste them into your page's <code>&lt;head&gt;</code>.</p></div></li>
+        <li><div><p>Use the font name in your CSS: <code>font-family: "Poppins", sans-serif;</code></p></div></li>
+      </ol>
+
+      <div class="playground" data-title="Using Google Fonts">
+        <script type="text/plain">
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;700&display=swap">
+
+          <style>
+            body {
+              font-family: "Poppins", sans-serif;
+              background-color: #FFF4E8;
+              padding: 10px;
+            }
+            h1 {
+              font-family: "Pacifico", cursive;
+              color: #FF6B4A;
+              font-weight: normal;
+            }
+          </style>
+
+          <h1>Taco Tuesday</h1>
+          <p>The best tacos in town, every <strong>Tuesday</strong> night.</p>
+        </script>
+      </div>
+
+      <p>The <code class="k-tag">&lt;link&gt;</code> tag loads the font from Google. It has no closing tag. Try changing <code>Pacifico</code> to <code>Lobster</code> in both places (the link and the CSS).</p>
+
+      <h3>Fonts that look great together</h3>
+      <p>A common trick: one font with personality for headings, and one easy-to-read font for everything else.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Headings</th><th>Body text</th><th>Feeling</th></tr></thead>
+          <tbody>
+            <tr><td>Poppins (bold)</td><td>Inter</td><td>Modern, clean, friendly</td></tr>
+            <tr><td>Fredoka</td><td>Nunito</td><td>Round, playful, cute</td></tr>
+            <tr><td>Playfair Display</td><td>Lato</td><td>Elegant, fancy</td></tr>
+            <tr><td>Space Grotesk</td><td>DM Sans</td><td>Techy, cool</td></tr>
+            <tr><td>Bricolage Grotesque</td><td>Figtree</td><td>Fun and modern (this course uses these!)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Size, weight and spacing</h2>
+      <p>Move the sliders to see what each property does.</p>
+
+      <div class="explorer" data-title="Size, weight and spacing">
+        <input type="range" name="size" data-label="font-size" min="10" max="72" value="32" data-unit="px">
+        <select name="weight" data-label="font-weight">
+          <option>300</option><option>400</option><option>500</option><option>600</option><option selected>700</option><option>800</option><option>900</option>
+        </select>
+        <input type="range" name="lh" data-label="line-height" min="0.8" max="2.4" step="0.1" value="1.2">
+        <input type="range" name="ls" data-label="letter-spacing" min="-3" max="12" step="0.5" value="0" data-unit="px">
+        <script type="text/plain">
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
+
+          <style>
+            h1 {
+              font-family: "Poppins", sans-serif;
+              font-size: {{size}};
+              font-weight: {{weight}};
+              line-height: {{lh}};
+              letter-spacing: {{ls}};
+            }
+          </style>
+
+          <h1>Big ideas start with small steps</h1>
+        </script>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Property</th><th>What it does</th><th>Good values</th></tr></thead>
+          <tbody>
+            <tr><td><code>font-size</code></td><td>How big the letters are.</td><td><code>16px</code> for normal text, <code>32px</code> to <code>64px</code> for big titles</td></tr>
+            <tr><td><code>font-weight</code></td><td>How thick (bold) the letters are. <code>400</code> is normal, <code>700</code> is bold.</td><td><code>400</code> for text, <code>600</code> to <code>800</code> for titles</td></tr>
+            <tr><td><code>line-height</code></td><td>The space between lines. <code>1.5</code> means 1.5 times the font size.</td><td><code>1.5</code> to <code>1.7</code> for paragraphs, <code>1.1</code> to <code>1.2</code> for big titles</td></tr>
+            <tr><td><code>letter-spacing</code></td><td>The space between letters.</td><td><code>0</code> usually. A little extra for small capital labels.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="note idea">
+        <h4>Why line-height has no unit</h4>
+        <p><code>line-height: 1.5</code> means "1.5 times the font size". If the text gets bigger, the space between lines grows with it. That's why it's usually written without <code>px</code>.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Alignment and decoration</h2>
+
+      <div class="explorer" data-title="Align, transform and decorate">
+        <select name="align" data-label="text-align">
+          <option>left</option><option selected>center</option><option>right</option><option>justify</option>
+        </select>
+        <select name="tt" data-label="text-transform">
+          <option>none</option><option selected>uppercase</option><option>lowercase</option><option>capitalize</option>
+        </select>
+        <select name="td" data-label="text-decoration">
+          <option selected>none</option><option>underline</option><option>line-through</option><option>underline wavy hotpink</option>
+        </select>
+        <select name="fs" data-label="font-style">
+          <option selected>normal</option><option>italic</option>
+        </select>
+        <script type="text/plain">
+          <style>
+            body { font-family: sans-serif; }
+            .label {
+              text-transform: {{tt}};
+              letter-spacing: 2px;
+              color: #FF5C8A;
+              font-size: 13px;
+            }
+            .label, h2, p {
+              text-align: {{align}};
+            }
+            h2 {
+              text-decoration: {{td}};
+              font-style: {{fs}};
+            }
+          </style>
+
+          <p class="label">new this week</p>
+          <h2>Strawberry smoothies</h2>
+          <p>Fresh strawberries, banana and a little honey,
+          blended until smooth and pink.</p>
+        </script>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Property</th><th>Values</th></tr></thead>
+          <tbody>
+            <tr><td><code>text-align</code></td><td><code>left</code>, <code>center</code>, <code>right</code>, <code>justify</code> (straight edges on both sides)</td></tr>
+            <tr><td><code>text-transform</code></td><td><code>uppercase</code> (ALL CAPS), <code>lowercase</code>, <code>capitalize</code> (Each Word)</td></tr>
+            <tr><td><code>text-decoration</code></td><td><code>none</code>, <code>underline</code>, <code>line-through</code>. Use <code>none</code> to remove the underline from links.</td></tr>
+            <tr><td><code>font-style</code></td><td><code>normal</code>, <code>italic</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Readable text</h2>
+      <p>Long lines are tiring to read, because your eyes get lost going back to the start of the next line. Keep paragraphs about <strong>60 to 75 characters</strong> wide. The <code>ch</code> unit is the width of one character, so <code>max-width: 65ch</code> is perfect.</p>
+
+      <div class="playground" data-title="Comfortable reading" data-devices>
+        <script type="text/plain">
+          <style>
+            body {
+              font-family: Georgia, serif;
+              font-size: 18px;
+              line-height: 1.7;
+              color: #2B2838;
+            }
+            .story {
+              max-width: 65ch;
+              margin: 0 auto;
+            }
+          </style>
+
+          <div class="story">
+            <h1>The Little Lighthouse</h1>
+            <p>On a rocky island far out at sea stood a little lighthouse.
+            Every night it turned its light around and around, so the ships
+            could find their way home through the dark and the fog. It was
+            small, but it was never afraid of the storms.</p>
+          </div>
+        </script>
+      </div>
+
+      <p>Press <strong>Laptop 1280</strong> under the preview: even on a wide screen, the text stays a comfortable width in the middle.</p>
+
+      <h3>Text shadow</h3>
+      <p>A soft shadow behind text can make it pop. <code class="k-prop">text-shadow</code> takes: how far right, how far down, how blurry, and a color.</p>
+      <div class="playground" data-title="Text shadow">
+        <script type="text/plain">
+          <style>
+            h1 {
+              font-family: sans-serif;
+              font-size: 48px;
+              color: #FFD84D;
+              text-shadow: 3px 3px 0 #FF5C8A;
+            }
+          </style>
+
+          <h1>POP!</h1>
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Font names with spaces need quotes</strong>: <code>"Times New Roman"</code>, <code>"Playfair Display"</code>.</li>
+          <li><strong>Using a Google Font without the <code>&lt;link&gt;</code></strong>. The browser doesn't have it, so it uses the fallback.</li>
+          <li><strong>Text too small.</strong> Normal text should be at least 16px.</li>
+          <li><strong>Too many fonts.</strong> Two is plenty. Three at most.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">Which font-weight is normal (not bold) text?</p>
+        <div class="opts">
+          <button>100</button>
+          <button data-correct>400</button>
+          <button>700</button>
+        </div>
+        <p class="why"><code>400</code> is normal and <code>700</code> is bold. You can also write <code>normal</code> and <code>bold</code>.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">Why end font-family with something like sans-serif?</p>
+        <div class="opts">
+          <button>It makes the text bigger</button>
+          <button data-correct>It's a backup if the other fonts are missing</button>
+          <button>It's required or the page breaks</button>
+        </div>
+        <p class="why">If the computer doesn't have your first choices, the browser uses any sans-serif font instead of an ugly default.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>font-family: "Poppins", sans-serif;</code> with a fallback at the end.</li>
+          <li>Google Fonts: paste the <code>&lt;link&gt;</code> in the head, then use the name.</li>
+          <li><code>font-size</code>, <code>font-weight</code>, <code>line-height</code>, <code>letter-spacing</code>.</li>
+          <li><code>text-align</code>, <code>text-transform</code>, <code>text-decoration</code>.</li>
+          <li>Set your main font on <code>body</code>. Keep lines about 65 characters wide.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../assets/course.js"></script>
+</body>
+</html>

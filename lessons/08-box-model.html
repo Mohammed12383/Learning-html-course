@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spacing: The Box Model · Hello HTML</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".." data-lesson="08-box-model">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 08 &middot; <b>Styling with CSS</b></p>
+      <div class="hero-code" aria-hidden="true">padding</div>
+      <h1>Spacing: The Box Model</h1>
+      <p class="lead">Good spacing is the biggest difference between a messy website and a beautiful one. Every element is a box with layers of space around it. Once you understand these layers, you can place anything exactly where you want.</p>
+      <ul class="learn">
+        <li>Padding, border, margin</li>
+        <li>Shorthand for four sides</li>
+        <li>Rounded corners</li>
+        <li>Shadows</li>
+        <li>box-sizing</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Every element is a box</h2>
+      <p>Every element on a page is a rectangle with four layers, from the inside out:</p>
+
+      <div class="boxmodel" role="img" aria-label="Box model diagram: content in the middle, padding around it, then the border, then margin on the outside">
+        <div class="bm bm-margin"><b>margin</b>
+          <div class="bm bm-border"><b>border</b>
+            <div class="bm bm-padding"><b>padding</b>
+              <div class="bm-content">content</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Layer</th><th>What it is</th></tr></thead>
+          <tbody>
+            <tr><td><strong>content</strong></td><td>The text or picture itself.</td></tr>
+            <tr><td><code>padding</code></td><td>Space <strong>inside</strong> the box, between the content and the edge. It has the box's background color.</td></tr>
+            <tr><td><code>border</code></td><td>The <strong>edge</strong> of the box. A line you can see (or not).</td></tr>
+            <tr><td><code>margin</code></td><td>Space <strong>outside</strong> the box, pushing other things away. Always see-through.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="note idea">
+        <h4>Think of it like this</h4>
+        <p>Imagine a framed photo on a wall. The <strong>photo</strong> is the content. The white card around the photo is the <strong>padding</strong>. The wooden <strong>frame</strong> is the border. The empty wall between this frame and the next one is the <strong>margin</strong>.</p>
+      </aside>
+
+      <div class="explorer" data-title="Build a box layer by layer">
+        <input type="range" name="pad" data-label="padding" min="0" max="60" value="24" data-unit="px">
+        <input type="range" name="bw" data-label="border width" min="0" max="16" value="4" data-unit="px">
+        <input type="color" name="bc" data-label="border color" value="#9C7BD6">
+        <input type="range" name="mar" data-label="margin" min="0" max="60" value="20" data-unit="px">
+        <script type="text/plain">
+          <style>
+            body {
+              background-color: #FFF4D6;
+              margin: 0;
+              font-family: sans-serif;
+            }
+            .box {
+              background-color: white;
+              padding: {{pad}};
+              border: {{bw}} solid {{bc}};
+              margin: {{mar}};
+            }
+          </style>
+
+          <div class="box">I'm the content. Watch the space around me.</div>
+          <div class="box">I'm a second box. The margin keeps us apart.</div>
+        </script>
+      </div>
+
+      <p>Move the <strong>padding</strong> slider: the white area grows, because padding is <em>inside</em> the box. Move the <strong>margin</strong>: the yellow gap around and between the boxes grows, because margin is <em>outside</em>.</p>
+      <p>Turn on <strong>X-ray</strong> too. You'll see that padding and border make the box bigger, but margin doesn't.</p>
+    </section>
+
+    <section>
+      <h2>Four sides, one line</h2>
+      <p>A box has four sides: top, right, bottom and left. You can set each side on its own:</p>
+      <script type="text/plain" class="snippet" data-lang="css">
+        .box {
+          padding-top: 10px;
+          padding-right: 20px;
+          padding-bottom: 10px;
+          padding-left: 20px;
+        }
+      </script>
+      <p>But that's a lot of typing. The <strong>shorthand</strong> does it in one line. It works the same for <code>padding</code> and <code>margin</code>:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>You write</th><th>It means</th></tr></thead>
+          <tbody>
+            <tr><td><code>padding: 20px;</code></td><td>All four sides 20px.</td></tr>
+            <tr><td><code>padding: 10px 20px;</code></td><td>Top and bottom 10px. Left and right 20px.</td></tr>
+            <tr><td><code>padding: 10px 20px 30px;</code></td><td>Top 10px. Left and right 20px. Bottom 30px.</td></tr>
+            <tr><td><code>padding: 10px 20px 30px 40px;</code></td><td>Top, right, bottom, left. Clockwise, like a clock starting at 12.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="note tip">
+        <h4>A trick to remember the order</h4>
+        <p>With four values, think of the word <strong>TRouBLe</strong>: <strong>T</strong>op, <strong>R</strong>ight, <strong>B</strong>ottom, <strong>L</strong>eft.</p>
+      </aside>
+
+      <div class="playground" data-title="Shorthand in action">
+        <script type="text/plain">
+          <style>
+            span {
+              display: inline-block;
+              background-color: #D6E4FF;
+              margin: 6px;
+              font-family: sans-serif;
+            }
+            .a { padding: 20px; }
+            .b { padding: 10px 30px; }
+            .c { padding: 4px 40px 30px 4px; }
+          </style>
+
+          <span class="a">20px</span>
+          <span class="b">10px 30px</span>
+          <span class="c">4px 40px 30px 4px</span>
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Borders</h2>
+      <p>The <code class="k-prop">border</code> shorthand takes three things: <strong>width</strong>, <strong>style</strong> and <strong>color</strong>.</p>
+
+      <div class="anatomy" role="img" aria-label="border: 2px solid hotpink. 2px is the width, solid is the style, hotpink is the color">
+        <div class="part prop"><span>border: </span><small>property</small></div>
+        <div class="part val"><span>2px </span><small>width</small></div>
+        <div class="part val"><span>solid </span><small>style</small></div>
+        <div class="part val"><span>hotpink</span><small>color</small></div>
+        <div class="part punc"><span>;</span><small></small></div>
+      </div>
+
+      <div class="playground" data-title="Border styles">
+        <script type="text/plain">
+          <style>
+            p {
+              padding: 10px;
+              font-family: sans-serif;
+            }
+            .solid  { border: 3px solid hotpink; }
+            .dashed { border: 3px dashed hotpink; }
+            .dotted { border: 3px dotted hotpink; }
+            .double { border: 6px double hotpink; }
+            .bottom { border-bottom: 3px solid hotpink; }
+            .left   { border-left: 6px solid hotpink; }
+          </style>
+
+          <p class="solid">solid</p>
+          <p class="dashed">dashed</p>
+          <p class="dotted">dotted</p>
+          <p class="double">double</p>
+          <p class="bottom">only the bottom</p>
+          <p class="left">only the left side</p>
+        </script>
+      </div>
+      <p>To remove a border (for example, on buttons), use <code><span class="t-prop">border</span>: <span class="t-val">none</span>;</code></p>
+    </section>
+
+    <section>
+      <h2>Rounded corners</h2>
+      <p><code class="k-prop">border-radius</code> rounds the corners. Bigger number, rounder corner. Round corners make a design feel soft and friendly.</p>
+
+      <div class="explorer" data-title="From square to circle">
+        <input type="range" name="r" data-label="border-radius" min="0" max="100" value="24" data-unit="px">
+        <script type="text/plain">
+          <style>
+            .shape {
+              width: 160px;
+              height: 160px;
+              background-color: #FF8FAB;
+              border-radius: {{r}};
+            }
+          </style>
+
+          <div class="shape"></div>
+        </script>
+      </div>
+
+      <ul>
+        <li><code>border-radius: 50%</code> on a square makes a <strong>circle</strong>. Great for profile pictures.</li>
+        <li><code>border-radius: 999px</code> on a wide box makes a <strong>pill</strong> shape. Great for buttons and tags.</li>
+        <li>You can round each corner differently: <code>border-radius: 40px 0 40px 0</code> (top-left, top-right, bottom-right, bottom-left).</li>
+      </ul>
+
+      <div class="playground" data-title="Circles, pills and leaves">
+        <script type="text/plain">
+          <style>
+            .avatar {
+              width: 90px;
+              height: 90px;
+              border-radius: 50%;
+            }
+            .pill {
+              display: inline-block;
+              background-color: #D6F5E3;
+              padding: 8px 18px;
+              border-radius: 999px;
+              font-family: sans-serif;
+            }
+            .leaf {
+              width: 90px;
+              height: 90px;
+              background-color: #6CC28A;
+              border-radius: 0 60px 0 60px;
+            }
+          </style>
+
+          <img class="avatar" src="images/avatar.svg" alt="Round profile picture">
+          <p><span class="pill">I'm a pill</span></p>
+          <div class="leaf"></div>
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Margin: space outside</h2>
+      <p>Margin pushes things away from each other. Two very useful tricks:</p>
+      <ul>
+        <li><code><span class="t-prop">margin</span>: <span class="t-val">0</span>;</code> removes the space browsers add on their own. The <code>&lt;body&gt;</code> has 8px of margin by default, and headings and paragraphs have some above and below.</li>
+        <li><code><span class="t-prop">margin</span>: <span class="t-val">0 auto</span>;</code> centers a box that has a width or max-width. <code>auto</code> means "split the leftover space equally on the left and right".</li>
+      </ul>
+
+      <div class="playground" data-title="Centering with margin: auto">
+        <script type="text/plain">
+          <style>
+            body {
+              margin: 0;
+              background-color: #EEF0FF;
+              font-family: sans-serif;
+            }
+            .card {
+              width: 220px;
+              margin: 30px auto;
+              padding: 20px;
+              background-color: white;
+              border-radius: 16px;
+              text-align: center;
+            }
+          </style>
+
+          <div class="card">I'm centered!</div>
+        </script>
+      </div>
+
+      <aside class="note idea">
+        <h4>A strange thing about margins</h4>
+        <p>When two boxes stack on top of each other, their top and bottom margins <strong>don't add up</strong>. If one has a 20px bottom margin and the next has a 30px top margin, the gap is 30px (the bigger one), not 50px. This is called <strong>margin collapsing</strong>. It's normal, and good to know when a gap looks smaller than you expected.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>box-sizing: the setting everyone uses</h2>
+      <p>Here's a surprise. If you set <code>width: 200px</code> and then add <code>padding: 20px</code> and a <code>5px</code> border, the box becomes <strong>250px</strong> wide! The padding and border are added <em>on top of</em> the width. That makes sizes confusing.</p>
+      <p>The fix is one line: <code><span class="t-prop">box-sizing</span>: <span class="t-val">border-box</span>;</code>. Now padding and border fit <em>inside</em> the width, so a 200px box stays 200px.</p>
+
+      <div class="playground" data-title="Turn on X-ray and compare the widths">
+        <script type="text/plain">
+          <style>
+            .box {
+              width: 200px;
+              padding: 20px;
+              border: 5px solid #9C7BD6;
+              margin-bottom: 10px;
+              font-family: sans-serif;
+            }
+            .normal { box-sizing: content-box; } /* the browser's default */
+            .better { box-sizing: border-box; }
+          </style>
+
+          <div class="box normal">I'm 250px wide</div>
+          <div class="box better">I'm 200px wide</div>
+        </script>
+      </div>
+
+      <p>Almost every website starts its CSS with this rule, so <em>every</em> element works the easy way. Put it at the top of every stylesheet you write:</p>
+      <script type="text/plain" class="snippet" data-lang="css">
+        * {
+          box-sizing: border-box;
+        }
+      </script>
+    </section>
+
+    <section>
+      <h2>Shadows</h2>
+      <p><code class="k-prop">box-shadow</code> adds a shadow behind a box, making it look like it's floating above the page. It takes: how far <strong>right</strong>, how far <strong>down</strong>, how <strong>blurry</strong>, and a <strong>color</strong> (usually a see-through black).</p>
+
+      <div class="explorer" data-title="Make it float">
+        <input type="range" name="x" data-label="right" min="-30" max="30" value="0" data-unit="px">
+        <input type="range" name="y" data-label="down" min="-30" max="40" value="12" data-unit="px">
+        <input type="range" name="blur" data-label="blur" min="0" max="80" value="30" data-unit="px">
+        <input type="range" name="a" data-label="darkness" min="0" max="0.6" step="0.02" value="0.15">
+        <script type="text/plain">
+          <style>
+            body {
+              background-color: #F6F4FB;
+              padding: 30px;
+              font-family: sans-serif;
+            }
+            .card {
+              background-color: white;
+              padding: 24px;
+              border-radius: 20px;
+              box-shadow: {{x}} {{y}} {{blur}} rgba(0, 0, 0, {{a}});
+            }
+          </style>
+
+          <div class="card">
+            <h3>Floating card</h3>
+            <p>Soft shadows look modern and friendly.</p>
+          </div>
+        </script>
+      </div>
+
+      <aside class="note tip">
+        <h4>Shadow recipes</h4>
+        <ul>
+          <li><strong>Soft and modern:</strong> <code>0 10px 30px rgba(0, 0, 0, 0.08)</code></li>
+          <li><strong>Small, for buttons:</strong> <code>0 2px 6px rgba(0, 0, 0, 0.15)</code></li>
+          <li><strong>Fun, flat and solid:</strong> <code>6px 6px 0 #1F1D2E</code> (no blur)</li>
+          <li><strong>Colored glow:</strong> <code>0 10px 25px rgba(255, 92, 138, 0.4)</code></li>
+        </ul>
+        <p>Big blur with a light color looks the most natural. Dark, sharp shadows look old-fashioned (unless that's the style you want).</p>
+      </aside>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn: a product card</h4>
+        <ol>
+          <li>Give the card more <code>padding</code> so it can breathe.</li>
+          <li>Round the corners more.</li>
+          <li>Make the picture a circle with <code>border-radius: 50%</code>.</li>
+          <li>Add a <code>border</code> to the card, then try removing it and using only a shadow.</li>
+          <li>Use <code>margin: 20px auto</code> on the card to center it.</li>
+        </ol>
+      </aside>
+
+      <div class="playground" data-title="Product card">
+        <script type="text/plain">
+          <style>
+            * { box-sizing: border-box; }
+            body {
+              background-color: #FFF0F5;
+              font-family: sans-serif;
+              margin: 0;
+              padding: 20px;
+            }
+            .card {
+              max-width: 260px;
+              background-color: white;
+              padding: 12px;
+              border-radius: 8px;
+              box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            }
+            .card img {
+              width: 100%;
+              border-radius: 8px;
+            }
+            .price {
+              color: #FF5C8A;
+              font-weight: bold;
+            }
+          </style>
+
+          <div class="card">
+            <img src="images/flower.svg" alt="A pink flower">
+            <h3>Happy Flower</h3>
+            <p class="price">$12</p>
+          </div>
+        </script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Mixing up padding and margin.</strong> Space <em>inside</em> the background = padding. Space <em>between</em> boxes = margin.</li>
+          <li><strong>Wrong border order</strong>: <code>border: solid 2px</code> usually works, but always write width, style, color to be safe.</li>
+          <li><strong>Forgetting the style</strong>: <code>border: 2px hotpink</code> shows nothing. It needs <code>solid</code>.</li>
+          <li><strong>Forgetting box-sizing</strong>, then wondering why boxes are too wide.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">You want more space between the text and the edge of its colored box. Which property?</p>
+        <div class="opts">
+          <button data-correct>padding</button>
+          <button>margin</button>
+          <button>border</button>
+        </div>
+        <p class="why">Padding is the space inside the box, between the content and the edge.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">What does margin: 10px 20px; mean?</p>
+        <div class="opts">
+          <button>Left 10px, right 20px</button>
+          <button data-correct>Top and bottom 10px, left and right 20px</button>
+          <button>Top 10px, bottom 20px</button>
+        </div>
+        <p class="why">With two values, the first is top and bottom, the second is left and right.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>content → <code>padding</code> (inside) → <code>border</code> (edge) → <code>margin</code> (outside).</li>
+          <li>1 value = all sides. 2 values = top/bottom, left/right. 4 values = top, right, bottom, left.</li>
+          <li><code>border: 2px solid color;</code> and <code>border-radius</code> for round corners.</li>
+          <li><code>box-shadow: 0 10px 30px rgba(0,0,0,0.08);</code> for a soft shadow.</li>
+          <li>Start every stylesheet with <code>* { box-sizing: border-box; }</code></li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../assets/course.js"></script>
+</body>
+</html>

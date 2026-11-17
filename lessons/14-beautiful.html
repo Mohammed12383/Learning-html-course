@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Make It Beautiful · Hello HTML</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".." data-lesson="14-beautiful">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 14 &middot; <b>Polish</b></p>
+      <div class="hero-code" aria-hidden="true">shadow</div>
+      <h1>Make It Beautiful</h1>
+      <p class="lead">Modern app websites feel soft, colorful and alive. Things float, glow and wiggle a little when you touch them. None of that is magic. It's a handful of CSS tricks, and this lesson teaches all of them.</p>
+      <ul class="learn">
+        <li>Breathing room</li>
+        <li>Color variables</li>
+        <li>Gradients</li>
+        <li>Hover effects</li>
+        <li>Animations</li>
+        <li>Glass and fun details</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>The recipe for a fun, polished website</h2>
+      <p>Look closely at a beautiful app website and you'll find the same ingredients again and again:</p>
+      <div class="trio">
+        <div><div class="big" style="color: var(--c-val)">space</div><p>Lots of empty space around everything. Nothing feels crowded.</p></div>
+        <div><div class="big" style="color: var(--c-tag)">soft color</div><p>Pastel backgrounds, one or two bright colors, dark gray text.</p></div>
+        <div><div class="big" style="color: var(--c-prop)">round</div><p>Rounded corners on cards, buttons and pictures.</p></div>
+        <div><div class="big" style="color: var(--c-sel)">depth</div><p>Soft shadows and gradients that make things float.</p></div>
+        <div><div class="big" style="color: var(--c-attr)">motion</div><p>Small, smooth animations when you hover, click or scroll.</p></div>
+        <div><div class="big" style="color: var(--ink)">big type</div><p>Large, bold, friendly headings with short text.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>1. Give it room to breathe</h2>
+      <p>The fastest way to make anything look more expensive is <strong>more space</strong>. Drag the slider from cramped to calm:</p>
+
+      <div class="explorer" data-title="Cramped vs. calm">
+        <input type="range" name="s" data-label="space" min="2" max="40" value="6" data-unit="px">
+        <script type="text/plain">
+          <style>
+            body { font-family: system-ui, sans-serif; background: #FFF6F0; margin: 0; padding: 16px; }
+            .card {
+              background: white;
+              border-radius: 20px;
+              padding: {{s}};
+              display: grid;
+              gap: {{s}};
+              max-width: 320px;
+            }
+            .card h3, .card p { margin: 0; }
+            .card button {
+              justify-self: start;
+              background: #FF7A59;
+              color: white;
+              border: none;
+              border-radius: 999px;
+              padding: 10px 20px;
+            }
+          </style>
+
+          <div class="card">
+            <h3>Morning yoga 🧘</h3>
+            <p>A gentle 20-minute class to start your day.</p>
+            <button>Join</button>
+          </div>
+        </script>
+      </div>
+      <p>Beginners almost always use too little space. When in doubt, double it.</p>
+    </section>
+
+    <section>
+      <h2>2. Color variables: change everything at once</h2>
+      <p>A website uses the same few colors over and over. Instead of typing <code>#FF5C8A</code> fifty times, give it a name once. These are called <strong>CSS variables</strong> (or custom properties). They start with two dashes:</p>
+
+      <script type="text/plain" class="snippet" data-lang="css">
+        :root {
+          --main: #FF5C8A;      /* create the variable */
+          --soft: #FFE4EC;
+        }
+
+        button {
+          background: var(--main);   /* use it */
+        }
+      </script>
+
+      <p><code class="k-sel">:root</code> means "the whole page", so the variables work everywhere. <code>var(--main)</code> reads the variable. Now a whole theme can come from just one number. This explorer uses a single <code>--hue</code> variable for every color on the card:</p>
+
+      <div class="explorer" data-title="One variable, a whole theme">
+        <input type="range" name="h" data-label="--hue" min="0" max="360" value="340">
+        <script type="text/plain">
+          <style>
+            :root {
+              --hue: {{h}};
+              --bg:   hsl(var(--hue), 90%, 96%);
+              --soft: hsl(var(--hue), 85%, 90%);
+              --main: hsl(var(--hue), 75%, 58%);
+              --text: hsl(var(--hue), 35%, 18%);
+            }
+            body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 12px; }
+            .card { background: white; border-radius: 22px; padding: 22px; box-shadow: 0 12px 30px hsla(var(--hue), 60%, 40%, 0.15); }
+            .tag { display: inline-block; background: var(--soft); color: var(--main); font-weight: 700; font-size: 13px; padding: 4px 12px; border-radius: 999px; }
+            h2 { margin: 12px 0 6px; }
+            button { background: var(--main); color: white; border: none; padding: 12px 22px; border-radius: 12px; font-weight: 700; font-size: 15px; }
+          </style>
+
+          <div class="card">
+            <span class="tag">New</span>
+            <h2>Weekend getaway</h2>
+            <p>Two nights by the lake. Breakfast included.</p>
+            <button>Book now</button>
+          </div>
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>3. Gradients</h2>
+      <p>A gradient blends from one color into another. It's written as a <code>background</code>. <code>linear-gradient</code> blends in a straight line, at an angle you choose:</p>
+
+      <div class="explorer" data-title="Gradient maker">
+        <input type="range" name="a" data-label="angle" min="0" max="360" value="135" data-unit="deg">
+        <input type="color" name="c1" data-label="first color" value="#FFB3C7">
+        <input type="color" name="c2" data-label="second color" value="#B8C4FF">
+        <script type="text/plain">
+          <style>
+            .sky {
+              height: 170px;
+              border-radius: 24px;
+              background: linear-gradient({{a}}, {{c1}}, {{c2}});
+            }
+          </style>
+
+          <div class="sky"></div>
+        </script>
+      </div>
+
+      <p><code>deg</code> means degrees, like a compass: <code>0deg</code> goes bottom to top, <code>90deg</code> goes left to right, <code>180deg</code> goes top to bottom.</p>
+
+      <h3>More gradient tricks</h3>
+      <div class="playground" data-title="Gradient tricks" data-stack>
+        <script type="text/plain">
+          <style>
+            body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; display: grid; gap: 14px; }
+            .box { height: 110px; border-radius: 20px; display: grid; place-items: center; font-weight: 700; }
+
+            /* Three colors */
+            .three { background: linear-gradient(90deg, #FFD6A5, #FFADAD, #BDB2FF); }
+
+            /* Round: from the middle outwards */
+            .radial { background: radial-gradient(circle, #FFF1B8, #FFB3C7); }
+
+            /* Soft "blobs" of color: several radial gradients stacked */
+            .blobs {
+              background:
+                radial-gradient(circle at 20% 30%, #FFC2D4 0, transparent 50%),
+                radial-gradient(circle at 80% 20%, #C2D4FF 0, transparent 50%),
+                radial-gradient(circle at 60% 90%, #C9F2DD 0, transparent 50%),
+                #FFFDF8;
+            }
+
+            /* Gradient text */
+            .text {
+              font-size: 44px;
+              font-weight: 900;
+              background: linear-gradient(90deg, #FF5C8A, #8F7BFF);
+              -webkit-background-clip: text;
+              background-clip: text;
+              color: transparent;
+            }
+          </style>
+
+          <div class="box three">three colors</div>
+          <div class="box radial">radial</div>
+          <div class="box blobs">soft blobs</div>
+          <div class="text">Gradient text</div>
+        </script>
+      </div>
+      <p>The "soft blobs" background is very popular on modern landing pages. It's just a few round gradients that fade to <code>transparent</code>, stacked on top of each other with commas.</p>
+    </section>
+
+    <section>
+      <h2>4. Things that react: hover effects</h2>
+      <p>You learned <code>:hover</code> and <code>transition</code> with buttons. They work on <em>anything</em>. Combined with <code class="k-prop">transform</code>, which moves, grows or turns an element, you get lovely effects:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>transform</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td><code>translateY(-6px)</code></td><td>Moves up 6px (a "lift"). <code>translateX</code> moves sideways.</td></tr>
+            <tr><td><code>scale(1.05)</code></td><td>Grows to 105% size. <code>scale(0.95)</code> shrinks.</td></tr>
+            <tr><td><code>rotate(-3deg)</code></td><td>Turns a little. Negative = counter-clockwise.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="playground" data-title="Point at the cards" data-stack>
+        <script type="text/plain">
+          <style>
+            body { font-family: system-ui, sans-serif; background: #F6F4FB; padding: 20px; }
+            .row { display: flex; gap: 16px; flex-wrap: wrap; }
+            .card {
+              flex: 1 1 150px;
+              background: white;
+              border-radius: 20px;
+              padding: 20px;
+              text-align: center;
+              cursor: pointer;
+              transition: transform 0.25s ease, box-shadow 0.25s ease;
+            }
+            .emoji { font-size: 40px; display: block; transition: transform 0.3s ease; }
+
+            .lift:hover   { transform: translateY(-8px); box-shadow: 0 16px 30px rgba(80, 60, 160, 0.15); }
+            .grow:hover   { transform: scale(1.06); }
+            .tilt:hover   { transform: rotate(-3deg); }
+            .spin:hover .emoji { transform: rotate(360deg) scale(1.2); }
+          </style>
+
+          <div class="row">
+            <div class="card lift"><span class="emoji">🎈</span>Lift</div>
+            <div class="card grow"><span class="emoji">🌱</span>Grow</div>
+            <div class="card tilt"><span class="emoji">🃏</span>Tilt</div>
+            <div class="card spin"><span class="emoji">🌀</span>Spin the emoji</div>
+          </div>
+        </script>
+      </div>
+      <p>Look at <code>.spin:hover .emoji</code>: it means "the emoji inside a card that's being hovered". So hovering the card animates something <em>inside</em> it.</p>
+    </section>
+
+    <section>
+      <h2>5. Animations that play by themselves</h2>
+      <p>A <code>transition</code> needs a change (like hover) to start. An <strong>animation</strong> plays on its own, and can loop forever. You make one in two steps:</p>
+      <ol>
+        <li><strong>Describe the movement</strong> with <code class="k-sel">@keyframes</code> and a name you choose. <code>from</code> is the start, <code>to</code> is the end, or use percentages for more steps.</li>
+        <li><strong>Play it</strong> on an element with the <code class="k-prop">animation</code> property: the name, how long, and how.</li>
+      </ol>
+
+      <div class="anatomy" role="img" aria-label="animation: float 3s ease-in-out infinite. float is the keyframes name, 3s is how long, ease-in-out is the speed curve, infinite means loop forever">
+        <div class="part prop"><span>animation: </span><small>property</small></div>
+        <div class="part val"><span>float </span><small>keyframes name</small></div>
+        <div class="part val"><span>3s </span><small>how long</small></div>
+        <div class="part val"><span>ease-in-out </span><small>speed: slow-fast-slow</small></div>
+        <div class="part val"><span>infinite</span><small>loop forever</small></div>
+      </div>
+
+      <div class="playground" data-title="Animation collection" data-stack>
+        <script type="text/plain">
+          <style>
+            body {
+              font-family: system-ui, sans-serif;
+              display: flex;
+              flex-wrap: wrap;
+              gap: 30px;
+              justify-content: center;
+              align-items: center;
+              padding: 30px;
+              font-size: 50px;
+            }
+
+            /* 1. Float up and down */
+            @keyframes float {
+              0%   { transform: translateY(0); }
+              50%  { transform: translateY(-14px); }
+              100% { transform: translateY(0); }
+            }
+            .float { animation: float 3s ease-in-out infinite; }
+
+            /* 2. Heartbeat */
+            @keyframes pulse {
+              0%, 100% { transform: scale(1); }
+              50%      { transform: scale(1.2); }
+            }
+            .pulse { animation: pulse 1s ease-in-out infinite; }
+
+            /* 3. Wiggle */
+            @keyframes wiggle {
+              0%, 100% { transform: rotate(0); }
+              25%      { transform: rotate(-12deg); }
+              75%      { transform: rotate(12deg); }
+            }
+            .wiggle { animation: wiggle 0.8s ease-in-out infinite; }
+
+            /* 4. Spin */
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+            .spin { animation: spin 4s linear infinite; }
+
+            /* 5. Fade in once, rising up */
+            @keyframes rise {
+              from { opacity: 0; transform: translateY(20px); }
+              to   { opacity: 1; transform: translateY(0); }
+            }
+            .rise { animation: rise 1s ease-out; font-size: 22px; font-weight: 700; }
+          </style>
+
+          <span class="float">🎈</span>
+          <span class="pulse">💖</span>
+          <span class="wiggle">🔔</span>
+          <span class="spin">🌸</span>
+          <span class="rise">I fade in once</span>
+        </script>
+      </div>
+
+      <aside class="note tip">
+        <h4>Use animation gently</h4>
+        <p>One or two moving things feel delightful. Ten feel like a circus. Some people also get dizzy from motion, and their devices have a "reduce motion" setting. You can respect it with this rule:</p>
+        <script type="text/plain" class="snippet" data-lang="css">
+          @media (prefers-reduced-motion: reduce) {
+            * { animation: none !important; transition: none !important; }
+          }
+        </script>
+      </aside>
+    </section>
+
+    <section>
+      <h2>6. Frosted glass</h2>
+      <p><code class="k-prop">backdrop-filter: blur()</code> blurs whatever is <em>behind</em> an element, like frosted glass. Use it with a see-through white background:</p>
+
+      <div class="playground" data-title="Glass card">
+        <script type="text/plain">
+          <style>
+            body {
+              margin: 0;
+              height: 260px;
+              display: grid;
+              place-items: center;
+              font-family: system-ui, sans-serif;
+              background:
+                radial-gradient(circle at 25% 35%, #FF8FAB 0, transparent 35%),
+                radial-gradient(circle at 75% 65%, #8F7BFF 0, transparent 35%),
+                #FFF6E8;
+            }
+            .glass {
+              background: rgba(255, 255, 255, 0.35);
+              backdrop-filter: blur(16px);
+              -webkit-backdrop-filter: blur(16px);
+              border: 1px solid rgba(255, 255, 255, 0.6);
+              border-radius: 24px;
+              padding: 24px 32px;
+            }
+          </style>
+
+          <div class="glass">
+            <h2>Frosted glass ✨</h2>
+            <p>The colors behind me are blurred.</p>
+          </div>
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>7. Little details that make people smile</h2>
+      <div class="playground" data-title="Fun details" data-stack>
+        <script type="text/plain">
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap">
+          <style>
+            body {
+              font-family: "Fredoka", system-ui, sans-serif;
+              background: #FFFBF3;
+              color: #2A2238;
+              padding: 30px 20px;
+              text-align: center;
+            }
+            h1 { font-size: 42px; line-height: 1.15; margin: 0; }
+
+            /* A marker highlight behind a word */
+            .marker {
+              background: linear-gradient(transparent 55%, #FFD84D 55%);
+            }
+
+            /* A wavy underline */
+            .wavy {
+              text-decoration: underline wavy #FF5C8A;
+              text-underline-offset: 8px;
+            }
+
+            /* A tilted sticker */
+            .sticker {
+              display: inline-block;
+              background: #8F7BFF;
+              color: white;
+              padding: 6px 14px;
+              border-radius: 999px;
+              font-size: 15px;
+              transform: rotate(-6deg);
+              box-shadow: 3px 3px 0 #2A2238;
+              margin-bottom: 14px;
+            }
+
+            /* Emoji with a soft colored circle */
+            .icon {
+              display: inline-grid;
+              place-items: center;
+              width: 56px;
+              height: 56px;
+              border-radius: 18px;
+              background: #DDF5E8;
+              font-size: 28px;
+              margin: 20px 6px 0;
+            }
+          </style>
+
+          <span class="sticker">✨ Brand new</span>
+          <h1>Plan your days <span class="marker">without</span> the <span class="wavy">stress</span></h1>
+          <div>
+            <span class="icon">📅</span>
+            <span class="icon" style="background:#FFE4EC">💌</span>
+            <span class="icon" style="background:#E6E9FF">🎧</span>
+          </div>
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Put it all together</h2>
+      <p>Here's a calendar card made with everything from this lesson: variables, soft colors, rounded corners, gentle shadows, a gradient, hover effects and one small animation. Read through the CSS. You know every single property in it now.</p>
+
+      <div class="playground" data-title="A friendly calendar card" data-stack>
+        <script type="text/plain">
+          <style>
+            :root {
+              --ink: #231F35;
+              --muted: #8A8499;
+              --pink: #FFE1EA;   --pink-ink: #C2185B;
+              --blue: #E1E8FF;   --blue-ink: #3949AB;
+              --mint: #DDF5E8;   --mint-ink: #1E7A4C;
+              --sun:  #FFF1C9;   --sun-ink:  #9A6400;
+            }
+            * { box-sizing: border-box; }
+            body {
+              margin: 0;
+              padding: 30px 16px;
+              font-family: system-ui, sans-serif;
+              color: var(--ink);
+              background:
+                radial-gradient(circle at 10% 10%, #FFE1EA 0, transparent 40%),
+                radial-gradient(circle at 90% 80%, #E1E8FF 0, transparent 40%),
+                #FBFAFF;
+            }
+            .card {
+              max-width: 380px;
+              margin: 0 auto;
+              background: white;
+              border-radius: 28px;
+              padding: 24px;
+              box-shadow: 0 24px 50px rgba(60, 40, 120, 0.12);
+            }
+            .top { display: flex; justify-content: space-between; align-items: center; }
+            .day { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+            h2 { margin: 2px 0 0; font-size: 28px; }
+            .wave { display: inline-block; animation: wave 2s ease-in-out infinite; transform-origin: 70% 70%; }
+            @keyframes wave {
+              0%, 60%, 100% { transform: rotate(0); }
+              10%, 30% { transform: rotate(14deg); }
+              20%, 40% { transform: rotate(-8deg); }
+            }
+            .add {
+              width: 44px; height: 44px;
+              border: none; border-radius: 14px;
+              background: var(--ink); color: white;
+              font-size: 22px; cursor: pointer;
+              transition: transform 0.2s;
+            }
+            .add:hover { transform: rotate(90deg); }
+
+            .events { display: grid; gap: 10px; margin-top: 20px; }
+            .event {
+              display: flex;
+              gap: 12px;
+              align-items: center;
+              padding: 12px 14px;
+              border-radius: 16px;
+              transition: transform 0.2s ease;
+            }
+            .event:hover { transform: translateX(6px); }
+            .time { font-size: 13px; font-weight: 700; width: 46px; opacity: 0.8; }
+            .title { font-weight: 600; }
+            .emoji { margin-left: auto; font-size: 20px; }
+            .pink { background: var(--pink); color: var(--pink-ink); }
+            .blue { background: var(--blue); color: var(--blue-ink); }
+            .mint { background: var(--mint); color: var(--mint-ink); }
+            .sun  { background: var(--sun);  color: var(--sun-ink); }
+          </style>
+
+          <div class="card">
+            <div class="top">
+              <div>
+                <div class="day">Tuesday, 17 Nov</div>
+                <h2>Good morning <span class="wave">👋</span></h2>
+              </div>
+              <button class="add" aria-label="Add event">+</button>
+            </div>
+
+            <div class="events">
+              <div class="event sun"><span class="time">09:00</span><span class="title">Coffee with Lina</span><span class="emoji">☕</span></div>
+              <div class="event blue"><span class="time">11:30</span><span class="title">Team meeting</span><span class="emoji">💬</span></div>
+              <div class="event pink"><span class="time">14:00</span><span class="title">Dentist</span><span class="emoji">🦷</span></div>
+              <div class="event mint"><span class="time">18:00</span><span class="title">Evening run</span><span class="emoji">🏃</span></div>
+            </div>
+          </div>
+        </script>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Add a fifth event with a new color pair (add two new variables in <code>:root</code>).</li>
+          <li>Change the greeting to your name.</li>
+          <li>Make events lift up instead of sliding right on hover.</li>
+          <li>Change the background blobs to colors you like.</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Design checklist</h2>
+      <p>Before you call a page done, check these. They're what separates "made by a beginner" from "made by a designer":</p>
+      <ul>
+        <li><strong>Two fonts at most.</strong> One for headings, one for text.</li>
+        <li><strong>One main color</strong>, plus soft versions of it and neutrals (white, grays, dark text).</li>
+        <li><strong>The same corner rounding</strong> on similar things (for example, 16px on all cards, 999px on all buttons).</li>
+        <li><strong>Spacing from your scale</strong>: 8, 16, 24, 32, 48, 64. No random numbers.</li>
+        <li><strong>Easy to read</strong>: dark text on light backgrounds, at least 16px.</li>
+        <li><strong>One main button</strong> per section, so people know what to do.</li>
+        <li><strong>Lots of space.</strong> Then a little more.</li>
+        <li><strong>Gentle motion</strong>: hover effects everywhere you can click, and at most one or two things that move on their own.</li>
+      </ul>
+
+      <div class="quiz">
+        <p class="q">You want a box to float up and down forever. What do you need?</p>
+        <div class="opts">
+          <button>A transition</button>
+          <button data-correct>@keyframes and the animation property</button>
+          <button>A :hover rule</button>
+        </div>
+        <p class="why">Transitions only play when something changes (like hover). <code>@keyframes</code> + <code>animation</code> play by themselves, and <code>infinite</code> makes them loop.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">How do you use a CSS variable called --main?</p>
+        <div class="opts">
+          <button>color: --main;</button>
+          <button data-correct>color: var(--main);</button>
+          <button>color: $main;</button>
+        </div>
+        <p class="why">Create it with <code>--main: #FF5C8A;</code> and use it with <code>var(--main)</code>.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>More space makes everything look better.</li>
+          <li>Variables: <code>:root { --main: #FF5C8A; }</code> then <code>var(--main)</code>.</li>
+          <li><code>linear-gradient(135deg, color1, color2)</code> and <code>radial-gradient(...)</code>.</li>
+          <li><code>transform</code> (translate, scale, rotate) + <code>transition</code> for hover effects.</li>
+          <li><code>@keyframes name { ... }</code> + <code>animation: name 2s ease infinite;</code></li>
+          <li><code>backdrop-filter: blur(16px)</code> for glass.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../assets/course.js"></script>
+</body>
+</html>

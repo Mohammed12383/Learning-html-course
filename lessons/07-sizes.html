@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sizes &amp; Units · Hello HTML</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".." data-lesson="07-sizes">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 07 &middot; <b>Styling with CSS</b></p>
+      <div class="hero-code" aria-hidden="true">16px</div>
+      <h1>Sizes &amp; Units</h1>
+      <p class="lead">How big should a button be? How wide is a phone? What's the difference between <code>px</code>, <code>%</code> and <code>rem</code>? This lesson explains every size you need, and ends with a size guide you can keep coming back to.</p>
+      <ul class="learn">
+        <li>What a pixel is</li>
+        <li>width and height</li>
+        <li>px, %, rem, vw and vh</li>
+        <li>max-width and centering</li>
+        <li>The size guide</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>What is a pixel?</h2>
+      <p>Your screen is made of millions of tiny squares of light called <strong>pixels</strong>. Every picture, letter and button is drawn with them. In CSS, sizes are usually measured in pixels, written <code class="k-val">px</code>.</p>
+
+      <div class="pixels" role="img" aria-label="A heart drawn from tiny squares, like pixels on a screen"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+      <p>One pixel is very small. Normal text is about <strong>16 pixels</strong> tall. A phone screen is about <strong>390 pixels</strong> wide.</p>
+
+      <aside class="note idea">
+        <h4>Good to know</h4>
+        <p>Phones with very sharp screens use 2 or 3 tiny dots for each CSS pixel. You don't need to worry about that: <code>16px</code> in CSS looks about the same size on every screen.</p>
+      </aside>
+
+      <h3>How wide are screens?</h3>
+      <p>These bars are drawn to scale. This is why a website has to work at many different widths:</p>
+      <div class="screens" role="img" aria-label="Screen widths to scale: phone 390 pixels, tablet 820, laptop 1440, big monitor 1920">
+        <div class="screen-row"><span class="name">Phone</span><span class="bar" style="width: 20.3%">390px</span></div>
+        <div class="screen-row"><span class="name">Tablet</span><span class="bar" style="width: 42.7%">820px</span></div>
+        <div class="screen-row"><span class="name">Laptop</span><span class="bar" style="width: 75%">1440px</span></div>
+        <div class="screen-row"><span class="name">Big monitor</span><span class="bar" style="width: 100%">1920px</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>width and height</h2>
+      <p>Every element is a rectangle. <code class="k-prop">width</code> sets how wide it is and <code class="k-prop">height</code> sets how tall it is.</p>
+
+      <div class="explorer" data-title="Width and height in pixels">
+        <input type="range" name="w" data-label="width" min="20" max="500" value="240" data-unit="px">
+        <input type="range" name="h" data-label="height" min="20" max="240" value="120" data-unit="px">
+        <script type="text/plain">
+          <style>
+            .box {
+              width: {{w}};
+              height: {{h}};
+              background-color: #FFB4CB;
+              border-radius: 12px;
+            }
+          </style>
+
+          <div class="box"></div>
+        </script>
+      </div>
+
+      <p>Turn on <strong>X-ray</strong> and point at the box: the size it shows matches your numbers exactly.</p>
+
+      <aside class="note tip">
+        <h4>Let height be automatic</h4>
+        <p>Usually you <strong>don't</strong> set a height. When you leave it out, the box grows to fit whatever is inside (this is called <code>height: auto</code>). If you set a fixed height and the text is longer than you expected, it spills out of the box.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>The units</h2>
+      <p>Pixels aren't the only unit. Some units are <strong>fixed</strong> (always the same size), and some are <strong>relative</strong> (they depend on something else, like the screen size). Here are the ones you'll actually use:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Unit</th><th>Means</th><th>Use it for</th></tr></thead>
+          <tbody>
+            <tr><td><code>px</code></td><td>Pixels. Always the same size.</td><td>Borders, shadows, small details, rounded corners</td></tr>
+            <tr><td><code>%</code></td><td>Percent of the box it's inside (its <strong>parent</strong>).</td><td>Widths that stretch, like <code>width: 100%</code></td></tr>
+            <tr><td><code>rem</code></td><td>Times the page's normal text size. <code>1rem</code> = 16px.</td><td>Font sizes and spacing</td></tr>
+            <tr><td><code>em</code></td><td>Times this element's own text size.</td><td>Padding inside buttons, so it grows with the text</td></tr>
+            <tr><td><code>vw</code></td><td>Percent of the screen's width. <code>100vw</code> = full width.</td><td>Big titles that grow with the screen</td></tr>
+            <tr><td><code>vh</code></td><td>Percent of the screen's height. <code>100vh</code> = full height.</td><td>A first section that fills the screen</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="explorer" data-title="Same number, different units" data-devices>
+        <input type="range" name="n" data-label="number" min="1" max="60" value="10">
+        <select name="u" data-label="unit">
+          <option>px</option><option selected>rem</option><option>%</option><option>vw</option>
+        </select>
+        <script type="text/plain">
+          <style>
+            .bar {
+              width: {{n}}{{u}};
+              height: 60px;
+              background-color: #9C7BD6;
+              border-radius: 10px;
+            }
+          </style>
+
+          <div class="bar"></div>
+          <p>Turn on X-ray to see the real size in pixels.</p>
+        </script>
+      </div>
+
+      <p>Set the number to <strong>10</strong> and switch units: <code>10px</code> is tiny, <code>10rem</code> is 160px, <code>10%</code> is a tenth of the preview, and <code>10vw</code> is a tenth of the screen. Then try <strong>Phone</strong> and <strong>Laptop</strong> under the preview and watch which ones change.</p>
+
+      <h3>Percent: a share of the parent</h3>
+      <p><code>%</code> is always a share of the box an element is inside. If the parent is 400px wide, <code>width: 50%</code> makes the child 200px.</p>
+
+      <div class="explorer" data-title="A child inside a parent">
+        <input type="range" name="pw" data-label="parent width" min="150" max="500" value="400" data-unit="px">
+        <input type="range" name="cw" data-label="child width" min="0" max="100" value="50" data-unit="%">
+        <script type="text/plain">
+          <style>
+            .parent {
+              width: {{pw}};
+              border: 3px dashed #9C7BD6;
+              padding: 10px 0;
+            }
+            .child {
+              width: {{cw}};
+              height: 50px;
+              background-color: #FFB4CB;
+            }
+          </style>
+
+          <div class="parent">
+            <div class="child"></div>
+          </div>
+        </script>
+      </div>
+
+      <h3>rem: sizes based on text</h3>
+      <p>Browsers start text at <strong>16px</strong>. <code>1rem</code> is that size. Many designers use <code>rem</code> for fonts and spacing, because if someone sets bigger text in their browser (to read more easily), everything grows with it.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>rem</th><th>pixels</th></tr></thead>
+          <tbody>
+            <tr><td><code>0.75rem</code></td><td>12px</td></tr>
+            <tr><td><code>0.875rem</code></td><td>14px</td></tr>
+            <tr><td><code>1rem</code></td><td>16px</td></tr>
+            <tr><td><code>1.25rem</code></td><td>20px</td></tr>
+            <tr><td><code>1.5rem</code></td><td>24px</td></tr>
+            <tr><td><code>2rem</code></td><td>32px</td></tr>
+            <tr><td><code>3rem</code></td><td>48px</td></tr>
+            <tr><td><code>4rem</code></td><td>64px</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Quick math: <strong>rem × 16 = pixels</strong>. Both are fine to use. If you find <code>px</code> easier to think about, use <code>px</code>.</p>
+
+      <h3>vw and vh: sizes based on the screen</h3>
+      <div class="playground" data-title="A section that fills the screen" data-devices>
+        <script type="text/plain">
+          <style>
+            body { margin: 0; font-family: sans-serif; }
+            .hero {
+              height: 100vh;
+              background: linear-gradient(160deg, #FFD6E7, #FFF4D6);
+              display: grid;
+              place-items: center;
+            }
+            h1 {
+              font-size: 8vw;
+            }
+          </style>
+
+          <div class="hero">
+            <h1>Hello!</h1>
+          </div>
+        </script>
+      </div>
+      <p>The section is always exactly as tall as the screen (<code>100vh</code>), and the title is 8% of the screen's width. Switch between Phone and Laptop to see it scale.</p>
+    </section>
+
+    <section>
+      <h2>max-width: not too wide</h2>
+      <p>On a big screen, content stretched across the whole width looks empty and is hard to read. <code class="k-prop">max-width</code> says "be as wide as you can, but <strong>never wider than</strong> this". On a phone the box shrinks to fit, and on a laptop it stops growing.</p>
+      <p>Add <code><span class="t-prop">margin</span>: <span class="t-val">0 auto</span></code> and the box sits in the center. (You'll learn exactly why in the next lesson.)</p>
+
+      <div class="playground" data-title="The most common layout trick" data-devices>
+        <script type="text/plain">
+          <style>
+            body {
+              font-family: sans-serif;
+              background-color: #EEF0FF;
+              margin: 0;
+              padding: 20px;
+            }
+            .container {
+              max-width: 600px;
+              margin: 0 auto;
+              background-color: white;
+              padding: 24px;
+              border-radius: 16px;
+            }
+          </style>
+
+          <div class="container">
+            <h2>I never get wider than 600px</h2>
+            <p>Switch between Phone and Laptop. On the phone, I fill the screen.
+            On the laptop, I stop at 600px and stay in the middle.</p>
+          </div>
+        </script>
+      </div>
+
+      <p>Almost every website wraps its content in a box like this. Common sizes are <code>max-width: 1100px</code> for the whole page and <code>max-width: 700px</code> for text.</p>
+      <p>There's also <code class="k-prop">min-width</code> ("never narrower than") and <code class="k-prop">min-height</code> ("at least this tall, but grow if needed"), which is safer than a fixed height.</p>
+    </section>
+
+    <section>
+      <h2>Sizing pictures</h2>
+      <p>Pictures are often bigger than the space they go in. Two lines fix that:</p>
+      <script type="text/plain" class="snippet" data-lang="css">
+        img {
+          max-width: 100%;  /* never wider than the box it's in */
+          height: auto;     /* keep the shape, don't squash it */
+        }
+      </script>
+      <p>Put this in every website you make. Sometimes you want all pictures to be the same shape, like square thumbnails. Then set both width and height, and use <code class="k-prop">object-fit</code> to decide what happens to the parts that don't fit:</p>
+
+      <div class="explorer" data-title="object-fit">
+        <select name="fit" data-label="object-fit">
+          <option>fill</option><option selected>cover</option><option>contain</option>
+        </select>
+        <input type="range" name="w" data-label="width" min="80" max="400" value="300" data-unit="px">
+        <script type="text/plain">
+          <style>
+            img {
+              width: {{w}};
+              height: 160px;
+              object-fit: {{fit}};
+              background-color: #EEE;
+              border-radius: 12px;
+            }
+          </style>
+
+          <img src="images/mountains.svg" alt="Mountains at sunset">
+        </script>
+      </div>
+
+      <ul>
+        <li><code>fill</code>: stretches the picture to fit. It looks squashed.</li>
+        <li><code>cover</code>: fills the box and cuts off the edges. Usually the best choice.</li>
+        <li><code>contain</code>: shows the whole picture, with empty space around it.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>The size guide</h2>
+      <p>Not sure what size to use? Start with these. They're the sizes most professional websites use. Every number here is a real size you can copy.</p>
+
+      <h3>Text sizes</h3>
+      <div class="type-scale" role="img" aria-label="Text sizes drawn at real size: 12, 14, 16, 18, 20, 24, 32, 48 and 64 pixels">
+        <div><code>12px</code><span style="font-size:12px">Tiny labels and fine print</span></div>
+        <div><code>14px</code><span style="font-size:14px">Small text, captions, dates</span></div>
+        <div><code>16px</code><span style="font-size:16px">Normal text (the most important size)</span></div>
+        <div><code>18px</code><span style="font-size:18px">Comfy text for reading articles</span></div>
+        <div><code>20px</code><span style="font-size:20px;font-weight:600">Small headings, intro text</span></div>
+        <div><code>24px</code><span style="font-size:24px;font-weight:700">Card titles, h3</span></div>
+        <div><code>32px</code><span style="font-size:32px;font-weight:700">Section titles, h2</span></div>
+        <div><code>48px</code><span style="font-size:48px;font-weight:800;line-height:1.1">Page title</span></div>
+        <div><code>64px</code><span style="font-size:64px;font-weight:800;line-height:1.1">Big hero</span></div>
+      </div>
+
+      <h3>Spacing sizes</h3>
+      <p>Pick spacing from a fixed list instead of random numbers. Your design will look neat and consistent. Most designers use multiples of 4 or 8:</p>
+      <div class="space-scale" role="img" aria-label="Spacing sizes drawn at real size: 4, 8, 12, 16, 24, 32, 48, 64 and 96 pixels">
+        <div><code>4px</code><i style="width:4px"></i></div>
+        <div><code>8px</code><i style="width:8px"></i></div>
+        <div><code>12px</code><i style="width:12px"></i></div>
+        <div><code>16px</code><i style="width:16px"></i></div>
+        <div><code>24px</code><i style="width:24px"></i></div>
+        <div><code>32px</code><i style="width:32px"></i></div>
+        <div><code>48px</code><i style="width:48px"></i></div>
+        <div><code>64px</code><i style="width:64px"></i></div>
+        <div><code>96px</code><i style="width:96px"></i></div>
+      </div>
+
+      <h3>Everything else</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Thing</th><th>Good size</th><th>Example CSS</th></tr></thead>
+          <tbody>
+            <tr><td>Normal text</td><td>16 to 18px</td><td><code>font-size: 16px;</code></td></tr>
+            <tr><td>Line height of paragraphs</td><td>1.5 to 1.7</td><td><code>line-height: 1.6;</code></td></tr>
+            <tr><td>Line height of big titles</td><td>1.1 to 1.2</td><td><code>line-height: 1.1;</code></td></tr>
+            <tr><td>Button</td><td>at least 44px tall</td><td><code>padding: 12px 24px;</code></td></tr>
+            <tr><td>Text box (input)</td><td>44 to 48px tall, 16px text</td><td><code>padding: 12px 14px;</code></td></tr>
+            <tr><td>Small icon</td><td>16, 20 or 24px</td><td><code>width: 24px;</code></td></tr>
+            <tr><td>Profile picture</td><td>40px small, 96 to 160px big</td><td><code>width: 48px;</code></td></tr>
+            <tr><td>Border</td><td>1 or 2px</td><td><code>border: 1px solid #DDD;</code></td></tr>
+            <tr><td>Rounded corners</td><td>6 to 8px small, 12 to 24px cards, 999px pill</td><td><code>border-radius: 16px;</code></td></tr>
+            <tr><td>Space inside a card</td><td>16 to 32px</td><td><code>padding: 24px;</code></td></tr>
+            <tr><td>Space between sections</td><td>64 to 120px</td><td><code>padding: 80px 0;</code></td></tr>
+            <tr><td>Whole page width</td><td>1100 to 1200px max</td><td><code>max-width: 1100px;</code></td></tr>
+            <tr><td>Text column width</td><td>600 to 700px (about 65 characters)</td><td><code>max-width: 65ch;</code></td></tr>
+            <tr><td>Phone screen</td><td>360 to 430px wide</td><td>test at 375px</td></tr>
+            <tr><td>Tablet screen</td><td>768 to 1024px wide</td><td>test at 768px</td></tr>
+            <tr><td>Laptop screen</td><td>1280 to 1440px wide</td><td>test at 1280px</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="note tip">
+        <h4>Why 44px for buttons?</h4>
+        <p>A fingertip is about 44 pixels wide on a phone screen. Anything smaller is hard to tap. This is why buttons and text boxes should be at least 44px tall.</p>
+      </aside>
+    </section>
+
+    <section>
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Forgetting the unit</strong>: <code>width: 200;</code> does nothing. Write <code>width: 200px;</code>. (Only <code>0</code> works without a unit.)</li>
+          <li><strong>A space before the unit</strong>: <code>16 px</code> doesn't work. Write <code>16px</code>.</li>
+          <li><strong>Fixed heights on text boxes</strong>. Long text spills out. Use <code>min-height</code> or no height.</li>
+          <li><strong>Width wider than the phone</strong>: <code>width: 800px</code> makes phones scroll sideways. Use <code>max-width</code> instead.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">If the normal text size is 16px, how big is 2rem?</p>
+        <div class="opts">
+          <button>2px</button>
+          <button>18px</button>
+          <button data-correct>32px</button>
+        </div>
+        <p class="why">rem × 16 = pixels, so 2 × 16 = 32px.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">You want a box to fill its parent, but never be wider than 800px. What do you write?</p>
+        <div class="opts">
+          <button>width: 800px;</button>
+          <button data-correct>max-width: 800px;</button>
+          <button>min-width: 800px;</button>
+        </div>
+        <p class="why"><code>max-width</code> lets the box shrink on small screens but stops it at 800px on big ones. <code>width: 800px</code> would be too wide for a phone.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>px</code> is fixed. <code>%</code> is part of the parent. <code>rem</code> is times 16px. <code>vw</code>/<code>vh</code> are parts of the screen.</li>
+          <li>Usually let height be automatic.</li>
+          <li><code>max-width</code> + <code>margin: 0 auto</code> makes a centered page.</li>
+          <li><code>img { max-width: 100%; height: auto; }</code> on every site.</li>
+          <li>Text 16px. Buttons 44px+ tall. Spacing from 4, 8, 16, 24, 32, 48, 64.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../assets/course.js"></script>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Text Boxes &amp; Forms · Hello HTML</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".." data-lesson="10-forms">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 10 &middot; <b>Building blocks</b></p>
+      <div class="hero-code" aria-hidden="true">&lt;input&gt;</div>
+      <h1>Text Boxes &amp; Forms</h1>
+      <p class="lead">Sign-up pages, search bars, contact forms, checkout pages: they're all forms. Here you'll learn every kind of box people can type into or pick from, and how to make them look beautiful.</p>
+      <ul class="learn">
+        <li>Text boxes and labels</li>
+        <li>14 input types</li>
+        <li>Big text areas and dropdowns</li>
+        <li>Checkboxes and radio buttons</li>
+        <li>Sending a form</li>
+        <li>Styling it all</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>The text box</h2>
+      <p>A text box is made with <code class="k-tag">&lt;input&gt;</code>. Like <code>&lt;img&gt;</code>, it has no closing tag. The <code class="k-attr">type</code> attribute says what kind of box it is.</p>
+
+      <div class="anatomy" role="img" aria-label="An input tag with type text and placeholder Your name">
+        <div class="part tag"><span>&lt;input</span><small>tag</small></div>
+        <div class="part attr"><span> type</span><small>kind of box</small></div>
+        <div class="part val"><span>="text"</span><small>normal text</small></div>
+        <div class="part attr"><span> placeholder</span><small>gray hint</small></div>
+        <div class="part val"><span>="Your name"</span><small>shown when empty</small></div>
+        <div class="part tag"><span>&gt;</span><small></small></div>
+      </div>
+
+      <div class="playground" data-title="Type in the box on the right">
+        <script type="text/plain">
+          <input type="text" placeholder="Your name">
+        </script>
+      </div>
+
+      <h3>Always add a label</h3>
+      <p>A <code class="k-tag">&lt;label&gt;</code> is the text that says what a box is for. Connect it to its box: give the input an <code class="k-attr">id</code>, and give the label a matching <code class="k-attr">for</code>. Now clicking the label puts the cursor in the box, and screen readers read the label out loud.</p>
+
+      <div class="playground" data-title="Label + text box">
+        <script type="text/plain">
+          <label for="name">Your name</label>
+          <input type="text" id="name" placeholder="e.g. Sam">
+        </script>
+      </div>
+      <p>Click the words "Your name" in the preview. The cursor jumps into the box. That only works because <code>for="name"</code> matches <code>id="name"</code>.</p>
+
+      <aside class="note oops">
+        <h4>Placeholder is not a label</h4>
+        <p>The placeholder disappears as soon as someone starts typing, so they forget what the box was for. Use a placeholder for an <em>example</em> ("e.g. Sam"), and a label for the <em>name</em> of the box.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>All kinds of inputs</h2>
+      <p>Changing the <code class="k-attr">type</code> changes the box completely. On phones, it even changes the keyboard: <code>type="email"</code> shows an @ key and <code>type="tel"</code> shows numbers. Try them all:</p>
+
+      <div class="playground" data-title="Input types" data-stack>
+        <script type="text/plain">
+          <style>
+            body { font-family: sans-serif; }
+            p { margin: 0 0 14px; }
+            label { display: block; font-size: 14px; color: #555; }
+          </style>
+
+          <p><label for="a">text</label>
+          <input type="text" id="a" placeholder="Anything"></p>
+
+          <p><label for="b">email (checks for @ when sent)</label>
+          <input type="email" id="b" placeholder="you@example.com"></p>
+
+          <p><label for="c">password (hides the letters)</label>
+          <input type="password" id="c" value="secret"></p>
+
+          <p><label for="d">number (has up/down arrows)</label>
+          <input type="number" id="d" value="3" min="1" max="10"></p>
+
+          <p><label for="e">tel (phone number keyboard)</label>
+          <input type="tel" id="e" placeholder="+968 ..."></p>
+
+          <p><label for="f">url (a web address)</label>
+          <input type="url" id="f" placeholder="https://"></p>
+
+          <p><label for="g">search</label>
+          <input type="search" id="g" placeholder="Search..."></p>
+
+          <p><label for="h">date (a calendar!)</label>
+          <input type="date" id="h"></p>
+
+          <p><label for="i">time</label>
+          <input type="time" id="i"></p>
+
+          <p><label for="j">color (a color picker!)</label>
+          <input type="color" id="j" value="#FF5C8A"></p>
+
+          <p><label for="k">range (a slider)</label>
+          <input type="range" id="k" min="0" max="100"></p>
+
+          <p><label for="l">file (upload)</label>
+          <input type="file" id="l"></p>
+
+          <p><input type="checkbox" id="m"> <label for="m" style="display:inline">checkbox</label></p>
+
+          <p><input type="radio" id="n"> <label for="n" style="display:inline">radio</label></p>
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Big text boxes and dropdowns</h2>
+      <ul>
+        <li><code class="k-tag">&lt;textarea&gt;</code> is a big box for long messages. It <em>does</em> have a closing tag. <code class="k-attr">rows</code> sets how many lines tall it is.</li>
+        <li><code class="k-tag">&lt;select&gt;</code> makes a dropdown menu. Each choice is an <code class="k-tag">&lt;option&gt;</code>.</li>
+      </ul>
+
+      <div class="playground" data-title="textarea and select">
+        <script type="text/plain">
+          <style>
+            body { font-family: sans-serif; }
+            label { display: block; margin-top: 12px; }
+          </style>
+
+          <label for="msg">Your message</label>
+          <textarea id="msg" rows="4" placeholder="Write something nice..."></textarea>
+
+          <label for="size">Pizza size</label>
+          <select id="size">
+            <option>Small</option>
+            <option selected>Medium</option>
+            <option>Large</option>
+          </select>
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Checkboxes and radio buttons</h2>
+      <div class="split2">
+        <div>
+          <h4>checkbox</h4>
+          <p>Pick <strong>any number</strong> of choices. Like pizza toppings: you can have cheese <em>and</em> mushrooms.</p>
+        </div>
+        <div>
+          <h4>radio</h4>
+          <p>Pick <strong>only one</strong>. Like the size: small <em>or</em> large. Radios with the same <code>name</code> belong together.</p>
+        </div>
+      </div>
+
+      <div class="playground" data-title="Checkboxes vs radios">
+        <script type="text/plain">
+          <style>
+            body { font-family: sans-serif; }
+            fieldset { border: 2px solid #EEE; border-radius: 12px; margin-bottom: 12px; }
+          </style>
+
+          <fieldset>
+            <legend>Toppings (pick any)</legend>
+            <label><input type="checkbox" name="topping" value="cheese" checked> Cheese</label><br>
+            <label><input type="checkbox" name="topping" value="mushroom"> Mushrooms</label><br>
+            <label><input type="checkbox" name="topping" value="olives"> Olives</label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Crust (pick one)</legend>
+            <label><input type="radio" name="crust" value="thin" checked> Thin</label><br>
+            <label><input type="radio" name="crust" value="thick"> Thick</label>
+          </fieldset>
+        </script>
+      </div>
+
+      <p>Two new things: <code class="k-tag">&lt;fieldset&gt;</code> draws a box around a group of choices, and <code class="k-tag">&lt;legend&gt;</code> is the group's title. Also notice another way to connect a label: put the input <em>inside</em> the label. Then you don't need <code>for</code> and <code>id</code>.</p>
+      <p>The <code class="k-attr">checked</code> attribute picks a choice before anyone clicks.</p>
+    </section>
+
+    <section>
+      <h2>Sending a form</h2>
+      <p>To send information, put everything inside a <code class="k-tag">&lt;form&gt;</code> and add a submit button. Two important attributes:</p>
+      <ul>
+        <li><code class="k-attr">name</code>: the name of the information when it's sent. <strong>Without a name, a box sends nothing!</strong></li>
+        <li><code class="k-attr">required</code>: the form won't send until this box is filled in. The browser shows a message by itself.</li>
+      </ul>
+
+      <div class="playground" data-title="Fill it in and press Send">
+        <script type="text/plain">
+          <style>
+            body { font-family: sans-serif; }
+            label { display: block; margin-top: 10px; }
+          </style>
+
+          <form>
+            <label for="n">Name</label>
+            <input type="text" id="n" name="name" required>
+
+            <label for="e">Email</label>
+            <input type="email" id="e" name="email" required>
+
+            <label for="c">Favorite color</label>
+            <input type="color" id="c" name="color" value="#5B6CFF">
+
+            <p><button type="submit">Send</button></p>
+          </form>
+        </script>
+      </div>
+
+      <p>Press <strong>Send</strong> with the boxes empty: the browser stops you. Fill them in and press Send: a message shows exactly what the website received. Try deleting <code>name="email"</code> and sending again. The email disappears from what was received.</p>
+
+      <aside class="note idea">
+        <h4>Where does the information go?</h4>
+        <p>A real form needs somewhere to send the information, which is called a <strong>server</strong>. HTML and CSS can't receive it on their own. When you're ready to make a working contact form, free services like <strong>Formspree</strong> or <strong>Netlify Forms</strong> give you an address to put in <code>&lt;form action="..."&gt;</code>, and they email you the messages.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Making text boxes beautiful</h2>
+      <p>Default text boxes look old-fashioned. A few lines of CSS make them look modern. The most important one is <code>:focus</code>, the style when someone clicks into the box.</p>
+
+      <div class="explorer" data-title="Text box designer">
+        <input type="range" name="pad" data-label="padding" min="4" max="24" value="14" data-unit="px">
+        <input type="range" name="r" data-label="border-radius" min="0" max="30" value="12" data-unit="px">
+        <input type="range" name="bw" data-label="border width" min="0" max="4" value="2" data-unit="px">
+        <input type="color" name="bc" data-label="border color" value="#E2DFEA">
+        <input type="color" name="fc" data-label="focus color" value="#8F7BFF">
+        <input type="color" name="bg" data-label="background" value="#FFFFFF">
+        <script type="text/plain">
+          <style>
+            * { box-sizing: border-box; }
+            body { font-family: sans-serif; padding: 20px; }
+            label {
+              display: block;
+              font-weight: 600;
+              margin-bottom: 6px;
+            }
+            input {
+              width: 100%;
+              font-size: 16px;
+              padding: {{pad}};
+              border: {{bw}} solid {{bc}};
+              border-radius: {{r}};
+              background-color: {{bg}};
+              outline: none;
+            }
+            input:focus {
+              border-color: {{fc}};
+              box-shadow: 0 0 0 4px {{fc}}33;
+            }
+          </style>
+
+          <label for="mail">Email</label>
+          <input type="email" id="mail" placeholder="you@example.com">
+        </script>
+      </div>
+
+      <p><strong>Click into the box</strong> in the preview to see the focus style. The <code>33</code> at the end of the shadow color is a hex trick: two extra characters make the color see-through (<code>33</code> is about 20%).</p>
+
+      <aside class="note tip">
+        <h4>Size guide for forms</h4>
+        <ul>
+          <li><strong>Text box height:</strong> 44 to 48px. That's about <code>padding: 12px 14px</code> with 16px text.</li>
+          <li><strong>Font size:</strong> at least <strong>16px</strong>. Smaller, and iPhones zoom in when you tap the box.</li>
+          <li><strong>Width:</strong> <code>width: 100%</code> of the form, and limit the form with <code>max-width: 400px</code>.</li>
+          <li><strong>Label:</strong> above the box, 6 to 8px gap.</li>
+          <li><strong>Between fields:</strong> 16 to 20px.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Put it together: a sign-up card</h2>
+      <p>Here's a complete, polished sign-up form. It uses everything from this lesson and the ones before. Fill it in and press the button.</p>
+
+      <div class="playground" data-title="Sign-up card" data-stack>
+        <script type="text/plain">
+          <style>
+            * { box-sizing: border-box; }
+            body {
+              font-family: system-ui, sans-serif;
+              background: linear-gradient(135deg, #FFE4EC, #E6E9FF);
+              margin: 0;
+              padding: 30px 16px;
+            }
+            .card {
+              max-width: 380px;
+              margin: 0 auto;
+              background: white;
+              padding: 28px;
+              border-radius: 24px;
+              box-shadow: 0 20px 40px rgba(60, 40, 120, 0.12);
+            }
+            h2 { margin: 0 0 4px; color: #1F1D2E; }
+            .sub { margin: 0 0 20px; color: #6B6880; }
+            .field { margin-bottom: 16px; }
+            label {
+              display: block;
+              font-size: 14px;
+              font-weight: 600;
+              color: #1F1D2E;
+              margin-bottom: 6px;
+            }
+            input, select {
+              width: 100%;
+              font: inherit;
+              font-size: 16px;
+              padding: 12px 14px;
+              border: 2px solid #ECEAF2;
+              border-radius: 12px;
+              background: #FAFAFD;
+              outline: none;
+              transition: all 0.2s;
+            }
+            input:focus, select:focus {
+              border-color: #8F7BFF;
+              background: white;
+              box-shadow: 0 0 0 4px rgba(143, 123, 255, 0.2);
+            }
+            .check {
+              display: flex;
+              gap: 8px;
+              align-items: center;
+              font-size: 14px;
+              color: #6B6880;
+              margin-bottom: 20px;
+            }
+            .check input { width: auto; accent-color: #8F7BFF; }
+            button {
+              width: 100%;
+              font: inherit;
+              font-weight: 700;
+              font-size: 16px;
+              padding: 14px;
+              border: none;
+              border-radius: 12px;
+              background: #1F1D2E;
+              color: white;
+              cursor: pointer;
+              transition: all 0.2s;
+            }
+            button:hover { background: #8F7BFF; }
+          </style>
+
+          <form class="card">
+            <h2>Join the club 🌸</h2>
+            <p class="sub">Free tips every week. No spam, promise.</p>
+
+            <div class="field">
+              <label for="name">Name</label>
+              <input id="name" name="name" placeholder="e.g. Sam" required>
+            </div>
+
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="you@example.com" required>
+            </div>
+
+            <div class="field">
+              <label for="level">I am a...</label>
+              <select id="level" name="level">
+                <option>Total beginner</option>
+                <option>Learning a bit</option>
+                <option>Pro</option>
+              </select>
+            </div>
+
+            <label class="check">
+              <input type="checkbox" name="news" value="yes" checked>
+              Send me the weekly tips
+            </label>
+
+            <button type="submit">Create account</button>
+          </form>
+        </script>
+      </div>
+
+      <p>A new trick in there: <code><span class="t-prop">accent-color</span></code> changes the color of checkboxes, radios and sliders with just one line.</p>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>In the sign-up card, add a <strong>password</strong> field with its own label.</li>
+          <li>Add a <code>&lt;textarea&gt;</code> for "Tell us about yourself".</li>
+          <li>Change the focus color from purple to your favorite color (it appears in two places).</li>
+          <li>Fill in the form and send it. Check that your new fields show up in the message. (Did you remember <code>name</code>?)</li>
+        </ol>
+      </aside>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>No <code>name</code></strong> on inputs: nothing gets sent.</li>
+          <li><strong>No labels</strong>, or labels not connected (<code>for</code> must match <code>id</code> exactly).</li>
+          <li><strong>Radio buttons with different names</strong>: then you can select all of them. A group must share one <code>name</code>.</li>
+          <li><strong>Removing the focus style</strong> with <code>outline: none</code> and adding nothing instead. People can't see which box they're in.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">Which input type lets people pick only one choice from a group?</p>
+        <div class="opts">
+          <button>checkbox</button>
+          <button data-correct>radio</button>
+          <button>select-one</button>
+        </div>
+        <p class="why">Radio buttons that share the same <code>name</code> allow only one choice. Checkboxes allow many.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">Why does a text box need a name attribute?</p>
+        <div class="opts">
+          <button>To show text inside it</button>
+          <button data-correct>So its information is included when the form is sent</button>
+          <button>To connect it to its label</button>
+        </div>
+        <p class="why">The <code>name</code> is the label for the data when it's sent. (Connecting to a label uses <code>id</code> and <code>for</code>.)</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>&lt;input type="..."&gt;</code>: text, email, password, number, date, color, checkbox, radio and more.</li>
+          <li><code>&lt;label for="x"&gt;</code> + <code>&lt;input id="x"&gt;</code> are connected.</li>
+          <li><code>&lt;textarea&gt;</code> for long text, <code>&lt;select&gt;</code> + <code>&lt;option&gt;</code> for dropdowns.</li>
+          <li>Inside a <code>&lt;form&gt;</code>, every box needs a <code>name</code>. <code>required</code> makes it compulsory.</li>
+          <li>Style with padding, border, border-radius, and a clear <code>:focus</code> style. 16px text.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../assets/course.js"></script>
+</body>
+</html>

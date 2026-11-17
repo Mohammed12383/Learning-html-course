@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Final Project · Hello HTML</title>
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".." data-lesson="16-final-project">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 16 &middot; <b>Build</b></p>
+      <div class="hero-code" aria-hidden="true">launch</div>
+      <h1>Final Project</h1>
+      <p class="lead">Time to put everything together. You'll build <strong>Daybloom</strong>, a complete, colorful two-page website for a pretend planner app, the kind of polished landing page real apps use. Then you'll make it your own.</p>
+      <ul class="learn">
+        <li>Planning a website</li>
+        <li>Building it section by section</li>
+        <li>Making it work on phones</li>
+        <li>Making it yours</li>
+        <li>What to learn next</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>The finished website</h2>
+      <p>Here's the whole project. It has two pages (<code>index.html</code> and <code>about.html</code>) and one shared stylesheet (<code>style.css</code>). Look around: click the menu, try the Phone size, hover over the tiles, send the form.</p>
+
+      <div class="playground" data-title="Daybloom" data-devices data-stack data-hint="Click About in the menu to see the second page. Every file is also in the my-site folder of this course.">
+        <script type="text/plain" data-name="index.html">
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Daybloom · Plan your days beautifully</title>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Fredoka:wght@500;700&display=swap">
+            <link rel="stylesheet" href="style.css">
+          </head>
+          <body>
+
+            <!-- Navigation -->
+            <header class="container nav">
+              <a class="logo" href="index.html">🌼 daybloom</a>
+              <nav class="nav-links">
+                <a href="#features">Features</a>
+                <a href="about.html">About</a>
+              </nav>
+              <a class="btn btn-main" href="#join">Join free</a>
+            </header>
+
+            <main>
+
+              <!-- Hero: the first thing people see -->
+              <section class="container hero">
+                <div>
+                  <span class="sticker">✨ New: shared calendars</span>
+                  <h1>Plan your days <span class="marker">beautifully</span>.</h1>
+                  <p class="lead">Daybloom is a calm, colorful planner for your tasks, events and little goals. Everything in one happy place.</p>
+                  <div class="hero-buttons">
+                    <a class="btn btn-main" href="#join">Get started free</a>
+                    <a class="btn btn-soft" href="#features">See features</a>
+                  </div>
+                  <p class="small-print">Free forever · No credit card</p>
+                </div>
+
+                <!-- A picture of the app, drawn with HTML and CSS -->
+                <div class="mockup" aria-hidden="true">
+                  <span class="float float-1">🌸</span>
+                  <div class="app">
+                    <div class="app-top">
+                      <div class="app-title">Today</div>
+                      <div class="app-day">Tue 17 Nov</div>
+                    </div>
+                    <div class="event sun"><span>09:00</span>Coffee with Lina ☕</div>
+                    <div class="event blue"><span>11:30</span>Design review 🎨</div>
+                    <div class="event pink"><span>14:00</span>Piano lesson 🎹</div>
+                    <div class="event mint"><span>18:00</span>Evening run 🏃</div>
+                  </div>
+                  <span class="float float-2">⭐</span>
+                </div>
+              </section>
+
+              <!-- Features -->
+              <section class="container section" id="features">
+                <div class="section-head">
+                  <h2>Everything in one calm place</h2>
+                  <p>No more sticky notes everywhere. Daybloom keeps your day simple.</p>
+                </div>
+
+                <div class="bento">
+                  <div class="tile pink tile-big">
+                    <span class="icon">📅</span>
+                    <h3>Your week at a glance</h3>
+                    <p>See every event and task together, in soft colors that are easy on the eyes.</p>
+                  </div>
+                  <div class="tile sun">
+                    <span class="icon">✅</span>
+                    <h3>Happy to-dos</h3>
+                    <p>Tick things off and watch your day bloom.</p>
+                  </div>
+                  <div class="tile blue">
+                    <span class="icon">👯</span>
+                    <h3>Plan with friends</h3>
+                    <p>Share a calendar in one tap.</p>
+                  </div>
+                  <div class="tile mint">
+                    <span class="icon">🔔</span>
+                    <h3>Gentle reminders</h3>
+                    <p>Nudges, never nagging.</p>
+                  </div>
+                  <div class="tile lilac">
+                    <span class="icon">🌙</span>
+                    <h3>Dark mode</h3>
+                    <p>Easy on your eyes at night.</p>
+                  </div>
+                </div>
+              </section>
+
+              <!-- A happy user -->
+              <section class="container section">
+                <figure class="quote">
+                  <blockquote>“I used to forget everything. Now my week actually looks fun to read.”</blockquote>
+                  <figcaption class="person">
+                    <img src="images/avatar.svg" alt="">
+                    <span><strong>Maya K.</strong><small>Student and weekend baker</small></span>
+                  </figcaption>
+                </figure>
+              </section>
+
+              <!-- Sign up -->
+              <section class="container section" id="join">
+                <div class="join">
+                  <h2>Start blooming today 🌼</h2>
+                  <p>Free for everyone. Takes ten seconds.</p>
+                  <form class="join-form">
+                    <input type="email" name="email" placeholder="you@example.com" aria-label="Email address" required>
+                    <button type="submit">Join free</button>
+                  </form>
+                </div>
+              </section>
+
+            </main>
+
+            <footer class="container footer">
+              <span>© 2026 Daybloom. Made with HTML &amp; CSS.</span>
+              <span><a href="#features">Features</a> · <a href="about.html">About</a> · <a href="#join">Join</a></span>
+            </footer>
+
+          </body>
+          </html>
+        </script>
+        <script type="text/plain" data-name="about.html">
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>About · Daybloom</title>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Fredoka:wght@500;700&display=swap">
+            <link rel="stylesheet" href="style.css">
+          </head>
+          <body>
+
+            <!-- Navigation (the same on every page) -->
+            <header class="container nav">
+              <a class="logo" href="index.html">🌼 daybloom</a>
+              <nav class="nav-links">
+                <a href="index.html#features">Features</a>
+                <a class="active" href="about.html">About</a>
+              </nav>
+              <a class="btn btn-main" href="index.html#join">Join free</a>
+            </header>
+
+            <main>
+
+              <section class="container page-hero">
+                <span class="sticker">Our story</span>
+                <h1>Made by people who love lists</h1>
+                <p class="lead">Daybloom started as a paper notebook full of doodles. We wanted planning to feel less like homework and more like a little treat.</p>
+              </section>
+
+              <section class="container section">
+                <div class="section-head">
+                  <h2>The team</h2>
+                  <p>Three friends, one kitchen table, too much tea.</p>
+                </div>
+                <div class="team">
+                  <div class="member">
+                    <img src="images/avatar.svg" alt="Portrait of Maya">
+                    <h3>Maya</h3>
+                    <p>Design and doodles</p>
+                  </div>
+                  <div class="member">
+                    <img class="tint-1" src="images/avatar.svg" alt="Portrait of Omar">
+                    <h3>Omar</h3>
+                    <p>Code and coffee</p>
+                  </div>
+                  <div class="member">
+                    <img class="tint-2" src="images/avatar.svg" alt="Portrait of Lina">
+                    <h3>Lina</h3>
+                    <p>Words and welcomes</p>
+                  </div>
+                </div>
+              </section>
+
+              <section class="container section">
+                <div class="section-head">
+                  <h2>What we believe</h2>
+                </div>
+                <div class="bento">
+                  <div class="tile mint">
+                    <span class="icon">🍃</span>
+                    <h3>Calm beats busy</h3>
+                    <p>A good plan leaves room to breathe.</p>
+                  </div>
+                  <div class="tile sun">
+                    <span class="icon">🎨</span>
+                    <h3>Color makes it fun</h3>
+                    <p>Planning should make you smile.</p>
+                  </div>
+                  <div class="tile blue">
+                    <span class="icon">🔒</span>
+                    <h3>Your days are yours</h3>
+                    <p>We never sell your information.</p>
+                  </div>
+                </div>
+              </section>
+
+            </main>
+
+            <footer class="container footer">
+              <span>© 2026 Daybloom. Made with HTML &amp; CSS.</span>
+              <span><a href="index.html#features">Features</a> · <a href="about.html">About</a> · <a href="index.html#join">Join</a></span>
+            </footer>
+
+          </body>
+          </html>
+        </script>
+        <script type="text/plain" data-name="style.css">
+          /* ==========================================
+             Daybloom: the final project
+             One stylesheet for every page.
+             ========================================== */
+
+          /* 1. Colors and sizes, saved as variables */
+          :root {
+            --ink: #231F35;
+            --muted: #6E6882;
+            --bg: #FFFBF5;
+            --white: #FFFFFF;
+            --main: #FF5C8A;
+            --main-dark: #E23E6E;
+            --yellow: #FFD84D;
+            --pink: #FFE1EA;
+            --blue: #E1E8FF;
+            --mint: #DDF5E8;
+            --sun: #FFF1C9;
+            --lilac: #EEE6FF;
+            --radius: 24px;
+            --shadow: 0 20px 50px rgba(60, 40, 120, 0.12);
+          }
+
+          /* 2. The basics */
+          * {
+            box-sizing: border-box;
+          }
+
+          body {
+            margin: 0;
+            font-family: "Figtree", system-ui, sans-serif;
+            font-size: 17px;
+            line-height: 1.6;
+            color: var(--ink);
+            background: var(--bg);
+          }
+
+          h1, h2, h3 {
+            font-family: "Fredoka", system-ui, sans-serif;
+            line-height: 1.15;
+            margin: 0 0 12px;
+          }
+
+          img {
+            max-width: 100%;
+            height: auto;
+          }
+
+          a {
+            color: inherit;
+          }
+
+          /* Keeps everything a nice width, in the middle */
+          .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding-left: 24px;
+            padding-right: 24px;
+          }
+
+          /* Soft background colors, used by many things */
+          .pink  { background: var(--pink); }
+          .blue  { background: var(--blue); }
+          .mint  { background: var(--mint); }
+          .sun   { background: var(--sun); }
+          .lilac { background: var(--lilac); }
+
+          /* 3. Buttons */
+          .btn {
+            display: inline-block;
+            padding: 14px 26px;
+            border-radius: 999px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: transform 0.2s ease, background 0.2s ease;
+          }
+          .btn:hover {
+            transform: translateY(-2px);
+          }
+          .btn-main {
+            background: var(--main);
+            color: white;
+            box-shadow: 0 10px 24px rgba(255, 92, 138, 0.35);
+          }
+          .btn-main:hover {
+            background: var(--main-dark);
+          }
+          .btn-soft {
+            background: var(--white);
+            color: var(--ink);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+          }
+
+          /* 4. Navigation */
+          .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+          }
+          .logo {
+            font-family: "Fredoka", sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            text-decoration: none;
+          }
+          .nav-links {
+            display: flex;
+            gap: 6px;
+          }
+          .nav-links a {
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 999px;
+          }
+          .nav-links a:hover,
+          .nav-links a.active {
+            background: var(--pink);
+          }
+          .nav .btn {
+            padding: 10px 20px;
+          }
+
+          /* 5. Hero: the first thing people see */
+          .hero {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 56px;
+            align-items: center;
+            padding-top: 48px;
+            padding-bottom: 96px;
+          }
+          .sticker {
+            display: inline-block;
+            background: var(--ink);
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            transform: rotate(-3deg);
+            margin-bottom: 18px;
+          }
+          .hero h1 {
+            font-size: clamp(40px, 6vw, 68px);
+          }
+          .marker {
+            background: linear-gradient(transparent 60%, var(--yellow) 60%);
+          }
+          .lead {
+            font-size: 20px;
+            color: var(--muted);
+            max-width: 480px;
+          }
+          .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 28px 0 14px;
+          }
+          .small-print {
+            font-size: 14px;
+            color: var(--muted);
+          }
+
+          /* 6. The app picture, drawn with HTML and CSS */
+          .mockup {
+            position: relative;
+          }
+          .app {
+            background: var(--white);
+            border-radius: 28px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+            transform: rotate(2deg);
+          }
+          .app-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+          }
+          .app-title {
+            font-family: "Fredoka", sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+          }
+          .app-day {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+          }
+          .event {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 12px 14px;
+            border-radius: 16px;
+            margin-top: 10px;
+            font-weight: 600;
+          }
+          .event span {
+            width: 44px;
+            font-size: 13px;
+            opacity: 0.7;
+          }
+          .float {
+            position: absolute;
+            font-size: 40px;
+            animation: float 4s ease-in-out infinite;
+          }
+          .float-1 { top: -26px; left: -12px; }
+          .float-2 { bottom: -22px; right: 12px; animation-delay: -2s; }
+
+          @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-12px); }
+          }
+
+          /* 7. Sections */
+          .section {
+            padding-top: 72px;
+            padding-bottom: 72px;
+          }
+          .section-head {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 40px;
+          }
+          .section-head h2 {
+            font-size: clamp(32px, 4vw, 44px);
+          }
+          .section-head p {
+            color: var(--muted);
+            font-size: 18px;
+            margin: 0;
+          }
+
+          /* 8. Feature tiles (a bento grid) */
+          .bento {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+          }
+          .tile {
+            border-radius: var(--radius);
+            padding: 28px;
+            transition: transform 0.25s ease;
+          }
+          .tile:hover {
+            transform: translateY(-6px);
+          }
+          .tile-big {
+            grid-column: span 2;
+          }
+          .icon {
+            display: block;
+            font-size: 36px;
+            margin-bottom: 14px;
+          }
+          .tile p {
+            margin: 0;
+            color: var(--muted);
+          }
+
+          /* 9. Quote from a happy user */
+          .quote {
+            max-width: 720px;
+            margin: 0 auto;
+            text-align: center;
+          }
+          .quote blockquote {
+            font-family: "Fredoka", sans-serif;
+            font-size: clamp(24px, 3vw, 32px);
+            line-height: 1.35;
+            margin: 0 0 24px;
+          }
+          .person {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+          }
+          .person img {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+          }
+          .person small {
+            display: block;
+            color: var(--muted);
+          }
+
+          /* 10. Join form */
+          .join {
+            background: linear-gradient(135deg, var(--pink), var(--blue));
+            border-radius: 36px;
+            padding: 56px 24px;
+            text-align: center;
+          }
+          .join h2 {
+            font-size: clamp(30px, 4vw, 42px);
+          }
+          .join p {
+            color: var(--muted);
+            margin: 0;
+          }
+          .join-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-width: 480px;
+            margin: 24px auto 0;
+          }
+          .join-form input {
+            flex: 1 1 220px;
+            font: inherit;
+            font-size: 16px;
+            padding: 14px 20px;
+            border: 2px solid transparent;
+            border-radius: 999px;
+            outline: none;
+          }
+          .join-form input:focus {
+            border-color: var(--main);
+          }
+          .join-form button {
+            flex: 1 1 auto;
+            font: inherit;
+            font-weight: 700;
+            padding: 14px 26px;
+            border: none;
+            border-radius: 999px;
+            background: var(--ink);
+            color: white;
+            cursor: pointer;
+            transition: background 0.2s ease;
+          }
+          .join-form button:hover {
+            background: var(--main);
+          }
+
+          /* 11. Footer */
+          .footer {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-top: 32px;
+            padding-bottom: 40px;
+            font-size: 14px;
+            color: var(--muted);
+          }
+
+          /* 12. About page */
+          .page-hero {
+            text-align: center;
+            max-width: 720px;
+            padding-top: 56px;
+            padding-bottom: 24px;
+          }
+          .page-hero h1 {
+            font-size: clamp(38px, 5vw, 56px);
+          }
+          .page-hero .lead {
+            margin: 0 auto;
+          }
+          .team {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+          }
+          .member {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 28px 24px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(60, 40, 120, 0.06);
+          }
+          .member img {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+          }
+          .member h3 {
+            margin: 12px 0 4px;
+          }
+          .member p {
+            margin: 0;
+            color: var(--muted);
+          }
+          /* Turns the same picture into different colors */
+          .tint-1 { filter: hue-rotate(110deg); }
+          .tint-2 { filter: hue-rotate(220deg); }
+
+          /* 13. Tablets and phones */
+          @media (max-width: 860px) {
+            .hero {
+              grid-template-columns: 1fr;
+              padding-top: 24px;
+            }
+            .bento {
+              grid-template-columns: 1fr 1fr;
+            }
+          }
+
+          @media (max-width: 600px) {
+            .nav-links {
+              display: none;
+            }
+            .bento {
+              grid-template-columns: 1fr;
+            }
+            .tile-big {
+              grid-column: auto;
+            }
+            .section {
+              padding-top: 48px;
+              padding-bottom: 48px;
+            }
+          }
+
+          /* 14. Less motion for people who asked for it */
+          @media (prefers-reduced-motion: reduce) {
+            * {
+              animation: none !important;
+              transition: none !important;
+            }
+          }
+        </script>
+      </div>
+
+      <p>It might look like a lot of code. But every single line is something you've already learned. Let's walk through how it was built, one step at a time. Keep the playground above open and follow along in the code.</p>
+    </section>
+
+    <section>
+      <h2>Step 1: plan before you code</h2>
+      <p>Professionals don't start by typing. They start with a quick sketch: what sections the page has, and what goes in each one. You can do this on paper in two minutes.</p>
+
+      <div class="wire" style="grid-template-columns: 1fr; grid-template-areas: none;" role="img" aria-label="The plan for the Daybloom home page: navigation, hero, features, a quote, a sign-up form and a footer, stacked from top to bottom">
+        <div style="--wc: var(--c-attr); grid-area: auto">nav<small>logo, two links, a "Join" button</small></div>
+        <div style="--wc: var(--c-tag); grid-area: auto; min-height: 90px">hero<small>big headline and buttons on the left, a picture of the app on the right</small></div>
+        <div style="--wc: var(--c-prop); grid-area: auto">features<small>a heading and five tiles in a bento grid</small></div>
+        <div style="--wc: var(--c-sel); grid-area: auto">quote<small>a happy user with a profile picture</small></div>
+        <div style="--wc: var(--c-tag); grid-area: auto">join<small>an email box and a button on a gradient</small></div>
+        <div style="--wc: var(--c-val); grid-area: auto">footer<small>copyright and links</small></div>
+      </div>
+
+      <p>Then pick your style: <strong>fonts</strong> (Fredoka for headings, Figtree for text), a <strong>main color</strong> (pink <code>#FF5C8A</code>) and a few <strong>soft colors</strong> (pink, blue, mint, yellow, lilac).</p>
+    </section>
+
+    <section>
+      <h2>Step 2: the skeleton and the fonts</h2>
+      <p class="muted small">From lessons 1, 6 and 13.</p>
+      <p>Every page starts with the skeleton. In the <code>&lt;head&gt;</code> there are two <code>&lt;link&gt;</code> tags: one loads the Google Fonts, and one loads our <code>style.css</code>.</p>
+      <script type="text/plain" class="snippet">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>Daybloom · Plan your days beautifully</title>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Fredoka:wght@500;700&display=swap">
+          <link rel="stylesheet" href="style.css">
+        </head>
+      </script>
+    </section>
+
+    <section>
+      <h2>Step 3: variables and basics</h2>
+      <p class="muted small">From lessons 4, 8 and 14.</p>
+      <p>The top of <code>style.css</code> saves every color as a variable. Change <code>--main</code> and the whole site changes color. Then come the basics every site needs: <code>box-sizing</code>, a font on the <code>body</code>, and pictures that never overflow.</p>
+      <p>The <code>.container</code> class is the "max-width + margin auto" trick from the Sizes lesson. Every section uses it, so all content lines up in a neat column, never wider than 1100px.</p>
+      <script type="text/plain" class="snippet" data-lang="css">
+        .container {
+          max-width: 1100px;
+          margin: 0 auto;
+          padding-left: 24px;
+          padding-right: 24px;
+        }
+      </script>
+      <aside class="note idea">
+        <h4>Why padding-left and padding-right?</h4>
+        <p>Sections use both <code>.container</code> (side padding) and <code>.section</code> (top and bottom padding). If <code>.section</code> used the shorthand <code>padding: 72px 0</code>, the <code>0</code> would erase the side padding from <code>.container</code>. Writing each side separately keeps them from fighting.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Step 4: the navigation bar</h2>
+      <p class="muted small">From lessons 9 and 11.</p>
+      <p>The header is a flex container with three items: the logo, the links, and a button. <code>justify-content: space-between</code> pushes them apart. The links are their own small flex container. The "Join free" button reuses the <code>.btn</code> and <code>.btn-main</code> classes, the same ones the big buttons in the hero use.</p>
+    </section>
+
+    <section>
+      <h2>Step 5: the hero</h2>
+      <p class="muted small">From lessons 6, 12 and 14.</p>
+      <p>The hero is a <strong>grid with two columns</strong>: text on the left, the app picture on the right (<code>grid-template-columns: 1.1fr 1fr</code>). The headline uses <code>clamp()</code> so it's big on laptops and still fits on phones. The yellow marker behind "beautifully" is a gradient that only fills the bottom 40% of the word.</p>
+      <p>The best part: <strong>the app picture isn't a picture at all</strong>. It's made of divs. A white rounded card, tilted with <code>transform: rotate(2deg)</code>, holding four colored event rows. Two emoji float around it using a <code>@keyframes</code> animation. Turn on <strong>X-ray</strong> in the preview and point at it to see the boxes.</p>
+      <script type="text/plain" class="snippet">
+        <div class="app">
+          <div class="app-top">
+            <div class="app-title">Today</div>
+            <div class="app-day">Tue 17 Nov</div>
+          </div>
+          <div class="event sun"><span>09:00</span>Coffee with Lina ☕</div>
+          <div class="event blue"><span>11:30</span>Design review 🎨</div>
+        </div>
+      </script>
+    </section>
+
+    <section>
+      <h2>Step 6: the feature tiles</h2>
+      <p class="muted small">From lesson 12.</p>
+      <p>The features are a <strong>bento grid</strong>: <code>repeat(3, 1fr)</code> makes three columns, and the first tile has <code>grid-column: span 2</code> so it's twice as wide. Each tile gets one soft color class (<code>.pink</code>, <code>.sun</code>, <code>.blue</code>...), which are written once and used by the event rows too. On hover, tiles lift up 6px.</p>
+    </section>
+
+    <section>
+      <h2>Step 7: the quote and the sign-up form</h2>
+      <p class="muted small">From lessons 3, 10 and 14.</p>
+      <p>The quote uses <code>&lt;figure&gt;</code>, <code>&lt;blockquote&gt;</code> and <code>&lt;figcaption&gt;</code>, the right tags for a quote with a name. The avatar is a circle thanks to <code>border-radius: 50%</code>.</p>
+      <p>The sign-up form sits on a pink-to-blue gradient. The email box and button are in a flex row that wraps, so on a phone the button drops below the box. The input has an <code>aria-label</code> instead of a visible label: it's read aloud by screen readers. That's fine when the design has room for only one box, and the placeholder makes it obvious.</p>
+    </section>
+
+    <section>
+      <h2>Step 8: phones and tablets</h2>
+      <p class="muted small">From lesson 15.</p>
+      <p>At the bottom of the CSS, two media queries change the layout:</p>
+      <ul>
+        <li><strong>860px and below</strong>: the hero becomes one column (text on top, app picture below), and the bento grid becomes two columns.</li>
+        <li><strong>600px and below</strong>: the bento becomes one column, the nav links hide (they're also in the footer), and the sections get less space.</li>
+      </ul>
+      <p>Finally, <code>prefers-reduced-motion</code> switches off the floating and hover animations for people who asked their device for less motion. Press <strong>Phone 375</strong> under the preview to see it all.</p>
+    </section>
+
+    <section>
+      <h2>Make it yours</h2>
+      <p>Now the fun part. Turn Daybloom into <em>your</em> website. Ideas:</p>
+      <div class="trio">
+        <div><div class="big" style="color: var(--c-tag)">you</div><p>A personal site about you: your hobbies, your favorite things, a gallery.</p></div>
+        <div><div class="big" style="color: var(--c-prop)">a club</div><p>A page for your team, class or club, with a sign-up form.</p></div>
+        <div><div class="big" style="color: var(--c-val)">a shop</div><p>A pretend shop or café with a menu and prices.</p></div>
+        <div><div class="big" style="color: var(--c-sel)">an app</div><p>A landing page for an app idea you'd love to exist.</p></div>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn: remix it</h4>
+        <ol>
+          <li><strong>New name and logo</strong>: change "daybloom" and the 🌼 in the nav and footer.</li>
+          <li><strong>New colors</strong>: change the variables at the top of <code>style.css</code>. Try <code>--main: #5B6CFF;</code>.</li>
+          <li><strong>New words</strong>: rewrite the headline, the lead text and every tile.</li>
+          <li><strong>New fonts</strong>: pick two from Google Fonts and update the link and the <code>font-family</code> lines.</li>
+          <li><strong>A new section</strong>: add a "How it works" section with three numbered steps.</li>
+          <li><strong>A new page</strong>: in the <code>my-site</code> folder, copy <code>about.html</code> to <code>contact.html</code>, change its content, and add it to the menu on every page.</li>
+        </ol>
+      </aside>
+
+      <aside class="note tip">
+        <h4>Work on the real files</h4>
+        <p>Open the <code>my-site</code> folder of this course in VS Code (File &rarr; Open Folder). It has the exact same files as the playground. Open <code>index.html</code> with Live Server, and you're building a real website on your own computer. When you're happy, put it online with Netlify Drop or GitHub Pages (see lesson 13).</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>What to learn next</h2>
+      <p>You now know the HTML and CSS that real websites are built with. Here's where to go from here:</p>
+      <ol class="steps">
+        <li><div><p><strong>Build three more small sites.</strong> Practice is everything. Copy the layout of a website you like (for practice only), then design your own.</p></div></li>
+        <li><div><p><strong>Play CSS games.</strong> <strong>Flexbox Froggy</strong> and <strong>Grid Garden</strong> are free browser games that make layout stick.</p></div></li>
+        <li><div><p><strong>Learn JavaScript</strong>, to make menus open, build quizzes and games, and save information. You've already seen a taste with <code>onclick</code>.</p></div></li>
+        <li><div><p><strong>Keep good references</strong>: <strong>MDN Web Docs</strong> (developer.mozilla.org) explains every tag and property, and <strong>web.dev/learn</strong> has free courses on CSS and design.</p></div></li>
+      </ol>
+
+      <div class="quiz">
+        <p class="q">You want to change Daybloom's pink to blue everywhere. What's the fastest way?</p>
+        <div class="opts">
+          <button>Change every #FF5C8A in every file</button>
+          <button data-correct>Change --main (and --main-dark) at the top of style.css</button>
+          <button>Add a new class called .blue</button>
+        </div>
+        <p class="why">That's the power of CSS variables: every part of the site uses <code>var(--main)</code>, so changing it once changes everything.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>You did it</h4>
+        <p>When you started this course, a website was a mystery. Now you can plan one, build it with HTML, style it with CSS, lay it out with flexbox and grid, make it work on phones, add hover effects and animation, and put it online. That's real web development. Go build something you're proud of. 🌼</p>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../assets/course.js"></script>
+</body>
+</html>
