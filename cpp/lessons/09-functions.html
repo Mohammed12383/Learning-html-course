@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Functions · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="09-functions">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 09 &middot; <b>Functions &amp; memory</b></p>
+      <div class="hero-code" aria-hidden="true">int f()</div>
+      <h1>Functions</h1>
+      <p class="lead">You've been using one function all along: <code>main</code>. Now you'll write your own. A function is a named piece of code you can use again and again. You'll also learn one of C++'s most important ideas: the difference between passing a <strong>copy</strong> and passing the <strong>real thing</strong>.</p>
+      <ul class="learn">
+        <li>Writing functions</li>
+        <li>Parameters and return</li>
+        <li>void</li>
+        <li>Pass by value vs by reference</li>
+        <li>Default values and overloading</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Your own functions</h2>
+      <div class="anatomy" role="img" aria-label="int area, open bracket, int width, int height, close bracket, then the body in curly brackets">
+        <div class="part sel"><span>int</span><small>type it<br>gives back</small></div>
+        <div class="part prop"><span> area</span><small>its name</small></div>
+        <div class="part text"><span>(int width, int height)</span><small>parameters:<br>values it needs</small></div>
+        <div class="part punc"><span> { return ...; }</span><small>the code</small></div>
+      </div>
+
+      <div class="runnable" data-lang="cpp" data-title="Write and call a function">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int area(int width, int height) {
+              return width * height;
+          }
+
+          void greet(string name) {
+              cout << "Hello, " << name << "!" << endl;
+          }
+
+          int main() {
+              cout << area(4, 3) << endl;
+              int room = area(5, 4);
+              cout << "The room is " << room << " square meters" << endl;
+
+              greet("Lina");
+              greet("Omar");
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+12
+The room is 20 square meters
+Hello, Lina!
+Hello, Omar!
+</script>
+      </div>
+      <ul>
+        <li>The first word is the type the function <strong>returns</strong>: <code>int</code> means it gives back a whole number.</li>
+        <li><code class="k-tag">void</code> means it returns nothing: it just does something, like printing.</li>
+        <li>Functions are written <strong>above</strong> <code>main</code>, because the compiler reads top to bottom and must know a function before it's used.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Watch a call</h2>
+      <div class="stepper" data-lang="cpp" data-title="Jump in, jump back">
+        <script type="text/plain">
+          int doubleIt(int n) {
+              int result = n * 2;
+              return result;
+          }
+
+          int main() {
+              int x = doubleIt(21);
+              cout << x << endl;
+          }
+        </script>
+        <script type="application/json">
+          [
+            {"line": 6, "note": "Every program starts in <code>main</code>."},
+            {"line": 7, "note": "A call: <code>doubleIt(21)</code>. Jump into the function."},
+            {"line": 1, "vars": {"n": "21"}, "note": "The parameter <code>n</code> is a new box holding 21."},
+            {"line": 2, "vars": {"n": "21", "result": "42"}, "note": "21 × 2 = 42."},
+            {"line": 3, "vars": {"n": "21", "result": "42"}, "note": "<code>return</code> sends 42 back. The function's boxes are thrown away."},
+            {"line": 7, "vars": {"x": "42"}, "note": "Back in <code>main</code>: <code>x</code> gets 42."},
+            {"line": 8, "vars": {"x": "42"}, "out": "42\n", "note": "Print it."}
+          ]
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>A copy, or the real thing?</h2>
+      <p>This is a big idea in C++. Normally, a function gets a <strong>copy</strong> of the value. Changing the copy doesn't change the original. This is called <strong>pass by value</strong>.</p>
+      <p>Put <code>&amp;</code> after the type, and the function gets a <strong>reference</strong>: another name for the <em>same</em> box. Changing it changes the original. This is called <strong>pass by reference</strong>.</p>
+
+      <div class="split2">
+        <div>
+          <h4>by value: int n</h4>
+          <div class="memory" role="img" aria-label="Pass by value: main's coins box holds 10, and the function has its own separate copy n" style="margin: 8px 0 0">
+            <div class="slot num"><span class="nm">coins (main)</span><span class="vl">10</span><span class="ty">original</span></div>
+            <div class="slot num"><span class="nm">n (function)</span><span class="vl">20</span><span class="ty">a separate copy</span></div>
+          </div>
+        </div>
+        <div>
+          <h4>by reference: int&amp; n</h4>
+          <div class="memory" role="img" aria-label="Pass by reference: coins and n are two names for the same box, which now holds 20" style="margin: 8px 0 0">
+            <div class="slot other"><span class="nm">coins = n</span><span class="vl">20</span><span class="ty">one box, two names</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="runnable" data-lang="cpp" data-title="Copy vs reference">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          void doubleCopy(int n) {        // gets a copy
+              n = n * 2;
+          }
+
+          void doubleReal(int& n) {       // gets the real box
+              n = n * 2;
+          }
+
+          int main() {
+              int coins = 10;
+
+              doubleCopy(coins);
+              cout << "After doubleCopy: " << coins << endl;   // still 10
+
+              doubleReal(coins);
+              cout << "After doubleReal: " << coins << endl;   // now 20
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+After doubleCopy: 10
+After doubleReal: 20
+</script>
+      </div>
+
+      <aside class="note tip">
+        <h4>const reference: fast and safe</h4>
+        <p>Copying a big string or vector takes time. <code>const string&amp; name</code> passes the real thing (no copy, so it's fast) but promises not to change it (<code>const</code>). Use it for strings, vectors and objects you only want to read:</p>
+        <script type="text/plain" class="snippet" data-lang="cpp">
+          void printAll(const vector<string>& items) {
+              for (const string& item : items) {
+                  cout << item << endl;
+              }
+          }
+        </script>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Default values and overloading</h2>
+      <div class="runnable" data-lang="cpp" data-title="Two handy features">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          // a default value is used when you leave it out
+          void cheer(string word, int times = 3) {
+              for (int i = 0; i < times; i++) cout << word << "! ";
+              cout << endl;
+          }
+
+          // overloading: two functions with the same name, different parameters
+          int biggest(int a, int b) {
+              return a > b ? a : b;
+          }
+          double biggest(double a, double b) {
+              return a > b ? a : b;
+          }
+
+          int main() {
+              cheer("Go");
+              cheer("Hooray", 5);
+              cout << biggest(3, 9) << endl;
+              cout << biggest(2.5, 1.5) << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Go! Go! Go! 
+Hooray! Hooray! Hooray! Hooray! Hooray! 
+9
+2.5
+</script>
+      </div>
+      <p>With <strong>overloading</strong>, the compiler picks the right version by looking at the types you pass in.</p>
+    </section>
+
+    <section>
+      <h2>Functions that call functions</h2>
+      <div class="runnable" data-lang="cpp" data-title="Build bigger things from small pieces">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          string repeat(char c, int n) {
+              return string(n, c);
+          }
+
+          void box(const string& text) {
+              string line = "+" + repeat('-', text.length() + 2) + "+";
+              cout << line << endl;
+              cout << "| " << text << " |" << endl;
+              cout << line << endl;
+          }
+
+          int main() {
+              box("Hello, C++!");
+              box("Functions are building blocks");
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
++-------------+
+| Hello, C++! |
++-------------+
++-------------------------------+
+| Functions are building blocks |
++-------------------------------+
+</script>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Write <code>bool isEven(int n)</code>.</li>
+          <li>Write <code>double average(const vector&lt;int&gt;&amp; v)</code>.</li>
+          <li>Write <code>void swapValues(int&amp; a, int&amp; b)</code> that swaps two variables. Test it in <code>main</code>.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="cpp" data-title="Your functions">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          bool isEven(int n) {
+              return n % 2 == 0;
+          }
+
+          int main() {
+              cout << isEven(4) << " " << isEven(7) << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+1 0
+</script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Using a function before it's written</strong>: put functions above <code>main</code> (or declare them first, see lesson 15).</li>
+          <li><strong>Forgetting <code>return</code></strong> in a function that isn't <code>void</code>.</li>
+          <li><strong>Expecting a copy to change the original</strong>: add <code>&amp;</code> if the function must change it.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">void addOne(int x) { x++; } What happens to n after addOne(n)?</p>
+        <div class="opts">
+          <button>n goes up by 1</button>
+          <button data-correct>n stays the same</button>
+          <button>It doesn't compile</button>
+        </div>
+        <p class="why"><code>x</code> is a copy. To change <code>n</code>, the parameter would need to be <code>int&amp; x</code>.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>returnType name(type param) { ... return value; }</code>. <code>void</code> returns nothing.</li>
+          <li>Write functions above <code>main</code>.</li>
+          <li><code>int n</code> gets a copy. <code>int&amp; n</code> gets the real box. <code>const string&amp; s</code> reads without copying.</li>
+          <li>Default values: <code>int times = 3</code>. Overloading: same name, different parameter types.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

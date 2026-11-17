@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cheat Sheet · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="cheatsheet" data-group="build">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Reference</p>
+      <div class="hero-code" aria-hidden="true">c++</div>
+      <h1>C++ Cheat Sheet</h1>
+      <p class="lead">Everything from the course on one page. Type in the box to find what you need.</p>
+      <label for="cheat-filter" class="eyebrow" style="margin-top: 8px">Search</label>
+      <input id="cheat-filter" class="cheat-search" type="search" placeholder="Try: vector, loop, pointer, string, class..." autocomplete="off">
+    </header>
+
+    <section class="cheat">
+      <h2>The program frame</h2>
+      <script type="text/plain" class="snippet" data-lang="cpp">
+        #include <iostream>
+        #include <string>
+        using namespace std;
+
+        int main() {
+            cout << "Hello!" << endl;
+            return 0;
+        }
+      </script>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>#include &lt;name&gt;</code></td><td>Bring in a toolbox</td><td><code>#include &lt;vector&gt;</code></td></tr>
+        <tr><td><code>cout &lt;&lt; x &lt;&lt; endl;</code></td><td>Print, then end the line</td><td><code>cout &lt;&lt; "Hi " &lt;&lt; name &lt;&lt; endl;</code></td></tr>
+        <tr><td><code>cin &gt;&gt; x;</code></td><td>Read a word or number</td><td><code>cin &gt;&gt; age;</code></td></tr>
+        <tr><td><code>getline(cin, s);</code></td><td>Read a whole line</td><td><code>getline(cin, fullName);</code></td></tr>
+        <tr><td><code>\n \t \" \\</code></td><td>New line, tab, quote, backslash</td><td><code>"Line 1\nLine 2"</code></td></tr>
+        <tr><td><code>// comment</code> <code>/* … */</code></td><td>Notes the compiler ignores</td><td></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Variables and math</h2>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>int</code></td><td>Whole number (4 bytes)</td><td><code>int lives = 3;</code></td></tr>
+        <tr><td><code>double</code></td><td>Decimal number (8 bytes)</td><td><code>double price = 4.99;</code></td></tr>
+        <tr><td><code>char</code></td><td>One character, single quotes</td><td><code>char grade = 'A';</code></td></tr>
+        <tr><td><code>bool</code></td><td>true / false (prints 1 / 0)</td><td><code>bool done = false;</code></td></tr>
+        <tr><td><code>string</code></td><td>Text, double quotes</td><td><code>string name = "Sam";</code></td></tr>
+        <tr><td><code>long long</code></td><td>Very big whole numbers</td><td><code>long long big = 10000000000LL;</code></td></tr>
+        <tr><td><code>const</code> / <code>auto</code></td><td>Can't change / compiler picks the type</td><td><code>const double PI = 3.14;</code></td></tr>
+        <tr><td><code>sizeof(type)</code></td><td>Bytes of memory it uses</td><td><code>sizeof(int)</code> → 4</td></tr>
+        <tr><td><code>+ - * / %</code></td><td>Math. int / int drops decimals!</td><td><code>7 / 2</code> → 3, <code>7.0 / 2</code> → 3.5</td></tr>
+        <tr><td><code>static_cast&lt;double&gt;(x)</code></td><td>Convert to another type</td><td><code>static_cast&lt;double&gt;(total) / n</code></td></tr>
+        <tr><td><code>x++ x-- x += 5</code></td><td>Change a number</td><td><code>score += 10;</code></td></tr>
+        <tr><td><code>sqrt pow round floor ceil abs</code></td><td>From <code>&lt;cmath&gt;</code></td><td><code>pow(2, 10)</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Decisions and loops</h2>
+      <script type="text/plain" class="snippet" data-lang="cpp">
+        if (score >= 90) {
+            cout << "A";
+        } else if (score >= 70) {
+            cout << "B";
+        } else {
+            cout << "Keep going";
+        }
+
+        for (int i = 0; i < 5; i++) { }
+        for (int x : numbers) { }
+        while (lives > 0) { }
+      </script>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>== != &lt; &gt; &lt;= &gt;=</code></td><td>Compare</td><td><code>if (a == b)</code></td></tr>
+        <tr><td><code>&amp;&amp; || !</code></td><td>And, or, not</td><td><code>if (x &gt; 0 &amp;&amp; x &lt; 10)</code></td></tr>
+        <tr><td><code>switch (x) { case 1: …; break; default: … }</code></td><td>One value, many options</td><td><code>case 'q': …</code></td></tr>
+        <tr><td><code>q ? a : b</code></td><td>Pick one of two values</td><td><code>n == 1 ? "life" : "lives"</code></td></tr>
+        <tr><td><code>do { } while (q);</code></td><td>A loop that runs at least once</td><td></td></tr>
+        <tr><td><code>break</code> / <code>continue</code></td><td>Leave the loop / skip to the next round</td><td><code>if (found) break;</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Vectors, strings and the STL</h2>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>vector&lt;int&gt; v = {1, 2};</code></td><td>A list that can grow</td><td><code>#include &lt;vector&gt;</code></td></tr>
+        <tr><td><code>push_back pop_back size</code></td><td>Add, remove last, count</td><td><code>v.push_back(3);</code></td></tr>
+        <tr><td><code>v[i]</code> / <code>v.at(i)</code></td><td>Item at index (at checks it exists)</td><td><code>v.at(0)</code></td></tr>
+        <tr><td><code>front back empty clear</code></td><td>First, last, is empty, remove all</td><td><code>v.back()</code></td></tr>
+        <tr><td><code>int a[5] = {…};</code></td><td>A fixed-size array</td><td><code>a[2]</code></td></tr>
+        <tr><td><code>s.length() s[i]</code></td><td>String length, one char</td><td><code>s[0]</code></td></tr>
+        <tr><td><code>s.substr(start, count)</code></td><td>A piece of the string</td><td><code>"pancake".substr(3, 4)</code></td></tr>
+        <tr><td><code>s.find(x)</code></td><td>Position, or <code>string::npos</code></td><td><code>if (s.find("a") != string::npos)</code></td></tr>
+        <tr><td><code>to_string stoi stod</code></td><td>Number ↔ text</td><td><code>stoi("42")</code></td></tr>
+        <tr><td><code>toupper tolower isdigit</code></td><td>From <code>&lt;cctype&gt;</code></td><td><code>toupper(c)</code></td></tr>
+        <tr><td><code>map&lt;K, V&gt; m;</code></td><td>Key → value, sorted by key</td><td><code>m["apple"] = 0.5;</code></td></tr>
+        <tr><td><code>set&lt;T&gt; s;</code></td><td>Unique values</td><td><code>s.insert(x); s.count(x)</code></td></tr>
+        <tr><td><code>sort(v.begin(), v.end())</code></td><td>Sort (from <code>&lt;algorithm&gt;</code>)</td><td><code>…, greater&lt;int&gt;()</code> for biggest first</td></tr>
+        <tr><td><code>find count max_element reverse</code></td><td>More algorithms</td><td><code>*max_element(v.begin(), v.end())</code></td></tr>
+        <tr><td><code>[](int a, int b) { return a &lt; b; }</code></td><td>A lambda: a tiny function</td><td><code>sort(…, [](auto a, auto b) {…})</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Functions, references and pointers</h2>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>int f(int a) { return …; }</code></td><td>A function (write it above main)</td><td><code>int twice(int n) { return n * 2; }</code></td></tr>
+        <tr><td><code>void f()</code></td><td>Returns nothing</td><td><code>void greet(string name)</code></td></tr>
+        <tr><td><code>f(int n)</code></td><td>Gets a copy</td><td></td></tr>
+        <tr><td><code>f(int&amp; n)</code></td><td>Gets the real variable (can change it)</td><td><code>void addOne(int&amp; n)</code></td></tr>
+        <tr><td><code>f(const string&amp; s)</code></td><td>Reads without copying</td><td></td></tr>
+        <tr><td><code>&amp;x</code></td><td>The address of x</td><td><code>int* p = &amp;x;</code></td></tr>
+        <tr><td><code>*p</code></td><td>The box p points at</td><td><code>*p = 9;</code></td></tr>
+        <tr><td><code>nullptr</code></td><td>Points at nothing</td><td><code>if (p != nullptr)</code></td></tr>
+        <tr><td><code>p-&gt;f()</code></td><td>Follow the pointer, then call</td><td><code>robot-&gt;attack()</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Structs and classes</h2>
+      <script type="text/plain" class="snippet" data-lang="cpp">
+        class Player {
+        private:
+            string name;
+            int score = 0;
+        public:
+            Player(string n) : name(n) {}
+            void win(int points) { score += points; }
+            int getScore() const { return score; }
+        };
+
+        Player zara("Zara");
+        zara.win(50);
+      </script>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>struct Name { … };</code></td><td>Group values (public by default)</td><td><code>struct Point { int x; int y; };</code></td></tr>
+        <tr><td><code>class Name { … };</code></td><td>Data + methods (private by default)</td><td></td></tr>
+        <tr><td><code>public: private: protected:</code></td><td>Who can use it</td><td></td></tr>
+        <tr><td><code>Name(…) : a(x) {}</code></td><td>Constructor with initializer list</td><td><code>Player(string n) : name(n) {}</code></td></tr>
+        <tr><td><code>~Name()</code></td><td>Destructor: runs when destroyed</td><td></td></tr>
+        <tr><td><code>int get() const</code></td><td>A method that only reads</td><td></td></tr>
+        <tr><td><code>class B : public A</code></td><td>Inheritance</td><td><code>class Cat : public Animal</code></td></tr>
+        <tr><td><code>virtual … = 0;</code> / <code>override</code></td><td>Must / does replace the parent's version</td><td><code>int attack() override</code></td></tr>
+        <tr><td><code>make_unique&lt;T&gt;(…)</code></td><td>Create an object with a smart pointer</td><td><code>unique_ptr&lt;Robot&gt; r = make_unique&lt;Tank&gt;("Bo");</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Random numbers and real programs</h2>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>mt19937 rng(seed);</code></td><td>A random generator (from <code>&lt;random&gt;</code>)</td><td><code>mt19937 rng(random_device{}());</code></td></tr>
+        <tr><td><code>uniform_int_distribution&lt;int&gt; d(1, 6);</code></td><td>Whole numbers in a range</td><td><code>d(rng)</code></td></tr>
+        <tr><td><code>#include "file.h"</code></td><td>Include your own header file</td><td><code>#include "Robot.h"</code></td></tr>
+        <tr><td><code>Class::method</code></td><td>Write a method outside the class</td><td><code>void Robot::greet() { }</code></td></tr>
+        <tr><td><code>g++ -std=c++20 main.cpp -o app</code></td><td>Compile on a computer</td><td>then <code>./app</code></td></tr>
+        <tr><td><code>ofstream / ifstream</code></td><td>Write / read files (from <code>&lt;fstream&gt;</code>)</td><td><code>ofstream out("save.txt");</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

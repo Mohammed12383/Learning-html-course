@@ -3507,7 +3507,7 @@ td code { white-space: nowrap; overflow-wrap: normal; }
           colors = ["hotpink", "orange", "gold", "mediumseagreen", "dodgerblue"]
 
           t.penup()
-          t.goto(-150, -120)
+          t.goto(-115, -120)
           for i in range(len(steps)):
               t.fillcolor(colors[i])
               t.begin_fill()
@@ -7237,6 +7237,7 @@ Sk.builtinFiles={"files":{"src/builtin/sys.js":"var $builtinmodule=function(){va
         if (editor) editor.setMarks(errs.map(function (e) { return { line: e.line, kind: 'error' }; }));
         if (!errs.length) out.error('The compiler found a problem', r.compileText);
         errs.slice(0, 4).forEach(function (e) { out.error('Error on line ' + e.line, e.msg, cppHelp(e.msg)); });
+        out.console.scrollTop = 0;   // the first error is usually the one to fix
         return;
       }
       if (r.stdout) out.write(r.stdout);
@@ -8134,7 +8135,7 @@ window.COURSE_ASSETS = {
     pre.appendChild(code);
     main.appendChild(marks);
     var id = 'code-' + (++uid);
-    var ta = el('textarea', { class: 'ed-input', id: id, spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', autocorrect: 'off', wrap: 'off', 'aria-label': 'Code editor. Type to change the website.' });
+    var ta = el('textarea', { class: 'ed-input', id: id, spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', autocorrect: 'off', wrap: 'off', 'aria-label': 'Code editor' });
     main.appendChild(pre); main.appendChild(ta);
     root.appendChild(gutter); root.appendChild(main);
     root.addEventListener('click', function (e) { if (e.target === root || e.target === gutter) ta.focus(); });

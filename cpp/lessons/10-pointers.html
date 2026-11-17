@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Memory &amp; Pointers · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="10-pointers">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 10 &middot; <b>Functions &amp; memory</b></p>
+      <div class="hero-code" aria-hidden="true">*p</div>
+      <h1>Memory &amp; Pointers</h1>
+      <p class="lead">This is the lesson that makes C++ special. Every variable lives somewhere in memory, and every place in memory has an <strong>address</strong>, like a house number. A <strong>pointer</strong> is a variable that holds an address. It sounds tricky, but with pictures it's simple.</p>
+      <ul class="learn">
+        <li>Memory addresses</li>
+        <li>&amp;: "the address of"</li>
+        <li>Pointers and *</li>
+        <li>nullptr</li>
+        <li>Pointers vs references</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Every box has an address</h2>
+      <p>Think of memory as a very long street of boxes. Each box has a house number: its <strong>address</strong>. Addresses are usually written in <strong>hexadecimal</strong> (counting with 0-9 and a-f), like <code>0x1000</code>.</p>
+
+      <div class="cells" role="img" aria-label="A street of memory boxes with addresses 0x1000 to 0x100c. The variable age lives at 0x1004 and holds 12.">
+        <span class="cap">address →</span>
+        <div class="cell"><b>…</b><small>0x1000</small></div>
+        <div class="cell hl"><b>12</b><small>0x1004</small><small>age</small></div>
+        <div class="cell"><b>…</b><small>0x1008</small></div>
+        <div class="cell"><b>…</b><small>0x100c</small></div>
+      </div>
+
+      <p>Put <code>&amp;</code> in front of a variable to get its address. (The real addresses are long and change every time the program runs.)</p>
+      <div class="runnable" data-lang="cpp" data-title="Where do my variables live?">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              int age = 12;
+              double price = 4.5;
+
+              cout << "age holds " << age << " and lives at " << &age << endl;
+              cout << "price holds " << price << " and lives at " << &price << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+age holds 12 and lives at 0x7ffd1ae8aa1c
+price holds 4.5 and lives at 0x7ffd1ae8aa20
+</script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Pointers: a box that holds an address</h2>
+      <p>A <strong>pointer</strong> is a variable whose value is an address. Its type has a <code>*</code>: <code>int*</code> means "a pointer to an int". It "points at" another box.</p>
+
+      <div class="anatomy" role="img" aria-label="int star p equals ampersand age: p is a pointer to an int, holding the address of age">
+        <div class="part sel"><span>int*</span><small>"pointer to an int"</small></div>
+        <div class="part text"><span> p</span><small>its name</small></div>
+        <div class="part punc"><span> = </span><small></small></div>
+        <div class="part prop"><span>&amp;age</span><small>the address of age</small></div>
+        <div class="part punc"><span>;</span><small></small></div>
+      </div>
+
+      <div class="memory" role="img" aria-label="age lives at 0x1004 and holds 12. p lives at 0x2000 and holds the address 0x1004, so it points at age.">
+        <div class="slot num"><span class="nm">age @ 0x1004</span><span class="vl">12</span><span class="ty">an int</span></div>
+        <div class="slot other"><span class="nm">p @ 0x2000</span><span class="vl">0x1004 → age</span><span class="ty">an int* pointing at age</span></div>
+      </div>
+
+      <p>Put <code>*</code> in front of a pointer to reach the box it points at. This is called <strong>dereferencing</strong>: "go to that address". Step through it:</p>
+
+      <div class="stepper" data-lang="cpp" data-title="Follow the pointer">
+        <script type="text/plain">
+          int age = 12;
+          int* p = &age;
+          cout << *p << endl;
+          *p = 13;
+          cout << age << endl;
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "vars": {"age @0x1004": "12"}, "note": "A box called <code>age</code> at address 0x1004, holding 12."},
+            {"line": 2, "vars": {"age @0x1004": "12", "p": "0x1004"}, "note": "<code>p</code> is a pointer. It holds age's <b>address</b>, not 12. We say \"p points at age\"."},
+            {"line": 3, "vars": {"age @0x1004": "12", "p": "0x1004"}, "out": "12\n", "note": "<code>*p</code> means \"go to the address in p\". It finds age's box, which holds 12."},
+            {"line": 4, "vars": {"age @0x1004": "13", "p": "0x1004"}, "note": "<code>*p = 13</code> goes to that address and stores 13 there. So <b>age changes</b>, even though we never wrote \"age\"!"},
+            {"line": 5, "vars": {"age @0x1004": "13", "p": "0x1004"}, "out": "13\n", "note": "Printing age shows 13."}
+          ]
+        </script>
+      </div>
+
+      <div class="runnable" data-lang="cpp" data-title="Change a variable through a pointer">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              int age = 12;
+              int* p = &age;
+
+              cout << "p holds the address " << p << endl;
+              cout << "*p is the value there: " << *p << endl;
+
+              *p = 13;
+              cout << "Now age is " << age << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+p holds the address 0x7ffc9055d214
+*p is the value there: 12
+Now age is 13
+</script>
+      </div>
+
+      <aside class="note idea">
+        <h4>Two meanings of * and &amp;</h4>
+        <p>In a <strong>type</strong>, <code>int*</code> means "pointer to int" and <code>int&amp;</code> means "reference to int". In an <strong>expression</strong>, <code>&amp;x</code> means "the address of x" and <code>*p</code> means "the box p points at". Same symbols, different jobs depending on where they are.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>nullptr: pointing at nothing</h2>
+      <p>A pointer can point at nothing. That special value is <code>nullptr</code>. Following a <code>nullptr</code> crashes the program, so always check first:</p>
+      <div class="runnable" data-lang="cpp" data-title="Check before you follow">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              int treasure = 100;
+              int* map = nullptr;          // no treasure found yet
+
+              if (map == nullptr) {
+                  cout << "The map is empty" << endl;
+              }
+
+              map = &treasure;             // now it points somewhere
+              if (map != nullptr) {
+                  cout << "Treasure: " << *map << " coins" << endl;
+              }
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+The map is empty
+Treasure: 100 coins
+</script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Pointers and functions</h2>
+      <p>Like references (lesson 9), a pointer lets a function change a variable that lives somewhere else:</p>
+      <div class="runnable" data-lang="cpp" data-title="Three ways to pass a value">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          void byValue(int n)      { n += 10; }     // changes a copy
+          void byReference(int& n) { n += 10; }     // changes the original
+          void byPointer(int* n)   { *n += 10; }    // changes what n points at
+
+          int main() {
+              int score = 0;
+              byValue(score);
+              cout << score << endl;      // 0
+              byReference(score);
+              cout << score << endl;      // 10
+              byPointer(&score);          // pass the address
+              cout << score << endl;      // 20
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+0
+10
+20
+</script>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>Reference <code>int&amp; r = x;</code></th><th>Pointer <code>int* p = &amp;x;</code></th></tr></thead>
+          <tbody>
+            <tr><td>What it is</td><td>Another name for x</td><td>A separate box holding x's address</td></tr>
+            <tr><td>Use it</td><td><code>r = 5;</code></td><td><code>*p = 5;</code></td></tr>
+            <tr><td>Can be "nothing"?</td><td>No, always refers to something</td><td>Yes: <code>nullptr</code></td></tr>
+            <tr><td>Can point somewhere else later?</td><td>No</td><td>Yes</td></tr>
+            <tr><td>When to use</td><td>Most of the time (simpler, safer)</td><td>When it might be empty, or must change target</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Why does this matter?</h2>
+      <ul>
+        <li><strong>Speed</strong>: passing an address is much faster than copying a big object.</li>
+        <li><strong>Sharing</strong>: several parts of a program can work on the same thing.</li>
+        <li><strong>Building structures</strong>: games and apps link objects together with pointers (a player points at their pet, a list item points at the next one).</li>
+        <li><strong>Understanding computers</strong>: other languages use pointers too, they just hide them from you.</li>
+      </ul>
+      <p>In modern C++ you'll use references and <strong>smart pointers</strong> (lesson 15) most of the time, but they're all built on this idea.</p>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Printing the pointer instead of the value</strong>: <code>cout &lt;&lt; p</code> shows an address. Use <code>*p</code> for the value.</li>
+          <li><strong>Following a nullptr</strong>: crashes the program. Check first.</li>
+          <li><strong>Using a pointer that was never set</strong>: <code>int* p;</code> points at a random place. Always start with <code>nullptr</code> or an address.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">int x = 5; int* p = &amp;x; *p = 9; What is x?</p>
+        <div class="opts">
+          <button>5</button>
+          <button data-correct>9</button>
+          <button>An address</button>
+        </div>
+        <p class="why"><code>p</code> points at <code>x</code>, so <code>*p = 9</code> stores 9 in x's box.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>Every variable has an address. <code>&amp;x</code> is x's address.</li>
+          <li><code>int* p = &amp;x;</code> makes a pointer. <code>*p</code> is the box it points at.</li>
+          <li><code>nullptr</code> means "points at nothing". Check before following it.</li>
+          <li>Prefer references (<code>int&amp;</code>) when you can. Use pointers when it might be empty.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

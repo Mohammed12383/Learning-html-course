@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loops · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="06-loops">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 06 &middot; <b>Decisions &amp; loops</b></p>
+      <div class="hero-code" aria-hidden="true">for</div>
+      <h1>Loops</h1>
+      <p class="lead">Loops repeat code. Games run a loop 60 times every second to move everything on the screen. In this lesson you'll learn the three kinds of C++ loops and use them to draw patterns.</p>
+      <ul class="learn">
+        <li>for loops</li>
+        <li>while and do-while</li>
+        <li>break and continue</li>
+        <li>Nested loops and patterns</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>The for loop</h2>
+      <div class="anatomy" role="img" aria-label="for, open bracket, int i equals 0 the start, i less than 5 keep going while true, i plus plus after each round, close bracket, then the body">
+        <div class="part tag"><span>for (</span><small></small></div>
+        <div class="part text"><span>int i = 0;</span><small>1. start</small></div>
+        <div class="part val"><span> i &lt; 5;</span><small>2. keep going<br>while true</small></div>
+        <div class="part prop"><span> i++</span><small>3. after each<br>round</small></div>
+        <div class="part tag"><span>) { ... }</span><small>repeat this</small></div>
+      </div>
+
+      <div class="stepper" data-lang="cpp" data-title="Watch the loop">
+        <script type="text/plain">
+          for (int i = 0; i < 3; i++) {
+              cout << "Round " << i << endl;
+          }
+          cout << "Done!" << endl;
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "vars": {"i": "0"}, "note": "Start: <code>int i = 0</code>. Is 0 &lt; 3? <b>true</b>."},
+            {"line": 2, "vars": {"i": "0"}, "out": "Round 0\n", "note": "Print."},
+            {"line": 1, "vars": {"i": "1"}, "note": "<code>i++</code>: i is 1. Is 1 &lt; 3? <b>true</b>."},
+            {"line": 2, "vars": {"i": "1"}, "out": "Round 1\n", "note": "Print."},
+            {"line": 1, "vars": {"i": "2"}, "note": "<code>i++</code>: i is 2. Is 2 &lt; 3? <b>true</b>."},
+            {"line": 2, "vars": {"i": "2"}, "out": "Round 2\n", "note": "Print."},
+            {"line": 1, "vars": {"i": "3"}, "note": "<code>i++</code>: i is 3. Is 3 &lt; 3? <b>false</b>. Leave the loop."},
+            {"line": 4, "out": "Done!\n", "note": "The line after the loop runs once."}
+          ]
+        </script>
+      </div>
+
+      <div class="runnable" data-lang="cpp" data-title="Count, add up and count down">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              for (int i = 1; i <= 5; i++) {
+                  cout << i << " ";
+              }
+              cout << endl;
+
+              int total = 0;
+              for (int n = 1; n <= 100; n++) {
+                  total += n;
+              }
+              cout << "1 + 2 + ... + 100 = " << total << endl;
+
+              for (int t = 5; t >= 1; t--) {
+                  cout << t << "... ";
+              }
+              cout << "Lift off!" << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+1 2 3 4 5 
+1 + 2 + ... + 100 = 5050
+5... 4... 3... 2... 1... Lift off!
+</script>
+      </div>
+    </section>
+
+    <section>
+      <h2>while and do-while</h2>
+      <p>A <code class="k-tag">while</code> loop only has a question. Use it when you don't know how many rounds you'll need. A <code class="k-tag">do-while</code> loop runs its body <em>first</em> and checks the question after, so it always runs at least once:</p>
+      <div class="runnable" data-lang="cpp" data-title="How many days to a million?">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              long long coins = 1;
+              int days = 0;
+              while (coins < 1000000) {
+                  coins *= 2;
+                  days++;
+              }
+              cout << "Doubling every day: a millionaire after " << days << " days" << endl;
+
+              int n = 100;
+              do {
+                  cout << "This runs once, even though n is " << n << endl;
+              } while (n < 10);
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Doubling every day: a millionaire after 20 days
+This runs once, even though n is 100
+</script>
+      </div>
+
+      <h3>Loops that never end</h3>
+      <p>If the question never becomes false, the loop runs forever. The online compiler stops programs that run longer than a few seconds, so you can try it safely:</p>
+      <div class="runnable" data-lang="cpp" data-title="An infinite loop (press Run)">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              int n = 1;
+              while (n > 0) {
+                  // n never changes, so n > 0 is always true
+              }
+              cout << "Never printed" << endl;
+              return 0;
+          }
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>break and continue</h2>
+      <div class="runnable" data-lang="cpp" data-title="Skip and stop">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              // continue: skip odd numbers
+              for (int n = 1; n <= 10; n++) {
+                  if (n % 2 == 1) continue;
+                  cout << n << " ";
+              }
+              cout << endl;
+
+              // break: stop at the first multiple of 7 above 50
+              for (int n = 51; n < 100; n++) {
+                  if (n % 7 == 0) {
+                      cout << "Found it: " << n << endl;
+                      break;
+                  }
+              }
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+2 4 6 8 10 
+Found it: 56
+</script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Loops inside loops: drawing patterns</h2>
+      <p>A loop inside another loop runs completely, every time the outer loop goes round once. Perfect for rows and columns. Move the sliders, then press Run:</p>
+      <div class="code-explorer" data-lang="cpp" data-title="Pattern maker">
+        <input type="range" name="n" data-label="size" min="2" max="12" value="6">
+        <select name="ch" data-label="character">
+          <option>*</option><option>#</option><option>@</option><option>+</option>
+        </select>
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              int size = {{n}};
+
+              // a triangle
+              for (int row = 1; row <= size; row++) {
+                  for (int col = 1; col <= row; col++) {
+                      cout << '{{ch}}';
+                  }
+                  cout << endl;
+              }
+              cout << endl;
+
+              // a checkerboard
+              for (int row = 0; row < size; row++) {
+                  for (int col = 0; col < size; col++) {
+                      cout << ((row + col) % 2 == 0 ? "{{ch}} " : ". ");
+                  }
+                  cout << endl;
+              }
+              return 0;
+          }
+        </script>
+      </div>
+
+      <div class="runnable" data-lang="cpp" data-title="A times table">
+        <script type="text/plain">
+          #include <iostream>
+          #include <iomanip>
+          using namespace std;
+
+          int main() {
+              for (int row = 1; row <= 6; row++) {
+                  for (int col = 1; col <= 6; col++) {
+                      cout << setw(4) << row * col;
+                  }
+                  cout << endl;
+              }
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+   1   2   3   4   5   6
+   2   4   6   8  10  12
+   3   6   9  12  15  18
+   4   8  12  16  20  24
+   5  10  15  20  25  30
+   6  12  18  24  30  36
+</script>
+      </div>
+      <p><code>setw(4)</code> (from <code>&lt;iomanip&gt;</code>) makes each number take 4 spaces, so the columns line up.</p>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Print the 7 times table: "7 x 1 = 7" to "7 x 10 = 70".</li>
+          <li>Print an upside-down triangle of stars.</li>
+          <li>Add up all the even numbers from 1 to 50.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="cpp" data-title="Your loop">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              for (int i = 1; i <= 10; i++) {
+                  cout << "7 x " << i << " = " << 7 * i << endl;
+              }
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+7 x 1 = 7
+7 x 2 = 14
+7 x 3 = 21
+7 x 4 = 28
+7 x 5 = 35
+7 x 6 = 42
+7 x 7 = 49
+7 x 8 = 56
+7 x 9 = 63
+7 x 10 = 70
+</script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Commas instead of semicolons</strong> inside <code>for ( ; ; )</code>.</li>
+          <li><strong>Off by one</strong>: <code>i &lt; 10</code> stops at 9. Use <code>i &lt;= 10</code> to include 10.</li>
+          <li><strong>A semicolon after the for</strong>: <code>for (...);</code> repeats nothing, then runs the block once.</li>
+          <li><strong>Forgetting to change the variable</strong> in a while loop.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">How many stars?  for (int a = 0; a &lt; 3; a++) for (int b = 0; b &lt; 4; b++) cout &lt;&lt; '*';</p>
+        <div class="opts">
+          <button>7</button>
+          <button data-correct>12</button>
+          <button>4</button>
+        </div>
+        <p class="why">The inner loop prints 4, and the outer loop runs it 3 times: 3 × 4 = 12.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>for (int i = 0; i &lt; n; i++) { }</code>: start, keep going while, after each round.</li>
+          <li><code>while (q) { }</code>. <code>do { } while (q);</code> runs at least once.</li>
+          <li><code>break</code> leaves the loop, <code>continue</code> skips to the next round.</li>
+          <li>Nested loops make rows and columns. <code>setw(n)</code> lines them up.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

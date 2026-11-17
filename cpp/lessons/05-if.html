@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Making Decisions · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="05-if">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 05 &middot; <b>Decisions &amp; loops</b></p>
+      <div class="hero-code" aria-hidden="true">if</div>
+      <h1>Making Decisions</h1>
+      <p class="lead">Programs choose what to do: "if the player has no lives left, show Game Over". In this lesson you'll learn to compare values and use <code>if</code>, <code>else</code> and <code>switch</code>.</p>
+      <ul class="learn">
+        <li>Comparing values</li>
+        <li>if, else if, else</li>
+        <li>&amp;&amp;, || and !</li>
+        <li>switch</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Questions with true or false answers</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Operator</th><th>Means</th><th>Example</th><th>Answer</th></tr></thead>
+          <tbody>
+            <tr><td><code>==</code></td><td>is equal to</td><td><code>5 == 5</code></td><td>true</td></tr>
+            <tr><td><code>!=</code></td><td>is not equal to</td><td><code>5 != 3</code></td><td>true</td></tr>
+            <tr><td><code>&gt;</code> / <code>&lt;</code></td><td>greater / less than</td><td><code>5 &gt; 8</code></td><td>false</td></tr>
+            <tr><td><code>&gt;=</code> / <code>&lt;=</code></td><td>or equal</td><td><code>5 &lt;= 5</code></td><td>true</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <aside class="note oops">
+        <h4>= vs ==</h4>
+        <p><code>=</code> <strong>stores</strong> a value. <code>==</code> <strong>compares</strong> two values. Writing <code>if (x = 5)</code> by mistake stores 5 in x and is always true: a classic C++ bug. The compiler often warns you about it.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>if and else</h2>
+      <div class="anatomy" role="img" aria-label="if, the condition in round brackets, then the code to run in curly brackets">
+        <div class="part tag"><span>if</span><small>keyword</small></div>
+        <div class="part text"><span> (lives == 0)</span><small>the question,<br>in round brackets</small></div>
+        <div class="part punc"><span> { ... }</span><small>runs only if true,<br>in curly brackets</small></div>
+      </div>
+
+      <div class="runnable" data-lang="cpp" data-input="30" data-title="Hot or not?">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              int temperature;
+              cin >> temperature;
+
+              if (temperature > 25) {
+                  cout << "Hot! Wear shorts" << endl;
+              } else {
+                  cout << "Take a jacket" << endl;
+              }
+              cout << "Have a nice day" << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Hot! Wear shorts
+Have a nice day
+</script>
+      </div>
+      <p>Change the input to 15 and Run again. Exactly one of the two blocks runs. The last line always runs, because it's outside both blocks.</p>
+    </section>
+
+    <section>
+      <h2>else if: more choices</h2>
+      <p>C++ checks each question from the top and runs the <strong>first</strong> block that's true. Then it skips all the rest:</p>
+      <div class="stepper" data-lang="cpp" data-title="Which grade?">
+        <script type="text/plain">
+          int score = 72;
+
+          if (score >= 90) {
+              cout << "A: amazing!" << endl;
+          } else if (score >= 70) {
+              cout << "B: great job!" << endl;
+          } else if (score >= 50) {
+              cout << "C: you passed" << endl;
+          } else {
+              cout << "Keep practicing" << endl;
+          }
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "vars": {"score": "72"}, "note": "Store 72 in <code>score</code>."},
+            {"line": 3, "vars": {"score": "72"}, "note": "Is 72 &gt;= 90? <b>false</b>. Skip this block."},
+            {"line": 5, "vars": {"score": "72"}, "note": "Is 72 &gt;= 70? <b>true!</b> Go in."},
+            {"line": 6, "vars": {"score": "72"}, "out": "B: great job!\n", "note": "Print the message."},
+            {"line": 11, "vars": {"score": "72"}, "note": "One block ran, so the rest are skipped. Done."}
+          ]
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>And, or, not</h2>
+      <ul>
+        <li><code>&amp;&amp;</code> <strong>and</strong>: both must be true.</li>
+        <li><code>||</code> <strong>or</strong>: at least one must be true.</li>
+        <li><code>!</code> <strong>not</strong>: flips true and false.</li>
+      </ul>
+      <div class="runnable" data-lang="cpp" data-input="14 1" data-title="Can you ride the roller coaster?">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              int age;
+              bool hasTicket;
+              cin >> age >> hasTicket;      // type 1 for true, 0 for false
+
+              if (age >= 12 && hasTicket) {
+                  cout << "Enjoy the ride!" << endl;
+              } else if (!hasTicket) {
+                  cout << "Please buy a ticket first" << endl;
+              } else {
+                  cout << "Sorry, you need to be 12 or older" << endl;
+              }
+
+              if (age < 5 || age > 90) {
+                  cout << "Please ride with a helper" << endl;
+              }
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Enjoy the ride!
+</script>
+      </div>
+      <p>Try the inputs <code>14 0</code>, <code>9 1</code> and <code>95 1</code>.</p>
+    </section>
+
+    <section>
+      <h2>switch: one value, many choices</h2>
+      <p><code>switch</code> compares one value (an <code>int</code> or a <code>char</code>) with a list of <code>case</code>s. Each case ends with <code>break</code>. <code>default</code> runs if nothing matches:</p>
+      <div class="runnable" data-lang="cpp" data-input="3" data-title="A menu">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              cout << "1) Pizza  2) Burger  3) Salad" << endl;
+              int choice;
+              cin >> choice;
+
+              switch (choice) {
+                  case 1:
+                      cout << "One pizza coming up!" << endl;
+                      break;
+                  case 2:
+                      cout << "One burger coming up!" << endl;
+                      break;
+                  case 3:
+                      cout << "A fresh salad, coming up!" << endl;
+                      break;
+                  default:
+                      cout << "That's not on the menu." << endl;
+              }
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+1) Pizza  2) Burger  3) Salad
+A fresh salad, coming up!
+</script>
+      </div>
+      <p>Without <code>break</code>, C++ keeps running into the next case too ("falls through"). Try removing the first <code>break</code> and choosing 1.</p>
+
+      <h3>The ? : shortcut</h3>
+      <script type="text/plain" class="snippet" data-lang="cpp">
+        string word = (lives == 1) ? "life" : "lives";
+        cout << lives << " " << word << " left" << endl;
+      </script>
+      <p><code>question ? a : b</code> gives <code>a</code> when the question is true, otherwise <code>b</code>.</p>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Read a number and say if it's positive, negative or zero.</li>
+          <li>Read a number and say if it's even or odd (hint: <code>n % 2 == 0</code>).</li>
+          <li>Add a fourth item to the menu.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="cpp" data-input="-4" data-title="Your decisions">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              int n;
+              cin >> n;
+              if (n > 0) {
+                  cout << "positive" << endl;
+              }
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+</script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>= instead of ==</strong> in a question.</li>
+          <li><strong>A semicolon after the if</strong>: <code>if (x &gt; 5);</code> ends the if right there, so the block always runs.</li>
+          <li><strong>Forgetting break</strong> in a switch.</li>
+          <li><strong>Writing 0 &lt; x &lt; 10</strong>: that doesn't work like in math. Write <code>x &gt; 0 &amp;&amp; x &lt; 10</code>.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">Which one checks if x is between 1 and 10?</p>
+        <div class="opts">
+          <button>1 &lt; x &lt; 10</button>
+          <button data-correct>x &gt; 1 &amp;&amp; x &lt; 10</button>
+          <button>x &gt; 1 || x &lt; 10</button>
+        </div>
+        <p class="why">Both conditions must be true, so use <code>&amp;&amp;</code>. With <code>||</code>, every number would pass.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>Compare with <code>== != &lt; &gt; &lt;= &gt;=</code>.</li>
+          <li><code>if (q) { } else if (q2) { } else { }</code>. Only the first true block runs.</li>
+          <li><code>&amp;&amp;</code> and, <code>||</code> or, <code>!</code> not.</li>
+          <li><code>switch (x) { case 1: ... break; default: ... }</code></li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

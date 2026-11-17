@@ -1,51 +1,50 @@
-# Hello HTML
+# Hello Courses
 
-A visual HTML and CSS course for total beginners. Every lesson shows a short explanation, the code, and the live website side by side. Change the code and the website updates as you type.
+Four visual programming courses for total beginners: **HTML & CSS**, **Python**, **TypeScript** and **C++**. Every lesson shows a short explanation, the code, and the result side by side. Change the code and see what happens.
 
-## How to open the course
+| Course | Lessons | Final project | Runs |
+| --- | --- | --- | --- |
+| **Hello HTML** | 17 + cheat sheet | Daybloom, a two-page website | in the page, offline |
+| **Hello Python** | 17 + cheat sheet | Pocket Pet, a virtual pet game | in the page, offline (Skulpt) |
+| **Hello TypeScript** | 17 + cheat sheet | Daybloom Tasks, a working to-do app | in the page, offline (the real TypeScript compiler) |
+| **Hello C++** | 17 + cheat sheet | Robot Arena, a battle game | online compiler (Compiler Explorer); saved results offline |
 
-- **One file, any device (iPad, phone, computer):** `hello-html-course.html` is the whole course in a single file: every lesson, the pictures and the live editors. Copy just that file anywhere and open it in a web browser.
-- **On a computer:** download or clone this repository, then double-click `index.html`. It opens in your browser. No installs needed.
-- **Online, as a real website:** turn on GitHub Pages for this repository (Settings → Pages → Deploy from a branch → pick the branch → `/ (root)` → Save). The course will be at `https://<your-username>.github.io/Learning-html-course/hello-html-course.html`. On an iPad, open that address in Safari, tap Share → **Add to Home Screen**, and it gets its own icon like an app.
+## How to open the courses
 
-After changing any lesson, rebuild the single file with `python3 tools/build-single-file.py`.
+- **One file per course, any device (iPad, phone, computer):**
+  `hello-html-course.html`, `hello-python-course.html`, `hello-typescript-course.html`, `hello-cpp-course.html`.
+  Each file holds the whole course. Open it in a web browser.
+- **As a website:** turn on GitHub Pages for this repository (Settings → Pages → Deploy from a branch → pick the branch → `/ (root)` → Save). Then open `https://<your-username>.github.io/Learning-html-course/` (the HTML course links to the others), or a single-file course such as `.../hello-python-course.html`. On an iPad, tap Share → **Add to Home Screen** to get an app icon.
+- **On a computer:** download the repository and double-click `index.html`, `python/index.html`, `typescript/index.html` or `cpp/index.html`.
 
-## What's inside
+## Inside each lesson
 
-| Lesson | Topic |
-| --- | --- |
-| 00 | Start Here: what a website is, how to use the course, VS Code setup |
-| 01 | Your First Web Page: tags, attributes, nesting, the page skeleton |
-| 02 | Headings, Paragraphs & Lists |
-| 03 | Links & Images |
-| 04 | Hello CSS: Colors (names, hex, RGB, HSL, transparency) |
-| 05 | Classes, Divs & Sections |
-| 06 | Fonts & Text Style (Google Fonts, size, weight, spacing) |
-| 07 | Sizes & Units (px, %, rem, vw, max-width, and a full size guide) |
-| 08 | Spacing: The Box Model (padding, border, margin, radius, shadows) |
-| 09 | Buttons (styles, hover, animation, 10 ready-made designs) |
-| 10 | Text Boxes & Forms |
-| 11 | Layout with Flexbox |
-| 12 | Layout with Grid |
-| 13 | Multiple Pages (linking pages, shared CSS, putting a site online) |
-| 14 | Make It Beautiful (variables, gradients, hover effects, animation, glass) |
-| 15 | Phones & Tablets (media queries, responsive layouts) |
-| 16 | Final Project: build "Daybloom", a complete two-page website |
-| ★ | Cheat Sheet: every tag, property and size in one searchable page |
+- **Code boxes**: edit and run. Python and TypeScript run again by themselves when you stop typing. Errors are marked on their line with a plain-language explanation.
+- **Explorers**: sliders and menus that change the code and run it again.
+- **Step-through viewers**: watch a program run one line at a time, with the computer's memory drawn as boxes.
+- **X-ray** (HTML): outlines every element and shows its size in pixels.
+- **Your turn** tasks, **Common mistakes**, a **Quick check** quiz and a **Remember** summary. **Mark as done** fills your progress bar (saved in your browser).
 
 ## Folders
 
 ```
-index.html     the course home page
-lessons/       one page per lesson, plus the cheat sheet
-practice/      a blank page to practice in
-my-site/       the finished final project, ready to make your own
-assets/        the course's own styles (course.css) and interactive engine (course.js)
+index.html            the HTML course home page
+lessons/              HTML lessons and cheat sheet
+python/               the Python course (index.html, lessons/, course-config.js)
+typescript/           the TypeScript course
+cpp/                  the C++ course
+practice/             a blank HTML page to practice in
+my-site/              the finished HTML final project
+assets/course.css     the courses' design
+assets/course.js      the course engine: menus, progress, playgrounds, quizzes
+assets/code.js        code boxes for Python, TypeScript and C++
+assets/vendor/        Skulpt (Python in the browser) and the TypeScript compiler, with their licenses
+tools/                build-single-file.py (makes the one-file courses), update-cpp-outputs.py
 ```
 
-## Inside each lesson
+## After changing a lesson
 
-- **Playgrounds:** a code editor next to a pretend browser. Type and watch the site change. **Reset** undoes your changes, **Copy** copies the code, **X-ray** outlines every element and shows its size in pixels.
-- **Explorers:** sliders, color pickers and menus that change the code and the website together.
-- **Your turn** tasks, **Common mistakes**, a **Quick check** quiz and a **Remember** summary.
-- **Mark as done** at the end of each lesson fills your progress bar (saved in your browser).
+```
+python3 tools/update-cpp-outputs.py     # C++ only: recompile examples and save their outputs (needs g++)
+python3 tools/build-single-file.py      # rebuild the one-file courses
+```

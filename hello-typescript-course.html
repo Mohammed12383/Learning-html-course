@@ -6665,6 +6665,7 @@ window.TS_LIBS = {"/lib.decorators.d.ts": "/*! *********************************
         if (editor) editor.setMarks(errs.map(function (e) { return { line: e.line, kind: 'error' }; }));
         if (!errs.length) out.error('The compiler found a problem', r.compileText);
         errs.slice(0, 4).forEach(function (e) { out.error('Error on line ' + e.line, e.msg, cppHelp(e.msg)); });
+        out.console.scrollTop = 0;   // the first error is usually the one to fix
         return;
       }
       if (r.stdout) out.write(r.stdout);
@@ -7562,7 +7563,7 @@ window.COURSE_ASSETS = {
     pre.appendChild(code);
     main.appendChild(marks);
     var id = 'code-' + (++uid);
-    var ta = el('textarea', { class: 'ed-input', id: id, spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', autocorrect: 'off', wrap: 'off', 'aria-label': 'Code editor. Type to change the website.' });
+    var ta = el('textarea', { class: 'ed-input', id: id, spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', autocorrect: 'off', wrap: 'off', 'aria-label': 'Code editor' });
     main.appendChild(pre); main.appendChild(ta);
     root.appendChild(gutter); root.appendChild(main);
     root.addEventListener('click', function (e) { if (e.target === root || e.target === gutter) ta.focus(); });

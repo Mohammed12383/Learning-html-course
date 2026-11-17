@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Real Programs · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="15-real-programs">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 15 &middot; <b>Objects &amp; power tools</b></p>
+      <div class="hero-code" aria-hidden="true">g++</div>
+      <h1>Real Programs</h1>
+      <p class="lead">Real C++ programs make random numbers, create objects while running, split their code into many files, and get compiled on your own computer. This lesson covers the tools you need for that, including the final project.</p>
+      <ul class="learn">
+        <li>Random numbers</li>
+        <li>new, delete and smart pointers</li>
+        <li>Header files</li>
+        <li>Compiling on your computer</li>
+        <li>Reading and writing files</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Random numbers</h2>
+      <p>Games need dice rolls and surprises. Modern C++ has <code>&lt;random&gt;</code>: a <strong>generator</strong> makes random bits, and a <strong>distribution</strong> turns them into the kind of number you want, like "a whole number from 1 to 6". The generator needs a starting number called a <strong>seed</strong>:</p>
+      <div class="runnable" data-lang="cpp" data-input="42" data-title="Roll the dice">
+        <script type="text/plain">
+          #include <iostream>
+          #include <random>
+          using namespace std;
+
+          int main() {
+              int seed;
+              cin >> seed;
+
+              mt19937 rng(seed);                          // the generator
+              uniform_int_distribution<int> dice(1, 6);   // whole numbers 1 to 6
+
+              for (int i = 0; i < 10; i++) {
+                  cout << dice(rng) << " ";
+              }
+              cout << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+3 5 6 2 5 5 4 4 1 3 
+</script>
+      </div>
+      <p>Change the seed in the Input box and Run: different rolls. Use the same seed again: the same rolls! That's useful for testing a game. For a different game every time, seed it from a truly random source with <code>mt19937 rng(random_device{}());</code>.</p>
+    </section>
+
+    <section>
+      <h2>Making objects while the program runs</h2>
+      <p>So far, every variable was created when its line ran and destroyed at the end of its <code>{ }</code> block. That memory is called the <strong>stack</strong>. Sometimes you need an object that lives longer, or you don't know how many you'll need. Then you create it on the <strong>heap</strong>, a big area of memory you manage yourself.</p>
+
+      <h3>The old way: new and delete</h3>
+      <script type="text/plain" class="snippet" data-lang="cpp">
+        Monster* m = new Monster("Grumble");   // create on the heap
+        m->roar();
+        delete m;                               // you MUST give the memory back
+      </script>
+      <p>The danger: if you forget <code>delete</code>, the memory is never given back. That's called a <strong>memory leak</strong>, and big programs that leak slowly use up all the memory. Deleting twice, or using it after deleting, is even worse.</p>
+
+      <h3>The modern way: smart pointers</h3>
+      <p>A <strong>smart pointer</strong> deletes the object for you, automatically, when nothing uses it any more. Use <code>unique_ptr</code> (one owner) from <code>&lt;memory&gt;</code>:</p>
+      <div class="runnable" data-lang="cpp" data-title="Smart pointers clean up after themselves">
+        <script type="text/plain">
+          #include <iostream>
+          #include <memory>
+          #include <string>
+          #include <vector>
+          using namespace std;
+
+          class Monster {
+              string name;
+          public:
+              Monster(string n) : name(n) { cout << "  " << name << " appears!" << endl; }
+              ~Monster() { cout << "  " << name << " vanishes (memory given back)" << endl; }
+              void roar() const { cout << "  " << name << ": ROAR!" << endl; }
+          };
+
+          int main() {
+              cout << "Entering the cave..." << endl;
+              {
+                  unique_ptr<Monster> boss = make_unique<Monster>("Grumble");
+                  boss->roar();
+
+                  vector<unique_ptr<Monster>> minions;
+                  minions.push_back(make_unique<Monster>("Blip"));
+                  minions.push_back(make_unique<Monster>("Blop"));
+                  cout << "Leaving the cave..." << endl;
+              }   // everything is cleaned up automatically here
+              cout << "Safe outside. No leaks!" << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Entering the cave...
+  Grumble appears!
+  Grumble: ROAR!
+  Blip appears!
+  Blop appears!
+Leaving the cave...
+  Blip vanishes (memory given back)
+  Blop vanishes (memory given back)
+  Grumble vanishes (memory given back)
+Safe outside. No leaks!
+</script>
+      </div>
+      <p><code>~Monster()</code> is the <strong>destructor</strong>: it runs when an object is destroyed. The output shows that every monster was cleaned up at the closing <code>}</code>, without a single <code>delete</code>. In modern C++, use <code>make_unique</code> instead of <code>new</code>.</p>
+    </section>
+
+    <section>
+      <h2>Splitting code into files</h2>
+      <p>Big programs are split into many files. Each class usually gets two:</p>
+      <ul>
+        <li>a <strong>header</strong> file <code>.h</code>: the <em>declaration</em> (what exists: the class, its methods' names and types),</li>
+        <li>a <strong>source</strong> file <code>.cpp</code>: the <em>definitions</em> (the actual code of each method).</li>
+      </ul>
+<pre class="tree"><span class="dir">robot-game/</span>
+├── <span class="css">main.cpp</span>          <span class="c">← has int main()</span>
+├── <span class="html">Robot.h</span>           <span class="c">← the Robot class declaration</span>
+└── <span class="css">Robot.cpp</span>         <span class="c">← the Robot methods' code</span></pre>
+      <script type="text/plain" class="snippet" data-lang="cpp">
+        // Robot.h
+        #pragma once              // only include this file once
+        #include <string>
+
+        class Robot {
+            std::string name;
+        public:
+            Robot(std::string n);
+            void greet() const;
+        };
+
+        // Robot.cpp
+        #include "Robot.h"
+        #include <iostream>
+
+        Robot::Robot(std::string n) : name(n) {}
+        void Robot::greet() const { std::cout << "Beep! I'm " << name << "\n"; }
+
+        // main.cpp
+        #include "Robot.h"
+        int main() {
+            Robot r("Bolt");
+            r.greet();
+        }
+      </script>
+      <p>Your own files are included with quotes: <code>#include "Robot.h"</code>. <code>Robot::greet</code> means "the greet method that belongs to Robot". In header files, programmers write <code>std::string</code> instead of using <code>using namespace std;</code>, to avoid name clashes in other files.</p>
+    </section>
+
+    <section>
+      <h2>Compiling on your computer</h2>
+      <p>On a computer with a compiler installed (see lesson 0), open a terminal in your project folder:</p>
+      <ol class="steps">
+        <li><div><p><strong>Compile</strong> one file: <code>g++ -std=c++20 main.cpp -o game</code> (on a Mac, <code>clang++</code> works the same). <code>-o game</code> names the program.</p></div></li>
+        <li><div><p><strong>Compile</strong> several files together: <code>g++ -std=c++20 main.cpp Robot.cpp -o game</code></p></div></li>
+        <li><div><p><strong>Run</strong> it: <code>./game</code> on Mac and Linux, or <code>game.exe</code> on Windows. Now <code>cin</code> really waits for you to type!</p></div></li>
+        <li><div><p>Add <code>-Wall</code> to get helpful <strong>warnings</strong> about code that compiles but looks suspicious. Fix them too.</p></div></li>
+      </ol>
+      <p>Bigger projects use a build tool like <strong>CMake</strong>, or an IDE like Visual Studio or CLion that has a big green Run button.</p>
+    </section>
+
+    <section>
+      <h2>Files: saving and loading</h2>
+      <p>On your computer, <code>&lt;fstream&gt;</code> reads and writes files with the same <code>&lt;&lt;</code> and <code>&gt;&gt;</code> you already know:</p>
+      <script type="text/plain" class="snippet" data-lang="cpp">
+        #include <fstream>
+
+        // save a high score
+        ofstream out("highscore.txt");
+        out << "Zara " << 450 << endl;
+        out.close();
+
+        // load it again
+        ifstream in("highscore.txt");
+        string name;
+        int score;
+        if (in >> name >> score) {
+            cout << "High score: " << name << " with " << score << endl;
+        }
+      </script>
+      <p><code>ofstream</code> is an <strong>o</strong>utput <strong>f</strong>ile, <code>ifstream</code> an <strong>i</strong>nput file. Try this on your own computer: the file appears in your project folder.</p>
+
+      <div class="quiz">
+        <p class="q">Why use make_unique instead of new?</p>
+        <div class="opts">
+          <button>It's faster to type</button>
+          <button data-correct>The memory is given back automatically, so there are no leaks</button>
+          <button>new doesn't work any more</button>
+        </div>
+        <p class="why">A <code>unique_ptr</code> deletes its object automatically when it goes away, so you can't forget.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>&lt;random&gt;</code>: <code>mt19937 rng(seed);</code> and <code>uniform_int_distribution&lt;int&gt; d(1, 6);</code>, then <code>d(rng)</code>.</li>
+          <li>Use <code>make_unique&lt;T&gt;(...)</code> and <code>unique_ptr</code> instead of <code>new</code>/<code>delete</code>.</li>
+          <li>Split classes into <code>.h</code> (declaration) and <code>.cpp</code> (code).</li>
+          <li>Compile: <code>g++ -std=c++20 *.cpp -o app</code>, then run <code>./app</code>.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

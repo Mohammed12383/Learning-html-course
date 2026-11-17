@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Math · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="03-math">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 03 &middot; <b>First steps</b></p>
+      <div class="hero-code" aria-hidden="true">7 / 2</div>
+      <h1>Math</h1>
+      <p class="lead">C++ is lightning fast at math: billions of calculations per second. That's why games and science use it. But C++ math has one famous surprise that catches every beginner. This lesson shows you how to avoid it.</p>
+      <ul class="learn">
+        <li>Math operators</li>
+        <li>The integer division surprise</li>
+        <li>The remainder %</li>
+        <li>++ and +=</li>
+        <li>&lt;cmath&gt;</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>The operators</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Operator</th><th>Does</th><th>Example</th><th>Answer</th></tr></thead>
+          <tbody>
+            <tr><td><code>+</code></td><td>add</td><td><code>7 + 2</code></td><td>9</td></tr>
+            <tr><td><code>-</code></td><td>subtract</td><td><code>7 - 2</code></td><td>5</td></tr>
+            <tr><td><code>*</code></td><td>multiply</td><td><code>7 * 2</code></td><td>14</td></tr>
+            <tr><td><code>/</code></td><td>divide</td><td><code>7 / 2</code></td><td><strong>3</strong> (!) and <code>7.0 / 2</code> is 3.5</td></tr>
+            <tr><td><code>%</code></td><td>remainder (only for whole numbers)</td><td><code>7 % 2</code></td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Brackets first, then <code>* / %</code>, then <code>+ -</code>. So <code>2 + 3 * 4</code> is 14 and <code>(2 + 3) * 4</code> is 20.</p>
+    </section>
+
+    <section>
+      <h2>The integer division surprise</h2>
+      <p>When you divide an <code>int</code> by an <code>int</code>, C++ gives an <code>int</code> answer, and throws away the decimals:</p>
+      <div class="runnable" data-lang="cpp" data-title="7 / 2 is 3?!">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              cout << 7 / 2 << endl;        // int / int  → 3
+              cout << 7.0 / 2 << endl;      // double / int → 3.5
+              cout << 7 / 2.0 << endl;      // int / double → 3.5
+
+              int pizzas = 7;
+              int people = 2;
+              cout << pizzas / people << endl;                       // 3 again!
+              cout << static_cast<double>(pizzas) / people << endl;  // 3.5
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+3
+3.5
+3.5
+3
+3.5
+</script>
+      </div>
+      <p>If at least one side is a <code>double</code>, the answer is a <code>double</code>. To divide two <code>int</code> variables properly, turn one into a double with <code>static_cast&lt;double&gt;(x)</code>. This is called a <strong>cast</strong>.</p>
+
+      <div class="code-explorer" data-lang="cpp" data-title="Try the operators (then press Run)">
+        <input type="range" name="a" data-label="a" min="0" max="50" value="17">
+        <input type="range" name="b" data-label="b" min="1" max="12" value="5">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              int a = {{a}};
+              int b = {{b}};
+              cout << a << " + " << b << " = " << a + b << endl;
+              cout << a << " - " << b << " = " << a - b << endl;
+              cout << a << " * " << b << " = " << a * b << endl;
+              cout << a << " / " << b << " = " << a / b << "   (whole number)" << endl;
+              cout << a << " % " << b << " = " << a % b << "   (left over)" << endl;
+              cout << a << " / " << b << " = " << static_cast<double>(a) / b << "   (exact)" << endl;
+              return 0;
+          }
+        </script>
+      </div>
+
+      <aside class="note tip">
+        <h4>When integer division is useful</h4>
+        <p>Sharing 17 cookies among 5 friends: <code>17 / 5</code> is 3 cookies each, and <code>17 % 5</code> is 2 left over. And <code>n % 2 == 0</code> tells you a number is even.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Changing numbers: += and ++</h2>
+      <div class="runnable" data-lang="cpp" data-title="Shortcuts">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              int coins = 10;
+              coins += 5;     // coins = coins + 5
+              coins -= 3;     // coins = coins - 3
+              coins *= 2;     // coins = coins * 2
+              cout << coins << endl;
+
+              coins++;        // add 1
+              coins--;        // take 1 away
+              cout << coins << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+24
+24
+</script>
+      </div>
+    </section>
+
+    <section>
+      <h2>&lt;cmath&gt;: the math toolbox</h2>
+      <p>Add <code>#include &lt;cmath&gt;</code> to use square roots, powers, rounding and more:</p>
+      <div class="runnable" data-lang="cpp" data-title="Math functions">
+        <script type="text/plain">
+          #include <iostream>
+          #include <cmath>
+          using namespace std;
+
+          int main() {
+              cout << sqrt(81) << endl;       // square root: 9
+              cout << pow(2, 10) << endl;     // 2 to the power 10: 1024
+              cout << round(4.6) << endl;     // nearest whole: 5
+              cout << floor(4.6) << endl;     // round down: 4
+              cout << ceil(4.2) << endl;      // round up: 5
+              cout << abs(-7) << endl;        // remove the minus: 7
+
+              double radius = 3;
+              double area = M_PI * radius * radius;
+              cout << "Circle area: " << area << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+9
+1024
+5
+4
+5
+7
+Circle area: 28.2743
+</script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Boxes have limits</h2>
+      <p>An <code>int</code> is 4 bytes, so it can only hold numbers up to about 2.1 billion. Go past that, and the number "wraps around" to a big negative number. This is called <strong>overflow</strong>. For bigger numbers, use <code>long long</code> (8 bytes, up to about 9 quintillion):</p>
+      <div class="runnable" data-lang="cpp" data-title="Big numbers">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              long long stars = 100000000000LL;  // 100 billion
+              long long seconds = 60LL * 60 * 24 * 365 * 80;
+              cout << "Stars in our galaxy: about " << stars << endl;
+              cout << "Seconds in 80 years: " << seconds << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Stars in our galaxy: about 100000000000
+Seconds in 80 years: 2522880000
+</script>
+      </div>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Work out the average of three test scores: 72, 95 and 88. Make sure you get the decimals!</li>
+          <li>Convert 25 °C to Fahrenheit: <code>c * 9 / 5 + 32</code>. Try it with <code>int c</code> and with <code>double c</code>.</li>
+          <li>You have 100 stickers and put 8 on each page. How many full pages, and how many left over?</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="cpp" data-title="Your calculator">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              int total = 72 + 95 + 88;
+              cout << "Average: " << total / 3.0 << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Average: 85
+</script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Integer division by accident</strong>: <code>1 / 2</code> is 0. Write <code>1.0 / 2</code>.</li>
+          <li><strong>Using ^ for power</strong>: in C++ <code>^</code> means something else entirely. Use <code>pow(a, b)</code>.</li>
+          <li><strong>% with decimals</strong>: <code>7.5 % 2</code> doesn't compile. <code>%</code> is only for whole numbers.</li>
+          <li><strong>Dividing by zero</strong>: with ints, the program crashes.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">What does cout &lt;&lt; 9 / 2; print?</p>
+        <div class="opts">
+          <button>4.5</button>
+          <button data-correct>4</button>
+          <button>5</button>
+        </div>
+        <p class="why">Both are ints, so it's integer division: the .5 is thrown away.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>int / int</code> gives an int. Use a double (<code>7.0</code> or <code>static_cast&lt;double&gt;(x)</code>) for decimals.</li>
+          <li><code>%</code> is the remainder. <code>x += 5</code>, <code>x++</code>, <code>x--</code>.</li>
+          <li><code>#include &lt;cmath&gt;</code> for <code>sqrt</code>, <code>pow</code>, <code>round</code>, <code>floor</code>, <code>ceil</code>.</li>
+          <li><code>long long</code> for very big whole numbers.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

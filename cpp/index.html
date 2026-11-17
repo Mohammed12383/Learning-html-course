@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hello C++</title>
+  <meta name="description" content="A visual C++ course for total beginners: code, explanation and the program's output side by side.">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".">
+
+  <section class="home-hero">
+    <div>
+      <p class="eyebrow">A visual course for total beginners</p>
+      <h1>Learn <span class="tagword" style="color: var(--c-val)">C++</span>, the language of games</h1>
+      <p class="lead">C++ is fast and powerful: it runs video games, web browsers, robots and space probes. Every lesson shows a short explanation, the code, and what it does, side by side, with pictures of what happens inside the computer's memory. No experience needed.</p>
+      <div class="cta-row">
+        <a class="btn" href="lessons/00-start-here.html">Start lesson 0</a>
+        <a class="btn ghost" href="lessons/cheatsheet.html">Open the cheat sheet</a>
+      </div>
+    </div>
+
+    <div class="runnable" data-lang="cpp" data-title="This is real C++. Press Run!" data-hint="Change size to 8, or change '*' to '#', then press Run. C++ compiles online, so it needs internet.">
+      <script type="text/plain">
+        #include <iostream>
+        #include <string>
+        using namespace std;
+
+        int main() {
+            int size = 5;
+
+            for (int row = 0; row < size; row++) {
+                cout << string(size - row - 1, ' ');
+                cout << string(row * 2 + 1, '*') << endl;
+            }
+            cout << string(size - 1, ' ') << "|" << endl;
+
+            cout << "Hello from C++!" << endl;
+            return 0;
+        }
+      </script>
+      <script type="text/plain" data-expected>
+    *
+   ***
+  *****
+ *******
+*********
+    |
+Hello from C++!
+</script>
+    </div>
+  </section>
+
+  <section class="home-section">
+    <h2>How every lesson works</h2>
+    <p>You learn by looking and trying. Each idea comes with a small program you can change and run.</p>
+    <div class="how">
+      <div>
+        <span class="glyph">1 &middot; read</span>
+        <h3>A short, simple explanation</h3>
+        <p>Plain words and pictures. Every new word is explained the first time you meet it.</p>
+      </div>
+      <div>
+        <span class="glyph">2 &middot; run</span>
+        <h3>Code and result side by side</h3>
+        <p>Press Run to compile and run your code with a real C++ compiler. Step-through viewers show memory changing one line at a time.</p>
+      </div>
+      <div>
+        <span class="glyph">3 &middot; try</span>
+        <h3>Change it, break it, fix it</h3>
+        <p>Compile errors are marked on the right line and explained in plain English. Reset always brings the code back.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section">
+    <h2>The course</h2>
+    <p>17 lessons, in order. Each one takes about 15 to 30 minutes. Your progress is saved in this browser. Learning Python or TypeScript first makes C++ easier, but you don't have to.</p>
+    <div id="course-map"></div>
+  </section>
+
+  <section class="home-section">
+    <h2>More courses</h2>
+    <p>All the Hello courses work the same way.</p>
+    <div class="courses" id="course-list"></div>
+  </section>
+
+  <footer class="footer">
+    Hello C++ &middot; a beginner course. Code is compiled with GCC through the free Compiler Explorer service (needs internet). Each example's saved output is shown when you're offline.
+  </footer>
+
+  <script src="course-config.js"></script>
+  <script src="../assets/code.js"></script>
+  <script src="../assets/course.js"></script>
+</body>
+</html>

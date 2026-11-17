@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hello, World! · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="01-hello">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 01 &middot; <b>First steps</b></p>
+      <div class="hero-code" aria-hidden="true">cout &lt;&lt;</div>
+      <h1>Hello, World!</h1>
+      <p class="lead">Every C++ program has the same basic frame. In this lesson you'll understand every line of it, print anything you like, and learn to read the compiler's error messages.</p>
+      <ul class="learn">
+        <li>The program frame</li>
+        <li>cout and &lt;&lt;</li>
+        <li>New lines</li>
+        <li>Comments</li>
+        <li>Compile errors</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Every line explained</h2>
+      <script type="text/plain" class="snippet" data-lang="cpp">
+        #include <iostream>
+        using namespace std;
+
+        int main() {
+            cout << "Hello, world!" << endl;
+            return 0;
+        }
+      </script>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Line</th><th>What it means</th></tr></thead>
+          <tbody>
+            <tr><td><code>#include &lt;iostream&gt;</code></td><td>"Bring in the input/output toolbox." It contains <code>cout</code> (for printing) and <code>cin</code> (for reading input).</td></tr>
+            <tr><td><code>using namespace std;</code></td><td>The toolbox's tools all have the family name <code>std</code> (standard). This line lets you write <code>cout</code> instead of <code>std::cout</code>.</td></tr>
+            <tr><td><code>int main() {</code></td><td>The <strong>main function</strong>: where every C++ program starts. Its code goes between the curly brackets <code>{ }</code>.</td></tr>
+            <tr><td><code>cout &lt;&lt; "Hello, world!" &lt;&lt; endl;</code></td><td>Print the text, then end the line.</td></tr>
+            <tr><td><code>return 0;</code></td><td>The program ends and tells the computer "everything went fine" (0 means no problems).</td></tr>
+            <tr><td><code>}</code></td><td>The end of <code>main</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>You'll write this frame in every program. Your own code goes inside <code>main</code>, before <code>return 0;</code>.</p>
+    </section>
+
+    <section>
+      <h2>cout: print things</h2>
+      <p><code class="k-prop">cout</code> (say "see-out", for "character output") is the screen. The arrows <code>&lt;&lt;</code> push things onto it, like pouring water into a cup:</p>
+      <div class="anatomy" role="img" aria-label="cout, arrows, the text Hi in quotes, arrows, endl, semicolon">
+        <div class="part prop"><span>cout</span><small>the screen</small></div>
+        <div class="part punc"><span> &lt;&lt; </span><small>"send this"</small></div>
+        <div class="part val"><span>"Hi"</span><small>text in quotes</small></div>
+        <div class="part punc"><span> &lt;&lt; </span><small>"and this"</small></div>
+        <div class="part prop"><span>endl</span><small>end the line</small></div>
+        <div class="part punc"><span>;</span><small>end of the<br>instruction</small></div>
+      </div>
+
+      <div class="runnable" data-lang="cpp" data-title="Printing text and numbers">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              cout << "Hello!" << endl;
+              cout << "I am " << 12 << " years old" << endl;
+              cout << "5 + 3 = " << 5 + 3 << endl;
+              cout << "This is " << "one " << "line" << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Hello!
+I am 12 years old
+5 + 3 = 8
+This is one line
+</script>
+      </div>
+      <p>You can chain as many <code>&lt;&lt;</code> as you like. Text in quotes is printed exactly. Numbers and math without quotes are calculated: <code>5 + 3</code> prints <code>8</code>. Notice that <code>cout</code> doesn't add spaces for you: put them inside the quotes.</p>
+    </section>
+
+    <section>
+      <h2>New lines: endl and \n</h2>
+      <p>Without <code>endl</code>, everything stays on one line. There are two ways to start a new line:</p>
+      <div class="runnable" data-lang="cpp" data-title="Two ways to make a new line">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              cout << "One ";
+              cout << "line" << endl;
+
+              cout << "Line A\n";
+              cout << "Line B\nLine C\n";
+
+              cout << "Name:\tSam\n";      // \t is a tab (a big space)
+              cout << "She said \"hi\"\n";  // \" puts a quote inside text
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+One line
+Line A
+Line B
+Line C
+Name:	Sam
+She said "hi"
+</script>
+      </div>
+      <p><code>\n</code> inside text means "new line". <code>endl</code> does the same and is easier to read. Use whichever you like.</p>
+    </section>
+
+    <section>
+      <h2>Comments</h2>
+      <p>Comments are notes for people. The compiler ignores them. <code>//</code> lasts until the end of the line. <code>/* ... */</code> can cover several lines.</p>
+      <div class="runnable" data-lang="cpp" data-title="Comments">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          /* This program shows
+             how comments work. */
+          int main() {
+              cout << "Welcome!" << endl;   // a comment after code
+              // cout << "This line is switched off" << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Welcome!
+</script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Reading compile errors</h2>
+      <p>C++ is strict about every little detail: every instruction ends with <code>;</code>, every <code>{</code> needs a <code>}</code>, every <code>"</code> needs a partner, and capital letters matter. When something's off, the compiler gives you:</p>
+      <ol>
+        <li>the <strong>line number</strong> (marked in red in the code),</li>
+        <li>an <strong>error message</strong> written for programmers,</li>
+        <li>and in this course, a plain explanation of <strong>what it means</strong>.</li>
+      </ol>
+      <div class="runnable" data-lang="cpp" data-title="Find and fix three mistakes">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              cout << "Roses are red" << endl
+              cout << "Violets are blue" << endl;
+              Cout << "C++ is fun" << endl;
+              cout << "And so are you << endl;
+              return 0;
+          }
+        </script>
+      </div>
+      <p>Press Run, fix the first error, Run again. Repeat until it works.</p>
+
+      <aside class="note tip">
+        <h4>Tip: the error is often one line earlier</h4>
+        <p>A missing <code>;</code> is reported on the <em>next</em> line, because that's where the compiler notices something's wrong. Always check the line before too.</p>
+      </aside>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Print your name, age and favorite food on three lines.</li>
+          <li>Print how many minutes are in a day: <code>60 * 24</code>.</li>
+          <li>Draw a small picture with several <code>cout</code> lines, like a house or a face.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="cpp" data-title="Your program">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              cout << "  /\\  " << endl;
+              cout << " /  \\ " << endl;
+              cout << " |[]| " << endl;
+              cout << "Minutes in a day: " << 60 * 24 << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+  /\  
+ /  \ 
+ |[]| 
+Minutes in a day: 1440
+</script>
+      </div>
+      <p>Notice <code>\\</code> in the house: a backslash starts special codes like <code>\n</code>, so to print one backslash you write two.</p>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Missing semicolon</strong> at the end of an instruction.</li>
+          <li><strong>Capital letters</strong>: <code>Cout</code>, <code>Main</code> and <code>Endl</code> don't exist.</li>
+          <li><strong>Arrows the wrong way</strong>: printing uses <code>&lt;&lt;</code> (toward cout).</li>
+          <li><strong>Curly quotes</strong> “like these” from a word processor or the iPad keyboard. Code needs straight quotes <code>"</code>. On an iPad, turn off Smart Punctuation in Settings → General → Keyboard.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">Where does every C++ program start running?</p>
+        <div class="opts">
+          <button>At #include</button>
+          <button data-correct>At the main function</button>
+          <button>At the first cout</button>
+        </div>
+        <p class="why">The computer always starts at <code>int main()</code>.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>The frame: <code>#include &lt;iostream&gt;</code>, <code>using namespace std;</code>, <code>int main() { ... return 0; }</code>.</li>
+          <li><code>cout &lt;&lt; "text" &lt;&lt; value &lt;&lt; endl;</code> prints.</li>
+          <li><code>\n</code> new line, <code>\t</code> tab, <code>\"</code> quote, <code>\\</code> backslash.</li>
+          <li>Every instruction ends with <code>;</code>. Check the line before an error too.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

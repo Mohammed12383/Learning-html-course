@@ -673,6 +673,7 @@
         if (editor) editor.setMarks(errs.map(function (e) { return { line: e.line, kind: 'error' }; }));
         if (!errs.length) out.error('The compiler found a problem', r.compileText);
         errs.slice(0, 4).forEach(function (e) { out.error('Error on line ' + e.line, e.msg, cppHelp(e.msg)); });
+        out.console.scrollTop = 0;   // the first error is usually the one to fix
         return;
       }
       if (r.stdout) out.write(r.stdout);

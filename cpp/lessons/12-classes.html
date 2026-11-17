@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Classes · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="12-classes">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 12 &middot; <b>Objects &amp; power tools</b></p>
+      <div class="hero-code" aria-hidden="true">class</div>
+      <h1>Classes</h1>
+      <p class="lead">A <strong>class</strong> is a struct with superpowers: it bundles data <em>and</em> the functions that work on it, and it can keep its data <strong>private</strong> so nobody can break it. Classes are the heart of C++. The "++" in the name was originally about adding them.</p>
+      <ul class="learn">
+        <li>public and private</li>
+        <li>Constructors</li>
+        <li>Methods</li>
+        <li>Protecting your data</li>
+        <li>const methods</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>A class bundles data and actions</h2>
+      <div class="runnable" data-lang="cpp" data-title="A piggy bank class">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          class PiggyBank {
+          private:
+              string owner;
+              int coins;
+
+          public:
+              PiggyBank(string name) {      // the constructor
+                  owner = name;
+                  coins = 0;
+              }
+
+              void add(int amount) {
+                  coins += amount;
+                  cout << "+" << amount << " (" << owner << " has " << coins << ")" << endl;
+              }
+
+              bool spend(int amount) {
+                  if (amount > coins) {
+                      cout << "Not enough! " << owner << " has only " << coins << endl;
+                      return false;
+                  }
+                  coins -= amount;
+                  cout << "-" << amount << " (" << owner << " has " << coins << ")" << endl;
+                  return true;
+              }
+
+              int balance() const {
+                  return coins;
+              }
+          };
+
+          int main() {
+              PiggyBank mine("Sam");
+              mine.add(10);
+              mine.spend(25);
+              mine.spend(4);
+              cout << "Balance: " << mine.balance() << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
++10 (Sam has 10)
+Not enough! Sam has only 10
+-4 (Sam has 6)
+Balance: 6
+</script>
+      </div>
+    </section>
+
+    <section>
+      <h2>public and private</h2>
+      <div class="split2">
+        <div>
+          <h4>private:</h4>
+          <p><strong>Only the class's own code</strong> can use these. Usually the data goes here, so it can't be changed by accident.</p>
+        </div>
+        <div>
+          <h4>public:</h4>
+          <p><strong>Anyone</strong> can use these. Usually the methods go here: the buttons on the outside of the box.</p>
+        </div>
+      </div>
+      <p>Try adding <code>mine.coins = 1000000;</code> in <code>main</code> above and press Run. The compiler refuses: <code>coins</code> is private. The only way to change it is through <code>add</code> and <code>spend</code>, which check the rules. This idea is called <strong>encapsulation</strong>: keep the data safe inside, and offer a few safe buttons outside.</p>
+
+      <aside class="note idea">
+        <h4>Think of it like this</h4>
+        <p>A class is like a vending machine. The snacks and money are inside (private). You can only use the buttons on the front (public). You can't reach in and take a snack for free.</p>
+      </aside>
+      <p>The only difference between <code>struct</code> and <code>class</code>: in a struct, everything is public unless you say otherwise. In a class, everything is private unless you say otherwise.</p>
+    </section>
+
+    <section>
+      <h2>Constructors</h2>
+      <p>The <strong>constructor</strong> has the same name as the class and no return type. It runs automatically when an object is made, and sets everything up. A neat way to write it is with an <strong>initializer list</strong> after a colon:</p>
+      <div class="runnable" data-lang="cpp" data-title="Constructors and an initializer list">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          class Player {
+          private:
+              string name;
+              int score;
+              int lives;
+
+          public:
+              Player(string n, int startLives = 3) : name(n), score(0), lives(startLives) {}
+
+              void win(int points) { score += points; }
+              void hit() { if (lives > 0) lives--; }
+              bool alive() const { return lives > 0; }
+
+              void show() const {
+                  cout << name << ": " << score << " points, " << string(lives, '*') << endl;
+              }
+          };
+
+          int main() {
+              Player zara("Zara");
+              Player leo("Leo", 5);
+
+              zara.win(50);
+              zara.hit();
+              leo.hit();
+              leo.win(20);
+
+              zara.show();
+              leo.show();
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Zara: 50 points, **
+Leo: 20 points, ****
+</script>
+      </div>
+      <p><code>: name(n), score(0), lives(startLives)</code> fills in the fields before the constructor's body runs. Here the body <code>{}</code> is empty because there's nothing else to do.</p>
+    </section>
+
+    <section>
+      <h2>Watch an object being made</h2>
+      <div class="stepper" data-lang="cpp" data-title="Inside Player zara(&quot;Zara&quot;)">
+        <script type="text/plain">
+          class Player {
+              string name;
+              int score;
+          public:
+              Player(string n) : name(n), score(0) {}
+              void win(int p) { score += p; }
+          };
+
+          Player zara("Zara");
+          zara.win(50);
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "note": "The compiler learns the <code>Player</code> blueprint. No player exists yet."},
+            {"line": 9, "note": "<code>Player zara(\"Zara\")</code> makes a new object in memory and calls the constructor."},
+            {"line": 5, "vars": {"n": "\"Zara\"", "zara": "{ name: \"Zara\", score: 0 }"}, "note": "The initializer list fills in the fields: name gets \"Zara\", score gets 0."},
+            {"line": 9, "vars": {"zara": "{ name: \"Zara\", score: 0 }"}, "note": "The object is ready."},
+            {"line": 10, "vars": {"zara": "{ name: \"Zara\", score: 0 }"}, "note": "Call the method <code>win</code> on zara."},
+            {"line": 6, "vars": {"p": "50", "zara": "{ name: \"Zara\", score: 50 }"}, "note": "Inside the method, <code>score</code> means <b>zara's</b> score. It goes up to 50."},
+            {"line": 10, "vars": {"zara": "{ name: \"Zara\", score: 50 }"}, "note": "Back outside. Only <code>win</code> could change the private score."}
+          ]
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Rules that protect the data</h2>
+      <p>Because methods are the only way in, they can check every change. Here, a temperature can never be set below absolute zero:</p>
+      <div class="runnable" data-lang="cpp" data-title="A setter that checks">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          class Thermometer {
+          private:
+              double celsius = 20;
+
+          public:
+              void set(double value) {
+                  if (value < -273.15) {
+                      cout << "Impossible! Nothing is colder than -273.15." << endl;
+                      return;
+                  }
+                  celsius = value;
+              }
+              double get() const { return celsius; }
+              double fahrenheit() const { return celsius * 9 / 5 + 32; }
+          };
+
+          int main() {
+              Thermometer t;
+              t.set(31);
+              cout << t.get() << " C = " << t.fahrenheit() << " F" << endl;
+              t.set(-500);
+              cout << "Still " << t.get() << " C" << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+31 C = 87.8 F
+Impossible! Nothing is colder than -273.15.
+Still 31 C
+</script>
+      </div>
+      <p>A <code class="k-tag">const</code> after a method's brackets, like <code>double get() const</code>, promises that the method only reads and never changes the object.</p>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Give <code>PiggyBank</code> a method <code>bool isRich() const</code> that returns true for 100 coins or more.</li>
+          <li>Make a class <code>Counter</code> with a private count and methods <code>increment()</code>, <code>reset()</code> and <code>value()</code>.</li>
+          <li>Make a vector of <code>Player</code> objects and show them all.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="cpp" data-title="Your class">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          class Counter {
+          private:
+              int count = 0;
+          public:
+              void increment() { count++; }
+              int value() const { return count; }
+          };
+
+          int main() {
+              Counter c;
+              c.increment();
+              c.increment();
+              cout << c.value() << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+2
+</script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Forgetting the semicolon</strong> after the class's closing <code>}</code>.</li>
+          <li><strong>Forgetting <code>public:</code></strong>: then even the constructor is private, and nothing can use the class.</li>
+          <li><strong>Giving the constructor a return type</strong>: it has none, not even <code>void</code>.</li>
+          <li><strong>Writing <code>Player p();</code></strong> with empty brackets for a constructor without parameters. Write <code>Player p;</code>.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">In a class, who can use a private field?</p>
+        <div class="opts">
+          <button>Anyone</button>
+          <button data-correct>Only the class's own methods</button>
+          <button>Only main</button>
+        </div>
+        <p class="why">Private means only the class's own code can touch it. That's how a class protects its data.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>class Name { private: data; public: methods; };</code></li>
+          <li>The constructor has the class's name and no return type. <code>: a(x), b(y)</code> fills fields.</li>
+          <li>Make an object: <code>Name obj(args);</code>. Use it: <code>obj.method();</code>.</li>
+          <li>Keep data private, check changes in methods. <code>const</code> methods only read.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

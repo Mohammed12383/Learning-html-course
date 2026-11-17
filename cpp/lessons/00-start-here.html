@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Start Here · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="00-start-here">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 00 &middot; <b>First steps</b></p>
+      <div class="hero-code" aria-hidden="true">hello</div>
+      <h1>Start Here</h1>
+      <p class="lead">You don't need to know anything yet. In this lesson you'll find out what C++ is, why it's so fast, what a compiler does, and how to use this course.</p>
+      <ul class="learn">
+        <li>What a program is</li>
+        <li>Why C++</li>
+        <li>What a compiler does</li>
+        <li>How to use the code boxes</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>What is a program?</h2>
+      <p>A <strong>program</strong> is a list of instructions for the computer, written in a programming language. The computer follows them one by one, top to bottom, exactly as written. Here is a complete C++ program:</p>
+
+      <div class="runnable" data-lang="cpp" data-title="Your first look at a C++ program">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              cout << "Hello, world!" << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Hello, world!
+</script>
+      </div>
+
+      <p>The output box already shows what this program prints. Press <strong>Run</strong> to compile and run it yourself, for real. Then change <code>world</code> to your name and press Run again. Don't worry about the other lines yet: lesson 1 explains every one.</p>
+    </section>
+
+    <section>
+      <h2>Why C++?</h2>
+      <p>C++ is one of the most powerful programming languages in the world. It's used when programs need to be <strong>very fast</strong> or need to control the computer closely:</p>
+      <div class="trio four">
+        <div><div class="big" style="color: var(--c-tag)">games</div><p>Big game engines like Unreal Engine are written in C++.</p></div>
+        <div><div class="big" style="color: var(--c-prop)">browsers</div><p>Chrome, Firefox and Safari are mostly C++.</p></div>
+        <div><div class="big" style="color: var(--c-val)">robots</div><p>Robots, cars, drones and Mars rovers run C++.</p></div>
+        <div><div class="big" style="color: var(--c-attr)">apps</div><p>Photoshop, music software, and parts of Windows and macOS.</p></div>
+      </div>
+      <p>C++ asks you to be more careful and precise than Python or TypeScript. In return, you learn how computers really work inside: memory, addresses and types. That knowledge makes you better at every language.</p>
+    </section>
+
+    <section>
+      <h2>What a compiler does</h2>
+      <p>Computers don't understand C++ directly. They only understand <strong>machine code</strong>: millions of tiny instructions made of 1s and 0s. A program called a <strong>compiler</strong> translates your C++ into machine code. Then the computer runs that machine code, very fast.</p>
+      <div class="flow" role="img" aria-label="Your C++ code goes into the compiler. If there are mistakes, it stops and lists errors. If not, it makes a program in machine code, which the computer runs.">
+        <div class="fbox">your code <code>main.cpp</code></div>
+        <div class="arrow"></div>
+        <div class="fbox fq">the compiler checks and translates it</div>
+        <div class="arrow"></div>
+        <div class="branches">
+          <div class="branch no"><span class="lab">mistakes found</span><div class="fbox">compile errors, with line numbers. Nothing runs.</div></div>
+          <div class="branch yes"><span class="lab">no mistakes</span><div class="fbox">a program in machine code, which runs</div></div>
+        </div>
+      </div>
+      <p>So there are two moments: <strong>compiling</strong> (checking and translating) and <strong>running</strong>. If the compiler finds a mistake, nothing runs at all. It tells you the line and what's wrong, and you fix it.</p>
+
+      <div class="runnable" data-lang="cpp" data-title="A program with a mistake (press Run)">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              cout << "Hello" << endl
+              cout << "World" << endl;
+              return 0;
+          }
+        </script>
+      </div>
+      <p>Press Run. The compiler finds a missing semicolon. Read the explanation, then add a <code>;</code> at the end of line 5 and Run again.</p>
+    </section>
+
+    <section>
+      <h2>How to use this course</h2>
+      <ul>
+        <li><strong>Run</strong> sends your code to a real C++ compiler online (a free service called <strong>Compiler Explorer</strong>), runs it, and shows the output. It takes about a second, and <strong>it needs an internet connection</strong>.</li>
+        <li>Before you press Run, each box shows the <strong>saved result</strong>: what the example prints. You can read every lesson offline, but running changed code needs internet.</li>
+        <li>Programs that read input have an <strong>Input</strong> box: type the answers <em>before</em> pressing Run, one per line.</li>
+        <li><strong>Compile errors</strong> mark the line in red, with a plain explanation.</li>
+        <li><strong>Reset</strong> brings the code back. <strong>Copy</strong> copies it.</li>
+        <li><strong>Step-through viewers</strong> show a program running one line at a time, with pictures of memory.</li>
+      </ul>
+      <p>Code is colored to help you read it, the same way everywhere:</p>
+      <div class="legend">
+        <code class="k-tag">keywords like int, if</code>
+        <code class="k-val">"text"</code>
+        <code class="k-attr">numbers 42</code>
+        <code class="k-prop">cout, functions</code>
+        <code class="k-sel">types and #include</code>
+      </div>
+    </section>
+
+    <section>
+      <h2>C++ on your own computer</h2>
+      <ol class="steps">
+        <li><div><p><strong>Online, no install:</strong> <a href="https://godbolt.org" target="_blank" rel="noopener">godbolt.org</a> (Compiler Explorer, the same compiler this course uses) and other online C++ editors work in any browser.</p></div></li>
+        <li><div><p><strong>On a Mac:</strong> open the Terminal app and type <code>xcode-select --install</code>. That installs a C++ compiler called <code>clang++</code>.</p></div></li>
+        <li><div><p><strong>On Windows:</strong> install <strong>Visual Studio Community</strong> (free) and choose "Desktop development with C++".</p></div></li>
+        <li><div><p>Write your code in a file ending in <code>.cpp</code>, then compile and run it. Lesson 15 shows exactly how.</p></div></li>
+      </ol>
+    </section>
+
+    <section>
+      <div class="quiz">
+        <p class="q">What does a compiler do?</p>
+        <div class="opts">
+          <button>Makes your code look pretty</button>
+          <button data-correct>Checks your C++ and translates it into machine code</button>
+          <button>Runs the program line by line as you type</button>
+        </div>
+        <p class="why">The compiler translates the whole program into machine code before anything runs. If it finds mistakes, it stops and tells you.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>A program is a list of instructions, run top to bottom.</li>
+          <li>C++ is fast and powerful: games, browsers, robots.</li>
+          <li>The <strong>compiler</strong> turns C++ into machine code. Compile errors stop anything from running.</li>
+          <li>In this course, Run compiles online and needs internet. Saved results show without it.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

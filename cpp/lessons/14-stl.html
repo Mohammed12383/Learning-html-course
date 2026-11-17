@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Standard Library · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="14-stl">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 14 &middot; <b>Objects &amp; power tools</b></p>
+      <div class="hero-code" aria-hidden="true">map</div>
+      <h1>The Standard Library</h1>
+      <p class="lead">C++ comes with a huge toolbox called the <strong>Standard Library</strong> (often called the STL). You've already used <code>string</code> and <code>vector</code>. In this lesson you'll meet more power tools: <code>map</code>, <code>set</code>, and ready-made algorithms for sorting and searching.</p>
+      <ul class="learn">
+        <li>map: look things up by key</li>
+        <li>set: no duplicates</li>
+        <li>sort and other algorithms</li>
+        <li>Lambdas: tiny functions</li>
+        <li>pair and auto</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>map: a dictionary</h2>
+      <p>A <code class="k-sel">map</code> stores <strong>key → value</strong> pairs. You look up a value by its key, like a word in a dictionary. <code>map&lt;string, int&gt;</code> has string keys and int values. It keeps the keys sorted automatically.</p>
+      <div class="runnable" data-lang="cpp" data-title="Prices and counting">
+        <script type="text/plain">
+          #include <iostream>
+          #include <map>
+          #include <string>
+          #include <vector>
+          using namespace std;
+
+          int main() {
+              map<string, double> prices;
+              prices["mango"] = 1.20;
+              prices["apple"] = 0.50;
+              prices["banana"] = 0.25;
+
+              cout << "A mango costs " << prices["mango"] << endl;
+              cout << "Do we sell kiwis? " << (prices.count("kiwi") ? "yes" : "no") << endl;
+
+              for (const auto& [fruit, price] : prices) {     // sorted by key!
+                  cout << fruit << ": " << price << endl;
+              }
+
+              // counting votes
+              vector<string> votes = {"pizza", "tacos", "pizza", "sushi", "pizza", "tacos"};
+              map<string, int> count;
+              for (const string& v : votes) {
+                  count[v]++;          // a new key starts at 0
+              }
+              for (const auto& [food, n] : count) {
+                  cout << food << " " << string(n, '#') << " " << n << endl;
+              }
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+A mango costs 1.2
+Do we sell kiwis? no
+apple: 0.5
+banana: 0.25
+mango: 1.2
+pizza ### 3
+sushi # 1
+tacos ## 2
+</script>
+      </div>
+      <ul>
+        <li><code>m[key] = value</code> adds or changes. <code>m[key]</code> reads (and creates the key with 0 if it's missing, which is handy for counting).</li>
+        <li><code>m.count(key)</code> is 1 if the key exists, 0 if not.</li>
+        <li><code>for (const auto&amp; [key, value] : m)</code> visits every pair. <code class="k-tag">auto</code> lets the compiler work out the type.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>set: every value once</h2>
+      <div class="runnable" data-lang="cpp" data-title="Unique visitors">
+        <script type="text/plain">
+          #include <iostream>
+          #include <set>
+          #include <string>
+          using namespace std;
+
+          int main() {
+              set<string> visitors;
+              for (string name : {"Lina", "Omar", "Lina", "Maya", "Omar", "Lina"}) {
+                  visitors.insert(name);
+              }
+
+              cout << visitors.size() << " different visitors:" << endl;
+              for (const string& v : visitors) {
+                  cout << "  " << v << endl;          // also sorted
+              }
+              cout << "Did Maya visit? " << (visitors.count("Maya") ? "yes" : "no") << endl;
+
+              set<char> letters;
+              for (char c : string("mississippi")) letters.insert(c);
+              cout << "Different letters in mississippi: " << letters.size() << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+3 different visitors:
+  Lina
+  Maya
+  Omar
+Did Maya visit? yes
+Different letters in mississippi: 4
+</script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Algorithms: sort, find, count and more</h2>
+      <p>Add <code>#include &lt;algorithm&gt;</code> and you get dozens of ready-made algorithms. They work on a <strong>range</strong> given by <code>begin()</code> and <code>end()</code>: "from the start to the end of this vector".</p>
+      <div class="runnable" data-lang="cpp" data-title="Ready-made algorithms">
+        <script type="text/plain">
+          #include <iostream>
+          #include <vector>
+          #include <algorithm>
+          #include <numeric>
+          using namespace std;
+
+          void show(const vector<int>& v) {
+              for (int x : v) cout << x << " ";
+              cout << endl;
+          }
+
+          int main() {
+              vector<int> scores = {72, 95, 88, 64, 91, 88};
+
+              sort(scores.begin(), scores.end());
+              show(scores);                                   // smallest first
+
+              sort(scores.begin(), scores.end(), greater<int>());
+              show(scores);                                   // biggest first
+
+              cout << "Highest: " << *max_element(scores.begin(), scores.end()) << endl;
+              cout << "How many 88s: " << count(scores.begin(), scores.end(), 88) << endl;
+              cout << "Total: " << accumulate(scores.begin(), scores.end(), 0) << endl;
+
+              reverse(scores.begin(), scores.end());
+              show(scores);
+
+              bool hasPerfect = find(scores.begin(), scores.end(), 100) != scores.end();
+              cout << "Anyone got 100? " << (hasPerfect ? "yes" : "no") << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+64 72 88 88 91 95 
+95 91 88 88 72 64 
+Highest: 95
+How many 88s: 2
+Total: 498
+64 72 88 88 91 95 
+Anyone got 100? no
+</script>
+      </div>
+      <p><code>max_element</code> gives the <em>position</em> of the biggest item (an <strong>iterator</strong>), so <code>*</code> gets the value there, a bit like a pointer. <code>find</code> gives <code>end()</code> when it finds nothing.</p>
+    </section>
+
+    <section>
+      <h2>Lambdas: tiny functions on the spot</h2>
+      <p>A <strong>lambda</strong> is a small function without a name, written right where you need it. They're perfect for telling <code>sort</code> how to sort:</p>
+      <div class="anatomy" role="img" aria-label="A lambda: square brackets, the parameters in round brackets, then the body in curly brackets">
+        <div class="part tag"><span>[]</span><small>"a lambda"</small></div>
+        <div class="part text"><span>(const Player&amp; a, const Player&amp; b)</span><small>its parameters</small></div>
+        <div class="part punc"><span> { return a.score &gt; b.score; }</span><small>its body</small></div>
+      </div>
+      <div class="runnable" data-lang="cpp" data-title="A leaderboard">
+        <script type="text/plain">
+          #include <iostream>
+          #include <vector>
+          #include <string>
+          #include <algorithm>
+          using namespace std;
+
+          struct Player {
+              string name;
+              int score;
+          };
+
+          int main() {
+              vector<Player> players = {{"Lina", 320}, {"Omar", 450}, {"Maya", 280}, {"Sam", 450}};
+
+              // biggest score first; if equal, alphabetical
+              sort(players.begin(), players.end(), [](const Player& a, const Player& b) {
+                  if (a.score != b.score) return a.score > b.score;
+                  return a.name < b.name;
+              });
+
+              int place = 1;
+              for (const Player& p : players) {
+                  cout << place++ << ". " << p.name << " " << p.score << endl;
+              }
+
+              int over300 = count_if(players.begin(), players.end(), [](const Player& p) {
+                  return p.score > 300;
+              });
+              cout << over300 << " players scored over 300" << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+1. Omar 450
+2. Sam 450
+3. Lina 320
+4. Maya 280
+3 players scored over 300
+</script>
+      </div>
+      <p><code>sort</code> calls the lambda to compare two players. It returns <code>true</code> when <code>a</code> should come before <code>b</code>.</p>
+    </section>
+
+    <section>
+      <h2>pair: two values together</h2>
+      <script type="text/plain" class="snippet" data-lang="cpp">
+        pair<string, int> best = {"Omar", 450};
+        cout << best.first << " " << best.second << endl;
+
+        auto [name, score] = best;       // unpack into two variables
+      </script>
+      <p>A <code>pair</code> holds two values: <code>.first</code> and <code>.second</code>. The items in a <code>map</code> are pairs too.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Container</th><th>Use it when</th></tr></thead>
+          <tbody>
+            <tr><td><code>vector&lt;T&gt;</code></td><td>A list in order. Your default choice.</td></tr>
+            <tr><td><code>map&lt;K, V&gt;</code></td><td>Looking things up by a key.</td></tr>
+            <tr><td><code>set&lt;T&gt;</code></td><td>Each value only once, and fast "is it in there?" checks.</td></tr>
+            <tr><td><code>pair&lt;A, B&gt;</code></td><td>Two values that belong together.</td></tr>
+            <tr><td><code>string</code></td><td>Text.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Make a <code>map&lt;string, string&gt;</code> that translates five English words into another language.</li>
+          <li>Count how many times each letter appears in a sentence with a <code>map&lt;char, int&gt;</code>.</li>
+          <li>Sort a vector of words by length, shortest first, using a lambda.</li>
+        </ol>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">You add "cat", "dog", "cat" to a set&lt;string&gt;. What is its size?</p>
+        <div class="opts">
+          <button>3</button>
+          <button data-correct>2</button>
+          <button>1</button>
+        </div>
+        <p class="why">A set keeps each value only once, so the second "cat" is ignored.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>map&lt;K, V&gt;</code>: <code>m[key]</code>, <code>m.count(key)</code>, <code>for (auto&amp; [k, v] : m)</code>.</li>
+          <li><code>set&lt;T&gt;</code>: <code>insert</code>, <code>count</code>, no duplicates.</li>
+          <li><code>#include &lt;algorithm&gt;</code>: <code>sort</code>, <code>find</code>, <code>count</code>, <code>max_element</code>, <code>reverse</code> on <code>v.begin(), v.end()</code>.</li>
+          <li>Lambdas: <code>[](params) { return ...; }</code>.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

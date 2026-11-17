@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Input with cin · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="04-input">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 04 &middot; <b>First steps</b></p>
+      <div class="hero-code" aria-hidden="true">cin &gt;&gt;</div>
+      <h1>Input with cin</h1>
+      <p class="lead"><code>cout</code> sends things out to the screen. <code>cin</code> brings things in from the keyboard. With input, your programs can ask questions and react to the answers.</p>
+      <ul class="learn">
+        <li>cin and &gt;&gt;</li>
+        <li>Reading several values</li>
+        <li>getline for whole lines</li>
+        <li>Checking the input</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>cin: read from the keyboard</h2>
+      <p><code class="k-prop">cin</code> (say "see-in") is the keyboard. The arrows <code>&gt;&gt;</code> point the other way from <code>cout</code>: the value flows <em>from</em> cin <em>into</em> your variable.</p>
+      <div class="anatomy" role="img" aria-label="cin, arrows pointing right, age, semicolon: what's typed flows into the variable age">
+        <div class="part prop"><span>cin</span><small>the keyboard</small></div>
+        <div class="part punc"><span> &gt;&gt; </span><small>"flows into"</small></div>
+        <div class="part text"><span>age</span><small>your variable</small></div>
+        <div class="part punc"><span>;</span><small></small></div>
+      </div>
+
+      <aside class="note tip">
+        <h4>How input works in this course</h4>
+        <p>On a real computer, the program pauses and waits for you to type. Here, the code is sent to an online compiler all at once, so you type your answers <strong>before</strong> pressing Run, in the <strong>Input</strong> box above the output. Put each answer on its own line.</p>
+      </aside>
+
+      <div class="runnable" data-lang="cpp" data-input="12" data-title="How old are you?">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              int age;
+              cout << "How old are you? ";
+              cin >> age;
+
+              cout << endl;
+              cout << "Next year you'll be " << age + 1 << endl;
+              cout << "In dog years, you're " << age * 7 << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+How old are you? 
+Next year you'll be 13
+In dog years, you're 84
+</script>
+      </div>
+      <p>Change the number in the Input box and press Run. Because <code>age</code> is an <code>int</code>, <code>cin</code> reads a whole number from the input, and you can do math with it right away. (The <code>cout &lt;&lt; endl;</code> just starts a new line, since the input you typed isn't shown in the output here.)</p>
+    </section>
+
+    <section>
+      <h2>Several values at once</h2>
+      <p>You can chain <code>&gt;&gt;</code> to read several values. <code>cin</code> splits the input at spaces and new lines:</p>
+      <div class="runnable" data-lang="cpp" data-input="8 5" data-title="Add two numbers">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              int a, b;
+              cin >> a >> b;
+              cout << a << " + " << b << " = " << a + b << endl;
+              cout << a << " x " << b << " = " << a * b << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+8 + 5 = 13
+8 x 5 = 40
+</script>
+      </div>
+
+      <div class="runnable" data-lang="cpp" data-input="Sam\nMuscat\n4.5" data-title="A word, a word and a decimal">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          int main() {
+              string name, city;
+              double price;
+              cin >> name >> city >> price;
+
+              cout << "Hi " << name << " from " << city << "!" << endl;
+              cout << "Three cookies cost " << price * 3 << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Hi Sam from Muscat!
+Three cookies cost 13.5
+</script>
+      </div>
+      <p>With <code>&gt;&gt;</code>, a <code>string</code> reads <strong>one word</strong>: it stops at the first space.</p>
+    </section>
+
+    <section>
+      <h2>getline: read a whole line</h2>
+      <p>To read text with spaces, like a full name or a sentence, use <code>getline(cin, variable)</code>:</p>
+      <div class="runnable" data-lang="cpp" data-input="Sam Rivers\nI love making games" data-title="Full name and a sentence">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          int main() {
+              string fullName, hobby;
+              getline(cin, fullName);
+              getline(cin, hobby);
+
+              cout << "Name: " << fullName << endl;
+              cout << "Hobby: " << hobby << endl;
+              cout << "Your name has " << fullName.length() << " characters" << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Name: Sam Rivers
+Hobby: I love making games
+Your name has 10 characters
+</script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Mixing &gt;&gt; and getline</h4>
+        <p>After <code>cin &gt;&gt; age</code>, the Enter key is still waiting in the input. A <code>getline</code> right after would read that empty leftover. Fix it with <code>cin &gt;&gt; ws;</code> ("skip whitespace") before the <code>getline</code>:</p>
+        <script type="text/plain" class="snippet" data-lang="cpp">
+          cin >> age;
+          cin >> ws;              // skip the leftover Enter
+          getline(cin, fullName);
+        </script>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Checking the input</h2>
+      <p>What if someone types "hello" when you asked for a number? <code>cin</code> fails, and the variable gets 0. You can check: <code>if (cin &gt;&gt; x)</code> is true only when reading worked. (You'll learn <code>if</code> properly in the next lesson.)</p>
+      <div class="runnable" data-lang="cpp" data-input="hello" data-title="Was it a number?">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              int cookies;
+              if (cin >> cookies) {
+                  cout << "Here are " << cookies << " cookies!" << endl;
+              } else {
+                  cout << "That wasn't a number. Use digits, like 5." << endl;
+              }
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+That wasn't a number. Use digits, like 5.
+</script>
+      </div>
+      <p>Try it with <code>hello</code>, then with <code>5</code>.</p>
+    </section>
+
+    <section>
+      <h2>Build it: a story maker</h2>
+      <div class="runnable" data-lang="cpp" data-input="dragon\nthe beach\npancakes\n12" data-title="Silly story">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          int main() {
+              string animal, place, food;
+              int number;
+              getline(cin, animal);
+              getline(cin, place);
+              getline(cin, food);
+              cin >> number;
+
+              cout << "=== Your story ===" << endl;
+              cout << "Once upon a time, a " << animal << " went to " << place << "." << endl;
+              cout << "It was so hungry that it ate " << number << " plates of " << food << "!" << endl;
+              cout << "That's " << number * 3 << " plates in three days. The end." << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+=== Your story ===
+Once upon a time, a dragon went to the beach.
+It was so hungry that it ate 12 plates of pancakes!
+That's 36 plates in three days. The end.
+</script>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Change the story inputs and run it.</li>
+          <li>Write a program that reads a price (double) and a quantity (int) and prints the total.</li>
+          <li>Read a temperature in Celsius and print it in Fahrenheit.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="cpp" data-input="2.5 4" data-title="Your turn: price times quantity">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              double price;
+              int quantity;
+              cin >> price >> quantity;
+              cout << "Total: " << price * quantity << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Total: 10
+</script>
+      </div>
+
+      <div class="quiz">
+        <p class="q">Input is "Sam Rivers". string s; cin &gt;&gt; s; What is in s?</p>
+        <div class="opts">
+          <button>Sam Rivers</button>
+          <button data-correct>Sam</button>
+          <button>Rivers</button>
+        </div>
+        <p class="why"><code>&gt;&gt;</code> stops at the first space. Use <code>getline(cin, s)</code> to read the whole line.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>cin &gt;&gt; x;</code> reads a value into x. Chain them: <code>cin &gt;&gt; a &gt;&gt; b;</code></li>
+          <li><code>&gt;&gt;</code> reads one word or number. <code>getline(cin, s)</code> reads a whole line.</li>
+          <li>Use <code>cin &gt;&gt; ws;</code> before <code>getline</code> if you used <code>&gt;&gt;</code> before.</li>
+          <li><code>if (cin &gt;&gt; x)</code> checks that reading worked.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

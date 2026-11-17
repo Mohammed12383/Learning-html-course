@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Structs · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="11-structs">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 11 &middot; <b>Functions &amp; memory</b></p>
+      <div class="hero-code" aria-hidden="true">struct</div>
+      <h1>Structs</h1>
+      <p class="lead">A game character has a name, health and a position. Keeping those in separate variables gets messy fast. A <strong>struct</strong> lets you make your own type that bundles related values together under one name.</p>
+      <ul class="learn">
+        <li>Making a struct</li>
+        <li>Reading and changing fields</li>
+        <li>Vectors of structs</li>
+        <li>Structs and functions</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Your own type</h2>
+      <p>A <code class="k-tag">struct</code> describes a new type. Each value inside is called a <strong>field</strong> (or member):</p>
+      <div class="runnable" data-lang="cpp" data-title="A struct for a game hero">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          struct Hero {
+              string name;
+              int health;
+              int level;
+          };                       // don't forget this semicolon!
+
+          int main() {
+              Hero zara = {"Zara", 100, 1};
+              Hero leo = {"Leo", 80, 3};
+
+              cout << zara.name << " has " << zara.health << " health" << endl;
+
+              zara.health -= 25;   // change a field with a dot
+              zara.level++;
+              cout << zara.name << " is now level " << zara.level
+                   << " with " << zara.health << " health" << endl;
+              cout << leo.name << " is level " << leo.level << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Zara has 100 health
+Zara is now level 2 with 75 health
+Leo is level 3
+</script>
+      </div>
+
+      <div class="memory" role="img" aria-label="Two Hero values: zara with name Zara, health 75, level 2. leo with name Leo, health 80, level 3.">
+        <div class="slot other"><span class="nm">zara</span><span class="vl">name:   "Zara"
+health: 75
+level:  2</span><span class="ty">a Hero</span></div>
+        <div class="slot other"><span class="nm">leo</span><span class="vl">name:   "Leo"
+health: 80
+level:  3</span><span class="ty">a Hero</span></div>
+      </div>
+      <p>Each <code>Hero</code> has its own copy of every field. A struct's fields sit next to each other in memory, like one bigger box with compartments.</p>
+    </section>
+
+    <section>
+      <h2>Default values for fields</h2>
+      <div class="runnable" data-lang="cpp" data-title="Starting values">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          struct Settings {
+              string theme = "light";
+              int volume = 5;
+              bool sound = true;
+          };
+
+          int main() {
+              Settings mine;              // uses all the defaults
+              mine.theme = "dark";        // change just one
+              cout << mine.theme << ", volume " << mine.volume << ", sound " << mine.sound << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+dark, volume 5, sound 1
+</script>
+      </div>
+    </section>
+
+    <section>
+      <h2>A vector of structs: a table</h2>
+      <p>A vector of structs is like a table: each struct is a row, each field is a column.</p>
+      <div class="runnable" data-lang="cpp" data-title="A class list">
+        <script type="text/plain">
+          #include <iostream>
+          #include <iomanip>
+          #include <string>
+          #include <vector>
+          using namespace std;
+
+          struct Student {
+              string name;
+              int score;
+          };
+
+          int main() {
+              vector<Student> students = {
+                  {"Lina", 92},
+                  {"Omar", 78},
+                  {"Maya", 85},
+                  {"Sam", 64},
+              };
+              students.push_back({"Zara", 99});
+
+              int total = 0;
+              Student best = students[0];
+              for (const Student& s : students) {
+                  cout << left << setw(6) << s.name << right << setw(4) << s.score
+                       << "  " << string(s.score / 10, '*') << endl;
+                  total += s.score;
+                  if (s.score > best.score) best = s;
+              }
+              cout << "Average: " << static_cast<double>(total) / students.size() << endl;
+              cout << "Top of the class: " << best.name << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Lina    92  *********
+Omar    78  *******
+Maya    85  ********
+Sam     64  ******
+Zara    99  *********
+Average: 83.6
+Top of the class: Zara
+</script>
+      </div>
+      <p><code>const Student&amp; s</code> in the loop reads each student without copying it (from lesson 9). <code>left</code>, <code>right</code> and <code>setw</code> line up the columns.</p>
+    </section>
+
+    <section>
+      <h2>Structs and functions</h2>
+      <p>Pass a struct to a function by <code>const&amp;</code> to read it, or by <code>&amp;</code> to change it:</p>
+      <div class="runnable" data-lang="cpp" data-title="Functions that use a struct">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          struct Rect {
+              double width;
+              double height;
+          };
+
+          double area(const Rect& r) {
+              return r.width * r.height;
+          }
+
+          void grow(Rect& r, double amount) {
+              r.width += amount;
+              r.height += amount;
+          }
+
+          void print(const Rect& r) {
+              cout << r.width << " x " << r.height << " = " << area(r) << endl;
+          }
+
+          int main() {
+              Rect garden = {4, 3};
+              print(garden);
+              grow(garden, 1);
+              print(garden);
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+4 x 3 = 12
+5 x 4 = 20
+</script>
+      </div>
+
+      <h3>Structs inside structs</h3>
+      <script type="text/plain" class="snippet" data-lang="cpp">
+        struct Point {
+            int x;
+            int y;
+        };
+
+        struct Player {
+            string name;
+            Point position;     // a struct inside a struct
+        };
+
+        Player p = {"Zara", {3, 7}};
+        p.position.x += 1;      // dots chain to go deeper
+      </script>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Make a <code>struct Movie</code> with a title, a year and a rating, and print three movies.</li>
+          <li>Write a function <code>void heal(Hero&amp; h, int amount)</code> that adds health but never goes above 100.</li>
+          <li>Find the student with the lowest score.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="cpp" data-title="Your struct">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          struct Movie {
+              string title;
+              int year;
+          };
+
+          int main() {
+              Movie m = {"Space Cats", 2019};
+              cout << m.title << " (" << m.year << ")" << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Space Cats (2019)
+</script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Forgetting the semicolon</strong> after the struct's closing <code>}</code>. The error message can be confusing!</li>
+          <li><strong>Values in the wrong order</strong>: <code>{"Zara", 100, 1}</code> fills the fields in the order they're written in the struct.</li>
+          <li><strong>Changing a copy</strong>: <code>void grow(Rect r)</code> grows a copy. Use <code>Rect&amp; r</code>.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">struct P { int x; int y; }; P a = {2, 5}; What is a.y?</p>
+        <div class="opts">
+          <button>2</button>
+          <button data-correct>5</button>
+          <button>7</button>
+        </div>
+        <p class="why">The values fill the fields in order: x gets 2, y gets 5.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>struct Name { type field; ... };</code> makes a new type. Don't forget the <code>;</code>.</li>
+          <li><code>Name v = {a, b};</code> makes one. <code>v.field</code> reads or changes a field.</li>
+          <li><code>vector&lt;Name&gt;</code> makes a table of them.</li>
+          <li>Pass to functions by <code>const Name&amp;</code> (read) or <code>Name&amp;</code> (change).</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

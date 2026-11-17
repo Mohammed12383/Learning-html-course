@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arrays &amp; Vectors · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="07-vectors">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 07 &middot; <b>Collections</b></p>
+      <div class="hero-code" aria-hidden="true">vector&lt;int&gt;</div>
+      <h1>Arrays &amp; Vectors</h1>
+      <p class="lead">One variable holds one value. To keep a whole list (the scores of every player, the cards in a hand) you need many boxes in a row. C++ has two ways: the classic <strong>array</strong>, and the friendlier <strong>vector</strong>.</p>
+      <ul class="learn">
+        <li>Arrays</li>
+        <li>Vectors</li>
+        <li>Adding and removing</li>
+        <li>Looping over a list</li>
+        <li>Staying inside the boxes</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Boxes side by side</h2>
+      <p>An array is a row of boxes of the same type, right next to each other in memory. Each box has an <strong>index</strong> (position), starting at 0:</p>
+      <div class="cells" role="img" aria-label="An int array called scores: index 0 holds 72, 1 holds 95, 2 holds 88, 3 holds 64, 4 holds 91">
+        <span class="cap">scores =</span>
+        <div class="cell"><b>72</b><small>[0]</small></div>
+        <div class="cell"><b>95</b><small>[1]</small></div>
+        <div class="cell"><b>88</b><small>[2]</small></div>
+        <div class="cell"><b>64</b><small>[3]</small></div>
+        <div class="cell"><b>91</b><small>[4]</small></div>
+      </div>
+      <div class="runnable" data-lang="cpp" data-title="A classic array">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              int scores[5] = {72, 95, 88, 64, 91};
+
+              cout << "First: " << scores[0] << endl;
+              cout << "Third: " << scores[2] << endl;
+
+              scores[3] = 70;      // change one box
+
+              int total = 0;
+              for (int i = 0; i < 5; i++) {
+                  total += scores[i];
+              }
+              cout << "Total: " << total << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+First: 72
+Third: 88
+Total: 416
+</script>
+      </div>
+      <p>A classic array has a <strong>fixed size</strong>: <code>int scores[5]</code> always has exactly 5 boxes. You can't add a sixth. That's why most C++ programmers use vectors instead.</p>
+    </section>
+
+    <section>
+      <h2>Vectors: arrays that grow</h2>
+      <p>A <code class="k-sel">vector</code> is a list that can grow and shrink, and knows its own size. Add <code>#include &lt;vector&gt;</code>, and put the item type in angle brackets: <code>vector&lt;int&gt;</code> is "a vector of ints".</p>
+      <div class="stepper" data-lang="cpp" data-title="A vector grows and shrinks">
+        <script type="text/plain">
+          vector<string> pets = {"cat", "dog"};
+          pets.push_back("fish");
+          pets[0] = "tiger";
+          pets.pop_back();
+          cout << pets.size() << endl;
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "vars": {"pets": "{\"cat\", \"dog\"}", "size": "2"}, "note": "A vector of strings with 2 items."},
+            {"line": 2, "vars": {"pets": "{\"cat\", \"dog\", \"fish\"}", "size": "3"}, "note": "<code>push_back</code> adds to the end. The vector grows."},
+            {"line": 3, "vars": {"pets": "{\"tiger\", \"dog\", \"fish\"}", "size": "3"}, "note": "Change the item at index 0."},
+            {"line": 4, "vars": {"pets": "{\"tiger\", \"dog\"}", "size": "2"}, "note": "<code>pop_back</code> removes the last item."},
+            {"line": 5, "vars": {"pets": "{\"tiger\", \"dog\"}", "size": "2"}, "out": "2\n", "note": "<code>size()</code> says how many items there are."}
+          ]
+        </script>
+      </div>
+
+      <div class="runnable" data-lang="cpp" data-title="Using a vector">
+        <script type="text/plain">
+          #include <iostream>
+          #include <vector>
+          #include <string>
+          using namespace std;
+
+          int main() {
+              vector<string> friends = {"Lina", "Omar"};
+              friends.push_back("Maya");
+              friends.push_back("Sam");
+
+              cout << "I have " << friends.size() << " friends:" << endl;
+
+              // the range-for loop: "for each friend in friends"
+              for (string name : friends) {
+                  cout << "  Hi " << name << "!" << endl;
+              }
+
+              cout << "First: " << friends[0] << ", last: " << friends.back() << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+I have 4 friends:
+  Hi Lina!
+  Hi Omar!
+  Hi Maya!
+  Hi Sam!
+First: Lina, last: Sam
+</script>
+      </div>
+      <p><code>for (string name : friends)</code> is the <strong>range-for loop</strong>: it visits each item in turn. It's the easiest way to go through a vector.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Code</th><th>Does</th></tr></thead>
+          <tbody>
+            <tr><td><code>v.push_back(x)</code></td><td>Add x to the end</td></tr>
+            <tr><td><code>v.pop_back()</code></td><td>Remove the last item</td></tr>
+            <tr><td><code>v.size()</code></td><td>How many items</td></tr>
+            <tr><td><code>v[i]</code> / <code>v.at(i)</code></td><td>The item at index i (<code>at</code> checks it's inside the vector)</td></tr>
+            <tr><td><code>v.front()</code> / <code>v.back()</code></td><td>First / last item</td></tr>
+            <tr><td><code>v.empty()</code></td><td>true if there are no items</td></tr>
+            <tr><td><code>v.clear()</code></td><td>Remove everything</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Working with numbers in a vector</h2>
+      <div class="runnable" data-lang="cpp" data-input="72 95 88 64 91" data-title="Scores: total, best and a chart">
+        <script type="text/plain">
+          #include <iostream>
+          #include <vector>
+          #include <string>
+          using namespace std;
+
+          int main() {
+              vector<int> scores;
+              int s;
+              while (cin >> s) {          // read numbers until the input runs out
+                  scores.push_back(s);
+              }
+
+              int total = 0;
+              int best = scores[0];
+              for (int x : scores) {
+                  total += x;
+                  if (x > best) best = x;
+              }
+
+              cout << "Scores: " << scores.size() << endl;
+              cout << "Average: " << static_cast<double>(total) / scores.size() << endl;
+              cout << "Best: " << best << endl;
+
+              for (int x : scores) {
+                  cout << string(x / 5, '#') << " " << x << endl;
+              }
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Scores: 5
+Average: 82
+Best: 95
+############## 72
+################### 95
+################# 88
+############ 64
+################## 91
+</script>
+      </div>
+      <p>Change the numbers in the Input box (as many as you like) and Run. <code>string(n, '#')</code> makes a string of <code>n</code> hash characters: a simple bar chart.</p>
+    </section>
+
+    <section>
+      <h2>Stay inside the boxes!</h2>
+      <p>This is important in C++. With <code>v[i]</code>, C++ does <strong>not</strong> check that <code>i</code> is inside the vector. If it isn't, the program reads random memory, gives nonsense, or crashes. <code>v.at(i)</code> checks, and stops the program with a clear error instead:</p>
+      <div class="runnable" data-lang="cpp" data-title="Going past the end">
+        <script type="text/plain">
+          #include <iostream>
+          #include <vector>
+          using namespace std;
+
+          int main() {
+              vector<int> v = {10, 20, 30};
+              cout << "Index 2: " << v.at(2) << endl;   // fine: the last one
+              cout << "Index 5: " << v.at(5) << endl;   // there is no index 5!
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Index 2: 30
+</script>
+      </div>
+      <p>The program stops with an "out of range" error. A vector of 3 items has indexes 0, 1 and 2. While you're learning, <code>.at()</code> is the safer choice.</p>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Make a <code>vector&lt;string&gt;</code> of 5 movies and print them numbered from 1.</li>
+          <li>Read numbers from the input and print only the even ones.</li>
+          <li>Find the smallest number in a vector.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="cpp" data-title="Your vector">
+        <script type="text/plain">
+          #include <iostream>
+          #include <vector>
+          #include <string>
+          using namespace std;
+
+          int main() {
+              vector<string> movies = {"Space Cats", "Robot Dreams", "The Big Wave"};
+              for (int i = 0; i < movies.size(); i++) {
+                  cout << i + 1 << ". " << movies[i] << endl;
+              }
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+1. Space Cats
+2. Robot Dreams
+3. The Big Wave
+</script>
+      </div>
+
+      <div class="quiz">
+        <p class="q">vector&lt;int&gt; v = {4, 8, 15}. What is v[1]?</p>
+        <div class="opts">
+          <button>4</button>
+          <button data-correct>8</button>
+          <button>15</button>
+        </div>
+        <p class="why">Indexes start at 0: v[0] is 4, v[1] is 8.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>Arrays: <code>int a[5] = {...};</code> fixed size.</li>
+          <li>Vectors: <code>#include &lt;vector&gt;</code>, <code>vector&lt;int&gt; v;</code>, <code>push_back</code>, <code>pop_back</code>, <code>size()</code>.</li>
+          <li><code>for (int x : v)</code> visits every item.</li>
+          <li>Indexes go from 0 to size − 1. <code>.at(i)</code> checks the index for you.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

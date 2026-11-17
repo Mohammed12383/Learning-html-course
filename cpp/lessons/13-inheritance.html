@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inheritance · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="13-inheritance">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 13 &middot; <b>Objects &amp; power tools</b></p>
+      <div class="hero-code" aria-hidden="true">virtual</div>
+      <h1>Inheritance</h1>
+      <p class="lead">In a game, a Warrior, a Wizard and an Archer are all Characters. They share a name and health, but each attacks differently. <strong>Inheritance</strong> lets you write the shared parts once, and <strong>virtual functions</strong> let each kind do its own thing.</p>
+      <ul class="learn">
+        <li>Base and derived classes</li>
+        <li>protected</li>
+        <li>Calling the parent's constructor</li>
+        <li>virtual and override</li>
+        <li>Abstract classes</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>A class based on another</h2>
+      <p>Write <code>: public Animal</code> after the class name, and the new class (the <strong>derived</strong> class) gets everything from <code>Animal</code> (the <strong>base</strong> class):</p>
+      <div class="flow" role="img" aria-label="Animal is the base class with name and introduce. Cat and Cow both inherit from it and each has its own sound.">
+        <div class="fbox fq">Animal: name, introduce()</div>
+        <div class="arrow"></div>
+        <div class="branches">
+          <div class="branch"><span class="lab">inherits</span><div class="fbox">Cat: sound() → "Meow"</div></div>
+          <div class="branch"><span class="lab">inherits</span><div class="fbox">Cow: sound() → "Moo"</div></div>
+        </div>
+      </div>
+      <div class="runnable" data-lang="cpp" data-title="Animals">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          class Animal {
+          protected:
+              string name;          // protected: children can use it too
+
+          public:
+              Animal(string n) : name(n) {}
+
+              virtual string sound() const {
+                  return "...";
+              }
+
+              void introduce() const {
+                  cout << "I'm " << name << " and I say " << sound() << endl;
+              }
+          };
+
+          class Cat : public Animal {
+          public:
+              Cat(string n) : Animal(n) {}       // run Animal's constructor
+              string sound() const override { return "Meow"; }
+          };
+
+          class Cow : public Animal {
+          public:
+              Cow(string n) : Animal(n) {}
+              string sound() const override { return "Moo"; }
+          };
+
+          int main() {
+              Cat mochi("Mochi");
+              Cow daisy("Daisy");
+              Animal mystery("Mystery");
+
+              mochi.introduce();
+              daisy.introduce();
+              mystery.introduce();
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+I'm Mochi and I say Meow
+I'm Daisy and I say Moo
+I'm Mystery and I say ...
+</script>
+      </div>
+      <ul>
+        <li><code>Cat(string n) : Animal(n) {}</code> passes the name up to the parent's constructor.</li>
+        <li><code class="k-tag">protected</code> is like private, but derived classes can use it too.</li>
+        <li><code>introduce</code> is written once in <code>Animal</code>, and every animal gets it.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>virtual: let each class decide</h2>
+      <p>Notice that <code>introduce()</code> lives in <code>Animal</code>, but it calls the <em>right</em> <code>sound()</code> for each animal. That's because <code>sound</code> is marked <code class="k-tag">virtual</code>: "a derived class may replace this". The replacement is marked <code class="k-tag">override</code>, so the compiler can check that it really matches.</p>
+      <p>Try deleting the word <code>virtual</code> in the code above and press Run: every animal says "..." because <code>introduce</code> no longer looks for the child's version.</p>
+
+      <h3>Many kinds in one list</h3>
+      <p>The real power: you can keep different kinds of objects in one list, using pointers to the base class, and each one still behaves in its own way. This is called <strong>polymorphism</strong> ("many shapes"):</p>
+      <div class="runnable" data-lang="cpp" data-title="A party of heroes">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          #include <vector>
+          using namespace std;
+
+          class Character {
+          protected:
+              string name;
+          public:
+              Character(string n) : name(n) {}
+              virtual ~Character() {}
+              virtual int attack() const = 0;          // "= 0": every child MUST write this
+              string getName() const { return name; }
+          };
+
+          class Warrior : public Character {
+          public:
+              Warrior(string n) : Character(n) {}
+              int attack() const override { return 12; }
+          };
+
+          class Wizard : public Character {
+          public:
+              Wizard(string n) : Character(n) {}
+              int attack() const override { return 18; }
+          };
+
+          class Archer : public Character {
+          public:
+              Archer(string n) : Character(n) {}
+              int attack() const override { return 9 * 2; }   // two arrows
+          };
+
+          int main() {
+              Warrior zara("Zara");
+              Wizard leo("Leo");
+              Archer maya("Maya");
+
+              vector<Character*> party = {&zara, &leo, &maya};
+
+              int total = 0;
+              for (Character* c : party) {
+                  int damage = c->attack();
+                  cout << c->getName() << " attacks for " << damage << endl;
+                  total += damage;
+              }
+              cout << "Total damage: " << total << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Zara attacks for 12
+Leo attacks for 18
+Maya attacks for 18
+Total damage: 48
+</script>
+      </div>
+      <ul>
+        <li><code>vector&lt;Character*&gt;</code> holds pointers (lesson 10) to any kind of Character.</li>
+        <li><code>c-&gt;attack()</code> is a shortcut for <code>(*c).attack()</code>: "follow the pointer, then call the method".</li>
+        <li><code>virtual int attack() const = 0;</code> is a <strong>pure virtual</strong> function: <code>Character</code> doesn't say how to attack, so every derived class must. A class like that is called <strong>abstract</strong>, and you can't make an object of it directly.</li>
+        <li><code>virtual ~Character() {}</code> is a virtual <strong>destructor</strong>. Always add one to a base class that has virtual functions. (A destructor runs when an object is destroyed.)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Shapes: a classic example</h2>
+      <div class="runnable" data-lang="cpp" data-title="Area of any shape">
+        <script type="text/plain">
+          #include <iostream>
+          #include <vector>
+          #include <cmath>
+          using namespace std;
+
+          class Shape {
+          public:
+              virtual ~Shape() {}
+              virtual double area() const = 0;
+              virtual string name() const = 0;
+          };
+
+          class Circle : public Shape {
+              double r;
+          public:
+              Circle(double radius) : r(radius) {}
+              double area() const override { return M_PI * r * r; }
+              string name() const override { return "circle"; }
+          };
+
+          class Rectangle : public Shape {
+              double w, h;
+          public:
+              Rectangle(double width, double height) : w(width), h(height) {}
+              double area() const override { return w * h; }
+              string name() const override { return "rectangle"; }
+          };
+
+          int main() {
+              Circle c(2);
+              Rectangle r(3, 4);
+              Rectangle square(5, 5);
+              vector<Shape*> shapes = {&c, &r, &square};
+
+              for (Shape* s : shapes) {
+                  cout << "A " << s->name() << " with area " << s->area() << endl;
+              }
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+A circle with area 12.5664
+A rectangle with area 12
+A rectangle with area 25
+</script>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Add a <code>Duck</code> to the animals that says "Quack".</li>
+          <li>Add a <code>Healer</code> to the party whose attack is 4.</li>
+          <li>Add a <code>Triangle</code> shape with base and height (area = base × height ÷ 2).</li>
+        </ol>
+      </aside>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Forgetting <code>virtual</code></strong> in the base class: the child's version won't be used through a base pointer.</li>
+          <li><strong>A typo in an overriding method</strong>: <code>override</code> makes the compiler catch it. Always write it.</li>
+          <li><strong>Forgetting to call the parent's constructor</strong> when it needs values.</li>
+          <li><strong>Forgetting <code>public</code></strong> in <code>class Cat : public Animal</code>.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">What does "= 0" mean in virtual double area() const = 0;?</p>
+        <div class="opts">
+          <button>The area is always 0</button>
+          <button data-correct>Every derived class must write its own area()</button>
+          <button>The function returns nothing</button>
+        </div>
+        <p class="why">It's a pure virtual function: the base class has no version, so each child must provide one.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>class Child : public Parent</code> inherits everything. <code>Child(...) : Parent(...) {}</code> calls the parent's constructor.</li>
+          <li><code>protected</code>: private, but children can use it.</li>
+          <li><code>virtual</code> in the parent, <code>override</code> in the child. <code>= 0</code> makes it required.</li>
+          <li>A <code>vector&lt;Base*&gt;</code> can hold any kind of child. Use <code>-&gt;</code> with pointers.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

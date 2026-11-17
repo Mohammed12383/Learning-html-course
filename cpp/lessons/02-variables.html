@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Variables &amp; Types · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="02-variables">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 02 &middot; <b>First steps</b></p>
+      <div class="hero-code" aria-hidden="true">int x</div>
+      <h1>Variables &amp; Types</h1>
+      <p class="lead">A <strong>variable</strong> is a named box in the computer's memory. In C++, every box has a <strong>type</strong> that never changes, and the type decides how big the box is and what can go in it.</p>
+      <ul class="learn">
+        <li>Making variables</li>
+        <li>int, double, char, bool, string</li>
+        <li>How much memory each takes</li>
+        <li>Changing values</li>
+        <li>const and auto</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Boxes in memory</h2>
+      <p>To make a variable, write its <strong>type</strong>, its <strong>name</strong>, and (usually) a starting value:</p>
+      <div class="anatomy" role="img" aria-label="int age equals 12 semicolon">
+        <div class="part sel"><span>int</span><small>the type:<br>whole numbers</small></div>
+        <div class="part text"><span> age</span><small>the name</small></div>
+        <div class="part punc"><span> = </span><small>"store"</small></div>
+        <div class="part val"><span>12</span><small>the value</small></div>
+        <div class="part punc"><span>;</span><small></small></div>
+      </div>
+
+      <div class="memory" role="img" aria-label="Memory boxes: age is an int holding 12, price is a double holding 4.99, grade is a char holding A, happy is a bool holding true, name is a string holding Sam">
+        <div class="slot num"><span class="nm">age</span><span class="vl">12</span><span class="ty">int</span></div>
+        <div class="slot num"><span class="nm">price</span><span class="vl">4.99</span><span class="ty">double</span></div>
+        <div class="slot txt"><span class="nm">grade</span><span class="vl">'A'</span><span class="ty">char</span></div>
+        <div class="slot yes"><span class="nm">happy</span><span class="vl">true</span><span class="ty">bool</span></div>
+        <div class="slot txt"><span class="nm">name</span><span class="vl">"Sam"</span><span class="ty">string</span></div>
+      </div>
+
+      <div class="runnable" data-lang="cpp" data-title="Make and print variables">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          int main() {
+              int age = 12;
+              double price = 4.99;
+              char grade = 'A';
+              bool happy = true;
+              string name = "Sam";
+
+              cout << name << " is " << age << endl;
+              cout << "Price: " << price << endl;
+              cout << "Grade: " << grade << endl;
+              cout << "Happy? " << happy << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Sam is 12
+Price: 4.99
+Grade: A
+Happy? 1
+</script>
+      </div>
+      <p>Notice that <code>true</code> prints as <code>1</code> (and <code>false</code> as <code>0</code>). For text, add <code>#include &lt;string&gt;</code> at the top.</p>
+    </section>
+
+    <section>
+      <h2>The basic types</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Type</th><th>Holds</th><th>Examples</th><th>Size</th></tr></thead>
+          <tbody>
+            <tr><td><code>int</code></td><td>Whole numbers (about ±2 billion)</td><td><code>42</code>, <code>-7</code></td><td>4 bytes</td></tr>
+            <tr><td><code>double</code></td><td>Decimal numbers</td><td><code>3.14</code>, <code>-0.5</code></td><td>8 bytes</td></tr>
+            <tr><td><code>char</code></td><td>One single character, in single quotes</td><td><code>'A'</code>, <code>'?'</code>, <code>'7'</code></td><td>1 byte</td></tr>
+            <tr><td><code>bool</code></td><td>true or false</td><td><code>true</code>, <code>false</code></td><td>1 byte</td></tr>
+            <tr><td><code>string</code></td><td>Text, in double quotes</td><td><code>"Hello"</code></td><td>grows as needed</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>A <strong>byte</strong> is a tiny unit of memory: 8 bits (8 little on/off switches). <code>sizeof</code> tells you how many bytes a type uses:</p>
+
+      <div class="cells" role="img" aria-label="Memory drawn as bytes: an int takes 4 bytes, a double takes 8 bytes, a char takes 1 byte">
+        <span class="cap">int</span><div class="cell hl"><b> </b></div><div class="cell hl"><b> </b></div><div class="cell hl"><b> </b></div><div class="cell hl"><b> </b></div>
+        <span class="cap">&nbsp; char</span><div class="cell"><b> </b></div>
+      </div>
+
+      <div class="runnable" data-lang="cpp" data-title="How big is each box?">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              cout << "int:    " << sizeof(int) << " bytes" << endl;
+              cout << "double: " << sizeof(double) << " bytes" << endl;
+              cout << "char:   " << sizeof(char) << " byte" << endl;
+              cout << "bool:   " << sizeof(bool) << " byte" << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+int:    4 bytes
+double: 8 bytes
+char:   1 byte
+bool:   1 byte
+</script>
+      </div>
+
+      <aside class="note idea">
+        <h4>Why does C++ care so much about types?</h4>
+        <p>Because the compiler decides <em>before</em> the program runs exactly how much memory every variable needs and where it lives. That's one reason C++ is so fast. It's also why a variable's type can never change: an <code>int</code> box is always an <code>int</code> box.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Changing values</h2>
+      <div class="stepper" data-lang="cpp" data-title="Watch the score box">
+        <script type="text/plain">
+          int score = 0;
+          score = 10;
+          score = score + 5;
+          score++;
+          cout << score << endl;
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "vars": {"score": "0"}, "note": "Make an <code>int</code> box called <code>score</code>, holding 0."},
+            {"line": 2, "vars": {"score": "10"}, "note": "Store 10. The 0 is gone."},
+            {"line": 3, "vars": {"score": "15"}, "note": "Right side first: 10 + 5 = 15. Store it back in <code>score</code>."},
+            {"line": 4, "vars": {"score": "16"}, "note": "<code>++</code> adds 1. That's where the name C<b>++</b> comes from: \"one better than C\"."},
+            {"line": 5, "vars": {"score": "16"}, "out": "16\n", "note": "Print it."}
+          ]
+        </script>
+      </div>
+
+      <div class="runnable" data-lang="cpp" data-title="The type can't change">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          int main() {
+              int lives = 3;
+              lives = "three";     // an int box can't hold text
+              cout << lives << endl;
+              return 0;
+          }
+        </script>
+      </div>
+      <p>The compiler refuses: text can't go in an <code>int</code> box. Change <code>"three"</code> to <code>2</code>.</p>
+    </section>
+
+    <section>
+      <h2>A surprise: decimals in an int</h2>
+      <div class="runnable" data-lang="cpp" data-title="Where did the decimals go?">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              int whole = 3.99;      // the .99 is chopped off!
+              double exact = 3.99;
+              cout << whole << " and " << exact << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+3 and 3.99
+</script>
+      </div>
+      <p>Putting a decimal into an <code>int</code> doesn't round it. It just <strong>chops off</strong> everything after the point. Use <code>double</code> for numbers that need decimals.</p>
+    </section>
+
+    <section>
+      <h2>const and auto</h2>
+      <ul>
+        <li><code class="k-tag">const</code> makes a variable that can never change. Use it for things like <code>const int DAYS_IN_WEEK = 7;</code>.</li>
+        <li><code class="k-tag">auto</code> lets the compiler work out the type from the value: <code>auto x = 5;</code> is an <code>int</code>, <code>auto y = 2.5;</code> is a <code>double</code>.</li>
+      </ul>
+      <div class="runnable" data-lang="cpp" data-title="const and auto">
+        <script type="text/plain">
+          #include <iostream>
+          using namespace std;
+
+          int main() {
+              const double PI = 3.14159;
+              auto radius = 5;          // the compiler sees an int
+              auto area = PI * radius * radius;   // a double
+
+              cout << "Area: " << area << endl;
+              PI = 3;                   // not allowed: PI is const
+              return 0;
+          }
+        </script>
+      </div>
+      <p>Delete the line that changes <code>PI</code> to make it compile.</p>
+    </section>
+
+    <section>
+      <h2>Naming rules</h2>
+      <ul>
+        <li>Letters, numbers and <code>_</code> only. No spaces. Can't start with a number.</li>
+        <li>Case-sensitive: <code>score</code> and <code>Score</code> are different.</li>
+        <li>Can't be a keyword like <code>int</code> or <code>return</code>.</li>
+        <li>Common styles: <code>playerScore</code> (camelCase) or <code>player_score</code> (snake_case). Constants are often <code>ALL_CAPS</code>.</li>
+      </ul>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Make variables for your name (string), age (int), height in meters (double) and first initial (char). Print a sentence with all of them.</li>
+          <li>Make <code>int coins = 10;</code>, add 5, double it with <code>coins = coins * 2;</code>, and print it.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="cpp" data-title="Your variables">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          int main() {
+              string name = "Sam";
+              int coins = 10;
+              coins = coins + 5;
+              coins = coins * 2;
+              cout << name << " has " << coins << " coins" << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Sam has 30 coins
+</script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Using a variable with no value</strong>: <code>int x; cout &lt;&lt; x;</code> prints a random leftover number from memory! Always give a starting value.</li>
+          <li><strong>Double quotes for char</strong>: a char uses single quotes, <code>'A'</code>. Text uses double quotes, <code>"A"</code>.</li>
+          <li><strong>Forgetting <code>#include &lt;string&gt;</code></strong> when using <code>string</code>.</li>
+          <li><strong>Making the same variable twice</strong>: <code>int x = 1; int x = 2;</code> is an error. The second time, just write <code>x = 2;</code>.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">int n = 7.8; What is in n?</p>
+        <div class="opts">
+          <button>8</button>
+          <button data-correct>7</button>
+          <button>7.8</button>
+        </div>
+        <p class="why">An <code>int</code> can't hold decimals, so the .8 is chopped off (not rounded).</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>type name = value;</code> makes a variable. The type never changes.</li>
+          <li><code>int</code> whole numbers, <code>double</code> decimals, <code>char</code> one character, <code>bool</code> true/false, <code>string</code> text.</li>
+          <li><code>sizeof(type)</code> shows how many bytes it uses.</li>
+          <li><code>const</code> can't change. <code>auto</code> lets the compiler pick the type.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

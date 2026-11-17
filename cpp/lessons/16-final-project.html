@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Final Project · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="16-final-project">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 16 &middot; <b>Build</b></p>
+      <div class="hero-code" aria-hidden="true">game</div>
+      <h1>Final Project: Robot Arena</h1>
+      <p class="lead">Time to put it all together. You'll build <strong>Robot Arena</strong>: choose a battle robot, and watch it fight a random opponent, round by round, with health bars and special attacks. It uses classes, inheritance, virtual functions, smart pointers, random numbers, loops and functions: everything from this course.</p>
+      <ul class="learn">
+        <li>Planning a program</li>
+        <li>A base class and three robots</li>
+        <li>Smart pointers</li>
+        <li>The battle loop</li>
+        <li>Making it yours</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Play first</h2>
+      <p>The Input box has two numbers: your robot (<strong>1</strong> Tank, <strong>2</strong> Speedy, <strong>3</strong> Zapper) and a <strong>seed</strong> for the dice. Change them and press <strong>Run</strong>. Same seed, same battle. New seed, new battle.</p>
+
+      <div class="runnable" data-lang="cpp" data-stack data-input="3\n7" data-title="Robot Arena" data-hint="Input: your robot (1 Tank, 2 Speedy, 3 Zapper) on the first line, a seed number on the second. Then press Run.">
+        <script type="text/plain">
+          #include <algorithm>
+          #include <iostream>
+          #include <memory>
+          #include <random>
+          #include <string>
+          using namespace std;
+
+          // ---------- The dice ----------
+          mt19937 rng;
+
+          int roll(int low, int high) {
+              uniform_int_distribution<int> dice(low, high);
+              return dice(rng);
+          }
+
+          // ---------- What every robot has ----------
+          class Robot {
+          protected:
+              string name;
+              int health;
+              int maxHealth;
+
+          public:
+              Robot(string n, int hp) : name(n), health(hp), maxHealth(hp) {}
+              virtual ~Robot() {}
+
+              virtual string kind() const = 0;   // every robot type must say what it is
+              virtual int attack() = 0;          // ...and how it attacks
+
+              void takeDamage(int amount) {
+                  health = max(0, health - amount);
+              }
+              bool alive() const { return health > 0; }
+              string getName() const { return name; }
+
+              void show() const {
+                  int bars = health * 20 / maxHealth;
+                  cout << "  " << name << " the " << kind() << " [" << string(bars, '#')
+                       << string(20 - bars, '.') << "] " << health << "/" << maxHealth << endl;
+              }
+          };
+
+          // ---------- Three kinds of robots ----------
+          class Tank : public Robot {
+          public:
+              Tank(string n) : Robot(n, 120) {}
+              string kind() const override { return "Tank"; }
+              int attack() override { return roll(6, 10); }          // slow and steady
+          };
+
+          class Speedy : public Robot {
+          public:
+              Speedy(string n) : Robot(n, 80) {}
+              string kind() const override { return "Speedy"; }
+              int attack() override { return roll(3, 7) + roll(3, 7); }   // hits twice
+          };
+
+          class Zapper : public Robot {
+              int charge = 0;
+          public:
+              Zapper(string n) : Robot(n, 90) {}
+              string kind() const override { return "Zapper"; }
+              int attack() override {                              // every 3rd attack: super zap!
+                  charge++;
+                  if (charge == 3) {
+                      charge = 0;
+                      cout << "  *** SUPER ZAP! ***" << endl;
+                      return roll(18, 25);
+                  }
+                  return roll(4, 8);
+              }
+          };
+
+          // ---------- Make a robot of the chosen kind ----------
+          unique_ptr<Robot> makeRobot(int choice, string name) {
+              if (choice == 1) return make_unique<Tank>(name);
+              if (choice == 2) return make_unique<Speedy>(name);
+              return make_unique<Zapper>(name);
+          }
+
+          // ---------- The battle ----------
+          int main() {
+              int choice, seed;
+              cin >> choice >> seed;
+              rng.seed(seed);
+
+              unique_ptr<Robot> player = makeRobot(choice, "Bolt");
+              unique_ptr<Robot> enemy = makeRobot(roll(1, 3), "Rusty");
+
+              cout << "===== ROBOT ARENA =====" << endl;
+              player->show();
+              enemy->show();
+
+              int round = 1;
+              while (player->alive() && enemy->alive()) {
+                  cout << endl << "--- Round " << round << " ---" << endl;
+
+                  int hit = player->attack();
+                  enemy->takeDamage(hit);
+                  cout << "  " << player->getName() << " hits for " << hit << endl;
+
+                  if (enemy->alive()) {
+                      int back = enemy->attack();
+                      player->takeDamage(back);
+                      cout << "  " << enemy->getName() << " hits back for " << back << endl;
+                  }
+
+                  player->show();
+                  enemy->show();
+                  round++;
+              }
+
+              cout << endl;
+              if (player->alive()) {
+                  cout << player->getName() << " WINS after " << round - 1 << " rounds!" << endl;
+              } else {
+                  cout << enemy->getName() << " wins this time. Try another robot or seed!" << endl;
+              }
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+===== ROBOT ARENA =====
+  Bolt the Zapper [####################] 90/90
+  Rusty the Tank [####################] 120/120
+
+--- Round 1 ---
+  Bolt hits for 5
+  Rusty hits back for 9
+  Bolt the Zapper [##################..] 81/90
+  Rusty the Tank [###################.] 115/120
+
+--- Round 2 ---
+  Bolt hits for 5
+  Rusty hits back for 8
+  Bolt the Zapper [################....] 73/90
+  Rusty the Tank [##################..] 110/120
+
+--- Round 3 ---
+  *** SUPER ZAP! ***
+  Bolt hits for 25
+  Rusty hits back for 9
+  Bolt the Zapper [##############......] 64/90
+  Rusty the Tank [##############......] 85/120
+
+--- Round 4 ---
+  Bolt hits for 6
+  Rusty hits back for 10
+  Bolt the Zapper [############........] 54/90
+  Rusty the Tank [#############.......] 79/120
+
+--- Round 5 ---
+  Bolt hits for 5
+  Rusty hits back for 8
+  Bolt the Zapper [##########..........] 46/90
+  Rusty the Tank [############........] 74/120
+
+--- Round 6 ---
+  *** SUPER ZAP! ***
+  Bolt hits for 20
+  Rusty hits back for 8
+  Bolt the Zapper [########............] 38/90
+  Rusty the Tank [#########...........] 54/120
+
+--- Round 7 ---
+  Bolt hits for 4
+  Rusty hits back for 6
+  Bolt the Zapper [#######.............] 32/90
+  Rusty the Tank [########............] 50/120
+
+--- Round 8 ---
+  Bolt hits for 6
+  Rusty hits back for 7
+  Bolt the Zapper [#####...............] 25/90
+  Rusty the Tank [#######.............] 44/120
+
+--- Round 9 ---
+  *** SUPER ZAP! ***
+  Bolt hits for 18
+  Rusty hits back for 8
+  Bolt the Zapper [###.................] 17/90
+  Rusty the Tank [####................] 26/120
+
+--- Round 10 ---
+  Bolt hits for 6
+  Rusty hits back for 9
+  Bolt the Zapper [#...................] 8/90
+  Rusty the Tank [###.................] 20/120
+
+--- Round 11 ---
+  Bolt hits for 8
+  Rusty hits back for 10
+  Bolt the Zapper [....................] 0/90
+  Rusty the Tank [##..................] 12/120
+
+Rusty wins this time. Try another robot or seed!
+</script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Step 1: the plan</h2>
+      <ol class="steps">
+        <li><div><p>Every robot has a <strong>name</strong> and <strong>health</strong>, can <strong>take damage</strong>, and can <strong>show</strong> a health bar. That's a base class: <code>Robot</code>.</p></div></li>
+        <li><div><p>Each kind of robot <strong>attacks differently</strong>. That's a virtual function, <code>attack()</code>, that each derived class overrides.</p></div></li>
+        <li><div><p>The player picks a robot. The enemy is random. Both are created with <strong>smart pointers</strong>.</p></div></li>
+        <li><div><p>A <strong>loop</strong> runs rounds until one robot's health reaches 0.</p></div></li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>Step 2: the dice</h2>
+      <p class="muted small">From lesson 15.</p>
+      <p><code>rng</code> is a random generator shared by the whole program, and <code>roll(low, high)</code> is a small function that returns a random whole number in a range. Every attack uses it. The seed from the input makes the battle repeatable.</p>
+    </section>
+
+    <section>
+      <h2>Step 3: the Robot base class</h2>
+      <p class="muted small">From lessons 12 and 13.</p>
+      <p>The data (<code>name</code>, <code>health</code>, <code>maxHealth</code>) is <code>protected</code>, so the derived robots can use it but nobody else can change it. <code>kind()</code> and <code>attack()</code> are <strong>pure virtual</strong> (<code>= 0</code>): <code>Robot</code> doesn't know how to attack, so every kind of robot must say how.</p>
+      <p><code>show()</code> draws the health bar: <code>health * 20 / maxHealth</code> works out how many of the 20 bar pieces are full (integer division from lesson 3 is exactly right here), and <code>string(n, '#')</code> repeats a character.</p>
+    </section>
+
+    <section>
+      <h2>Step 4: three kinds of robots</h2>
+      <p class="muted small">From lesson 13.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Robot</th><th>Health</th><th>Attack</th></tr></thead>
+          <tbody>
+            <tr><td>Tank</td><td>120</td><td>6 to 10, every time. Slow and steady.</td></tr>
+            <tr><td>Speedy</td><td>80</td><td>Hits twice: two rolls of 3 to 7.</td></tr>
+            <tr><td>Zapper</td><td>90</td><td>4 to 8, but every third attack is a super zap: 18 to 25.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The Zapper has its own private <code>charge</code> counter. Each robot only writes what makes it different. Everything else comes from <code>Robot</code>.</p>
+    </section>
+
+    <section>
+      <h2>Step 5: making robots with smart pointers</h2>
+      <p class="muted small">From lessons 10 and 15.</p>
+      <p><code>makeRobot</code> returns a <code>unique_ptr&lt;Robot&gt;</code>: a smart pointer to <em>some</em> kind of Robot. The rest of the program doesn't care which kind. It just calls <code>player-&gt;attack()</code>, and the right version runs. When <code>main</code> ends, both robots are cleaned up automatically.</p>
+    </section>
+
+    <section>
+      <h2>Step 6: the battle loop</h2>
+      <p class="muted small">From lessons 5 and 6.</p>
+      <p>The <code>while</code> loop keeps going while <em>both</em> robots are alive (<code>&amp;&amp;</code>). Each round, the player attacks; if the enemy survives, it hits back; then both health bars are shown. After the loop, an <code>if</code> checks who's still standing.</p>
+    </section>
+
+    <section>
+      <h2>Make it yours</h2>
+      <aside class="note task">
+        <h4>Ideas to remix Robot Arena</h4>
+        <ol>
+          <li><strong>Balance</strong>: change the health or attack numbers. Which robot is best? Try many seeds.</li>
+          <li><strong>A fourth robot</strong>: add a <code>Healer</code> that sometimes repairs itself instead of attacking (add a <code>heal</code> method to <code>Robot</code>).</li>
+          <li><strong>Critical hits</strong>: in the battle loop, a 1 in 10 chance (<code>roll(1, 10) == 1</code>) to do double damage.</li>
+          <li><strong>A tournament</strong>: put several robots in a <code>vector&lt;unique_ptr&lt;Robot&gt;&gt;</code> and let them fight one by one.</li>
+          <li><strong>Play it for real</strong>: compile it on your computer (lesson 15) and add a menu so the player chooses an action each round with <code>cin</code>.</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section>
+      <h2>What to learn next</h2>
+      <ol class="steps">
+        <li><div><p><strong>Set up C++ on a computer</strong> (lesson 15), so <code>cin</code> waits for you and programs can use files.</p></div></li>
+        <li><div><p><strong>Make games with graphics</strong>: <strong>raylib</strong> is a free, beginner-friendly library for 2D and 3D games in C++.</p></div></li>
+        <li><div><p><strong>Read more</strong>: <strong>learncpp.com</strong> is a free, very thorough C++ tutorial, and <strong>cppreference.com</strong> explains every part of the Standard Library.</p></div></li>
+        <li><div><p><strong>Practice puzzles</strong>: sites with programming challenges are a great way to get faster at thinking in C++.</p></div></li>
+      </ol>
+
+      <div class="quiz">
+        <p class="q">In Robot Arena, why can player-&gt;attack() run Tank, Speedy or Zapper code?</p>
+        <div class="opts">
+          <button>Because of the if in main</button>
+          <button data-correct>Because attack() is virtual, so each robot's own version runs</button>
+          <button>Because of the random seed</button>
+        </div>
+        <p class="why">The pointer's type is <code>Robot</code>, but <code>attack()</code> is virtual, so C++ runs the version of the actual robot it points at.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>You did it</h4>
+        <p>You started with <code>cout &lt;&lt; "Hello, world!"</code>. Now you understand types and memory, loops and decisions, vectors, strings and maps, functions, references and pointers, classes and inheritance, smart pointers, and how to build a complete program. C++ is considered one of the hardest languages to learn, and you've learned it. Go build something amazing. 🤖</p>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

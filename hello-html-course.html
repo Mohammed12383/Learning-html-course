@@ -8350,7 +8350,7 @@ window.COURSE_ASSETS = {
     pre.appendChild(code);
     main.appendChild(marks);
     var id = 'code-' + (++uid);
-    var ta = el('textarea', { class: 'ed-input', id: id, spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', autocorrect: 'off', wrap: 'off', 'aria-label': 'Code editor. Type to change the website.' });
+    var ta = el('textarea', { class: 'ed-input', id: id, spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', autocorrect: 'off', wrap: 'off', 'aria-label': 'Code editor' });
     main.appendChild(pre); main.appendChild(ta);
     root.appendChild(gutter); root.appendChild(main);
     root.addEventListener('click', function (e) { if (e.target === root || e.target === gutter) ta.focus(); });

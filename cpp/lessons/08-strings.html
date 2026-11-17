@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Strings · Hello C++</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="08-strings">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 08 &middot; <b>Collections</b></p>
+      <div class="hero-code" aria-hidden="true">string</div>
+      <h1>Strings</h1>
+      <p class="lead">A <code>string</code> is text: names, messages, passwords. Under the hood it's a row of <code>char</code> boxes, a bit like a vector of characters. In this lesson you'll join, search, cut and change text.</p>
+      <ul class="learn">
+        <li>Joining text</li>
+        <li>Characters by position</li>
+        <li>substr, find and replace</li>
+        <li>Changing letters</li>
+        <li>Text ↔ numbers</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>A string is a row of characters</h2>
+      <div class="cells" role="img" aria-label="The string HELLO: H at index 0, E 1, L 2, L 3, O 4">
+        <div class="cell hl"><b>'H'</b><small>[0]</small></div>
+        <div class="cell"><b>'E'</b><small>[1]</small></div>
+        <div class="cell"><b>'L'</b><small>[2]</small></div>
+        <div class="cell"><b>'L'</b><small>[3]</small></div>
+        <div class="cell"><b>'O'</b><small>[4]</small></div>
+      </div>
+      <div class="runnable" data-lang="cpp" data-title="Joining and reading text">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          int main() {
+              string first = "Ice";
+              string second = "cream";
+              string both = first + " " + second;   // join with +
+
+              cout << both << endl;
+              cout << "Length: " << both.length() << endl;
+              cout << "First letter: " << both[0] << endl;
+              cout << "Last letter: " << both[both.length() - 1] << endl;
+
+              both += "!";                           // add to the end
+              cout << both << endl;
+
+              both[0] = 'N';                         // change one character
+              cout << both << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Ice cream
+Length: 9
+First letter: I
+Last letter: m
+Ice cream!
+Nce cream!
+</script>
+      </div>
+      <p>Each character is a <code>char</code>, so it uses single quotes: <code>both[0] = 'N'</code>.</p>
+    </section>
+
+    <section>
+      <h2>Cutting, searching and replacing</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Code</th><th>Does</th><th>Example ("watermelon")</th></tr></thead>
+          <tbody>
+            <tr><td><code>s.substr(start, count)</code></td><td>Cut out <code>count</code> characters from <code>start</code></td><td><code>substr(0, 5)</code> → "water"</td></tr>
+            <tr><td><code>s.find(x)</code></td><td>Position where x starts</td><td><code>find("melon")</code> → 5</td></tr>
+            <tr><td><code>s.replace(start, count, x)</code></td><td>Swap a part for x</td><td><code>replace(0, 5, "honey")</code> → "honeymelon"</td></tr>
+            <tr><td><code>s.insert(pos, x)</code></td><td>Put x in at a position</td><td><code>insert(5, " ")</code> → "water melon"</td></tr>
+            <tr><td><code>s.erase(start, count)</code></td><td>Remove characters</td><td><code>erase(0, 5)</code> → "melon"</td></tr>
+            <tr><td><code>s.empty()</code></td><td>true if there's no text</td><td>false</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="code-explorer" data-lang="cpp" data-title="Cut a piece out (press Run)">
+        <input type="text" name="w" data-label="word" value="watermelon">
+        <input type="range" name="s" data-label="start" min="0" max="9" value="0">
+        <input type="range" name="c" data-label="count" min="1" max="10" value="5">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          int main() {
+              string word = "{{w}}";
+              cout << "substr({{s}}, {{c}}) = " << word.substr({{s}}, {{c}}) << endl;
+
+              size_t pos = word.find("melon");
+              if (pos != string::npos) {
+                  cout << "\"melon\" starts at " << pos << endl;
+              } else {
+                  cout << "no \"melon\" in this word" << endl;
+              }
+              return 0;
+          }
+        </script>
+      </div>
+      <p>When <code>find</code> can't find something, it gives a special value called <code>string::npos</code> ("no position"). Always check for it, as the code above does.</p>
+    </section>
+
+    <section>
+      <h2>Going through every character</h2>
+      <p>Use the range-for loop to visit each <code>char</code>. The <code>&lt;cctype&gt;</code> toolbox has functions to test and change characters:</p>
+      <div class="runnable" data-lang="cpp" data-title="Shout, count and reverse">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          #include <cctype>
+          #include <algorithm>
+          using namespace std;
+
+          int main() {
+              string text = "Programming is fun";
+
+              string loud = text;
+              for (char& c : loud) {       // & lets us change each char
+                  c = toupper(c);
+              }
+              cout << loud << endl;
+
+              int vowels = 0;
+              for (char c : text) {
+                  char lower = tolower(c);
+                  if (lower == 'a' || lower == 'e' || lower == 'i' || lower == 'o' || lower == 'u') {
+                      vowels++;
+                  }
+              }
+              cout << "Vowels: " << vowels << endl;
+
+              string backwards = text;
+              reverse(backwards.begin(), backwards.end());
+              cout << backwards << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+PROGRAMMING IS FUN
+Vowels: 5
+nuf si gnimmargorP
+</script>
+      </div>
+      <p>Notice <code>char&amp; c</code> in the first loop. The <code>&amp;</code> means "the real character, not a copy", so changing <code>c</code> changes the string. Without it, you'd only change copies. Lesson 9 explains <code>&amp;</code> properly.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>From &lt;cctype&gt;</th><th>Does</th></tr></thead>
+          <tbody>
+            <tr><td><code>toupper(c)</code> / <code>tolower(c)</code></td><td>Capital / small version of a letter</td></tr>
+            <tr><td><code>isalpha(c)</code> / <code>isdigit(c)</code></td><td>Is it a letter? / a digit?</td></tr>
+            <tr><td><code>isspace(c)</code> / <code>isupper(c)</code></td><td>Is it a space? / a capital?</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Text and numbers</h2>
+      <div class="runnable" data-lang="cpp" data-title="Convert between them">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          using namespace std;
+
+          int main() {
+              int score = 42;
+              string label = "Score: " + to_string(score);    // number → text
+              cout << label << endl;
+
+              string typed = "17";
+              int n = stoi(typed);                             // text → int
+              double d = stod("3.5");                          // text → double
+              cout << n + 1 << " and " << d * 2 << endl;
+
+              string a = "apple", b = "banana";
+              if (a < b) {
+                  cout << a << " comes before " << b << " in the dictionary" << endl;
+              }
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Score: 42
+18 and 7
+apple comes before banana in the dictionary
+</script>
+      </div>
+      <p>You can't add a number to a string with <code>+</code> directly. Turn it into text first with <code>to_string</code>. Strings can be compared with <code>==</code>, <code>&lt;</code> and <code>&gt;</code>, in dictionary order.</p>
+    </section>
+
+    <section>
+      <h2>Build it: a username maker</h2>
+      <div class="runnable" data-lang="cpp" data-input="Sam Rivers\n2014" data-title="Username maker">
+        <script type="text/plain">
+          #include <iostream>
+          #include <string>
+          #include <cctype>
+          using namespace std;
+
+          int main() {
+              string fullName;
+              int year;
+              getline(cin, fullName);
+              cin >> year;
+
+              size_t space = fullName.find(' ');
+              string first = fullName.substr(0, space);
+              string last = fullName.substr(space + 1);
+
+              string username = "";
+              for (char c : first) username += tolower(c);
+              username += "_";
+              username += tolower(last[0]);
+              username += to_string(year % 100);
+
+              cout << "Hi " << first << "! Your username is: " << username << endl;
+              return 0;
+          }
+        </script>
+        <script type="text/plain" data-expected>
+Hi Sam! Your username is: sam_r14
+</script>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Change the input to your own name and year.</li>
+          <li>Count how many times the letter 'a' appears in a sentence.</li>
+          <li>Check whether a word reads the same backwards (a <strong>palindrome</strong>), like "racecar".</li>
+        </ol>
+      </aside>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Single vs double quotes</strong>: <code>'a'</code> is a char, <code>"a"</code> is a string.</li>
+          <li><strong>Adding numbers to strings</strong>: <code>"Age: " + 12</code> doesn't do what you think. Use <code>to_string(12)</code>.</li>
+          <li><strong>substr's second number</strong> is how many characters, not where to stop.</li>
+          <li><strong>Forgetting to check <code>string::npos</code></strong> after <code>find</code>.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">string s = "pancake"; What is s.substr(3, 4)?</p>
+        <div class="opts">
+          <button>"pan"</button>
+          <button data-correct>"cake"</button>
+          <button>"ncak"</button>
+        </div>
+        <p class="why">Start at index 3 (the 'c') and take 4 characters: c, a, k, e.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>#include &lt;string&gt;</code>. Join with <code>+</code> and <code>+=</code>.</li>
+          <li><code>s.length()</code>, <code>s[i]</code>, <code>s.substr(start, count)</code>, <code>s.find(x)</code>.</li>
+          <li><code>for (char c : s)</code> visits each character. <code>toupper</code>/<code>tolower</code> from <code>&lt;cctype&gt;</code>.</li>
+          <li><code>to_string(n)</code> number → text. <code>stoi(s)</code>, <code>stod(s)</code> text → number.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>
