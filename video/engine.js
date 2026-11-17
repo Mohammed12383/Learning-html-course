@@ -671,8 +671,10 @@
         const A = window.VIDEO_ASSETS || {};
         html = html.replace(/(src=["'])([^"']+)(["'])/g, (m, a, u, b) => a + (A[u.replace(/^\.\//, '')] || u) + b);
         css = transformCSS(css).replace(/url\((["']?)([^)"']+)\1\)/g, (m, q, u) => 'url(' + q + (A[u] || u) + q + ')');
-        this.root.innerHTML = '<style>' + BASE + '</style><style>' + css + '</style><div class="vp"><div class="page">' + html + '</div></div>';
+        this.root.innerHTML = '<style>' + BASE + '</style><style>' + css + '</style><div class="vp"><div class="page"></div></div>';
         this.vpEl = this.root.querySelector('.vp');
+        // parsed on its own, so a half-typed tag is dropped, like a real browser does
+        this.root.querySelector('.page').innerHTML = html;
         this.seenAnims = new Map();
         this.addrTitle.textContent = title;
         this.addrUrl.textContent = 'my-site/' + page;
