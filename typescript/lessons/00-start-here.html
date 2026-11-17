@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Start Here · Hello TypeScript</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="00-start-here">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 00 &middot; <b>First steps</b></p>
+      <div class="hero-code" aria-hidden="true">hello</div>
+      <h1>Start Here</h1>
+      <p class="lead">You don't need to know anything yet. In this lesson you'll find out what JavaScript and TypeScript are, why TypeScript is like a spell-checker for code, and how to use this course.</p>
+      <ul class="learn">
+        <li>What a program is</li>
+        <li>JavaScript and TypeScript</li>
+        <li>Type errors</li>
+        <li>How to use the code boxes</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>What is a program?</h2>
+      <p>A <strong>program</strong> is a list of instructions for the computer, written in a language it understands. The computer follows them one at a time, top to bottom, exactly as written. Writing those instructions is called <strong>programming</strong> or <strong>coding</strong>.</p>
+
+      <div class="runnable" data-lang="typescript" data-title="Your first look at a program">
+        <script type="text/plain">
+          console.log("Hello, world!");
+          console.log("I'm learning TypeScript 🚀");
+        </script>
+      </div>
+      <p>The code is on the left. What it shows is on the right, in the <strong>output</strong>. Change the text inside the quotes. When you stop typing, it runs again by itself.</p>
+    </section>
+
+    <section>
+      <h2>JavaScript and TypeScript</h2>
+      <p><strong>JavaScript</strong> is the programming language of the web. Every web browser understands it, and almost every website uses it to do things: open menus, play videos, check forms, run games.</p>
+      <p><strong>TypeScript</strong> is JavaScript with one superpower added: <strong>types</strong>. A type says what kind of value something is: a number, some text, true/false. TypeScript checks your code <em>while you type</em> and warns you about mistakes before your program even runs.</p>
+
+      <div class="trio">
+        <div><div class="big" style="color: var(--c-tag)">HTML</div><p><strong>The structure.</strong> What's on the page.</p></div>
+        <div><div class="big" style="color: var(--c-prop)">CSS</div><p><strong>The look.</strong> Colors, sizes, layout.</p></div>
+        <div><div class="big" style="color: var(--c-sel)">TypeScript</div><p><strong>The behavior.</strong> What happens when you click, type or wait.</p></div>
+      </div>
+
+      <aside class="note idea">
+        <h4>Think of it like this</h4>
+        <p>TypeScript is like a spell-checker for code. A spell-checker underlines "teh" before you send your message. TypeScript underlines mistakes like "you're trying to do math with a word" before you run your program.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Your first type error</h2>
+      <p>Here, a box called <code>age</code> is meant to hold a number. Line 3 tries to put text into it. Look: the line is marked in red and an explanation appears under the code, <em>before</em> the program runs.</p>
+
+      <div class="runnable" data-lang="typescript" data-title="TypeScript catches the mistake">
+        <script type="text/plain">
+          let age: number = 12;
+          console.log(age);
+          age = "twelve";
+        </script>
+      </div>
+
+      <p>Fix it by changing <code>"twelve"</code> to <code>13</code>. The red line disappears. In plain JavaScript, there would be no warning: the mistake would only show up later, maybe as a confusing bug on a real website. That's why many big apps, like VS Code, Slack and Airbnb, are written in TypeScript.</p>
+    </section>
+
+    <section>
+      <h2>How TypeScript runs</h2>
+      <p>Browsers only understand JavaScript. So TypeScript is first <strong>compiled</strong>: a program called the <strong>compiler</strong> checks the types, then removes them, leaving plain JavaScript that the browser runs.</p>
+      <div class="flow" role="img" aria-label="Your TypeScript code goes into the compiler, which checks the types and removes them. Out comes JavaScript, which the browser runs.">
+        <div class="fbox">your TypeScript code <code>.ts</code></div>
+        <div class="arrow"></div>
+        <div class="fbox fq">the compiler checks types, then removes them</div>
+        <div class="arrow"></div>
+        <div class="fbox">JavaScript <code>.js</code>, which the browser runs</div>
+      </div>
+      <p>In this course, the real TypeScript compiler runs inside this page, so you never have to think about it. It even works offline.</p>
+    </section>
+
+    <section>
+      <h2>How to use this course</h2>
+      <ul>
+        <li><strong>Run</strong> runs the program (<kbd>Ctrl</kbd>+<kbd>Enter</kbd> on a keyboard). Most examples also run again by themselves when you stop typing.</li>
+        <li><strong>Output</strong> shows what <code>console.log</code> prints. Some examples show a <strong>web page</strong> instead, which you can click and type in.</li>
+        <li><strong>Type errors</strong> appear under the code with the line number and a plain explanation. <strong>Runtime errors</strong> (problems while running) appear in the output.</li>
+        <li><strong>Reset</strong> brings the code back. <strong>Copy</strong> copies it.</li>
+        <li><strong>Step-through viewers</strong> show a program running one line at a time. <strong>Explorers</strong> have sliders that change the code.</li>
+      </ul>
+      <p>Code is colored to help you read it, the same way everywhere:</p>
+      <div class="legend">
+        <code class="k-tag">keywords like let, if</code>
+        <code class="k-val">"text"</code>
+        <code class="k-attr">numbers 42</code>
+        <code class="k-prop">functions log()</code>
+        <code class="k-sel">types like number</code>
+      </div>
+    </section>
+
+    <section>
+      <h2>TypeScript on your own computer</h2>
+      <ol class="steps">
+        <li><div><p><strong>Quickest:</strong> the official <a href="https://www.typescriptlang.org/play" target="_blank" rel="noopener">TypeScript Playground</a> runs TypeScript in your browser, like these code boxes.</p></div></li>
+        <li><div><p><strong>On a computer:</strong> install <strong>VS Code</strong> (it understands TypeScript already) and <strong>Node.js</strong> from <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a>.</p></div></li>
+        <li><div><p>Make a file called <code>hello.ts</code> and write <code>console.log("Hi!");</code></p></div></li>
+        <li><div><p>Open the terminal in VS Code (<strong>View → Terminal</strong>) and type <code>npx tsx hello.ts</code> to run it. You'll learn more about real projects in lesson 15.</p></div></li>
+      </ol>
+    </section>
+
+    <section>
+      <div class="quiz">
+        <p class="q">What does TypeScript add to JavaScript?</p>
+        <div class="opts">
+          <button>Colors and fonts</button>
+          <button data-correct>Types, which catch mistakes before the code runs</button>
+          <button>A faster computer</button>
+        </div>
+        <p class="why">TypeScript is JavaScript plus types. The types let it warn you about mistakes while you type.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>A program is a list of instructions, run top to bottom.</li>
+          <li><strong>JavaScript</strong> is the language of the web. <strong>TypeScript</strong> is JavaScript with types.</li>
+          <li>The compiler checks types, then turns TypeScript into JavaScript.</li>
+          <li>Type errors appear in red under the code. Read them: they help you.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/typescript.min.js"></script>
+<script src="../../assets/vendor/typescript-libs.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

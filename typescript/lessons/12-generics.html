@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Generics &amp; Collections · Hello TypeScript</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="12-generics">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 12 &middot; <b>Functions &amp; types</b></p>
+      <div class="hero-code" aria-hidden="true">&lt;T&gt;</div>
+      <h1>Generics &amp; Collections</h1>
+      <p class="lead">Some code works the same way for any type: "get the first item" works for a list of numbers and a list of names. <strong>Generics</strong> let you write it once and still keep the types. You'll also meet <code>Map</code> and <code>Set</code>, two very handy collections.</p>
+      <ul class="learn">
+        <li>Why generics</li>
+        <li>Generic functions</li>
+        <li>Generic interfaces</li>
+        <li>Map</li>
+        <li>Set and Record</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>The problem</h2>
+      <p>Imagine a function that returns the first item of an array. What type should it have? If you write <code>number[]</code>, it only works for numbers. If you use <code>any</code>, TypeScript stops helping:</p>
+      <div class="runnable" data-lang="typescript" data-title="any loses the type">
+        <script type="text/plain">
+          function firstAny(items: any[]): any {
+            return items[0];
+          }
+
+          const name = firstAny(["Lina", "Omar"]);
+          console.log(name.toFixed(2));   // no warning, but it crashes!
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Generic functions</h2>
+      <p>A generic function has a <strong>type parameter</strong>, written in angle brackets like <code>&lt;T&gt;</code>. Think of <code>T</code> as a blank that gets filled in with the real type each time you call the function:</p>
+
+      <div class="anatomy" role="img" aria-label="function first, angle bracket T, takes items of type T array, returns T">
+        <div class="part tag"><span>function</span><small></small></div>
+        <div class="part prop"><span> first</span><small>name</small></div>
+        <div class="part sel"><span>&lt;T&gt;</span><small>a type blank<br>called T</small></div>
+        <div class="part text"><span>(items: T[])</span><small>an array of T</small></div>
+        <div class="part sel"><span>: T</span><small>gives back<br>one T</small></div>
+      </div>
+
+      <div class="runnable" data-lang="typescript" data-title="One function, any type, types kept">
+        <script type="text/plain">
+          function first<T>(items: T[]): T {
+            return items[0];
+          }
+
+          const name = first(["Lina", "Omar"]);     // T is string
+          const score = first([72, 95, 88]);        // T is number
+
+          console.log(name.toUpperCase());
+          console.log(score.toFixed(1));
+          console.log(name.toFixed(2));             // caught: name is a string!
+        </script>
+      </div>
+      <p>TypeScript works out <code>T</code> from what you pass in. You've already used generics: <code>number[]</code> is short for <code>Array&lt;number&gt;</code>, and <code>querySelector&lt;HTMLButtonElement&gt;</code> on the course home page is a generic function too.</p>
+    </section>
+
+    <section>
+      <h2>Generic interfaces</h2>
+      <div class="runnable" data-lang="typescript" data-title="A box that can hold anything">
+        <script type="text/plain">
+          interface Box<T> {
+            label: string;
+            contents: T;
+          }
+
+          const toyBox: Box<string[]> = { label: "toys", contents: ["ball", "kite"] };
+          const coinBox: Box<number> = { label: "coins", contents: 42 };
+
+          console.log(`${toyBox.label}: ${toyBox.contents.join(", ")}`);
+          console.log(`${coinBox.label}: ${coinBox.contents + 8}`);
+
+          // a generic function that works with any Box
+          function describe<T>(box: Box<T>): string {
+            return `The ${box.label} box holds ${JSON.stringify(box.contents)}`;
+          }
+          console.log(describe(toyBox));
+          console.log(describe(coinBox));
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Map: look things up by key</h2>
+      <p>A <code class="k-sel">Map</code> stores pairs: a <strong>key</strong> and a <strong>value</strong>. You find a value by its key, like looking up a word in a dictionary. Its type says what the keys and values are: <code>Map&lt;string, number&gt;</code>.</p>
+      <div class="runnable" data-lang="typescript" data-title="A price list">
+        <script type="text/plain">
+          const prices = new Map<string, number>();
+          prices.set("apple", 0.5);
+          prices.set("banana", 0.25);
+          prices.set("mango", 1.2);
+
+          console.log(prices.get("mango"));
+          console.log(prices.has("kiwi"));        // false
+          console.log(prices.get("kiwi") ?? "not sold here");
+          console.log(prices.size, "fruits");
+
+          for (const [fruit, price] of prices) {
+            console.log(`${fruit}: $${price.toFixed(2)}`);
+          }
+        </script>
+      </div>
+
+      <h3>Counting with a Map</h3>
+      <div class="runnable" data-lang="typescript" data-title="Count the votes">
+        <script type="text/plain">
+          const votes = ["pizza", "tacos", "pizza", "sushi", "pizza", "tacos"];
+          const count = new Map<string, number>();
+
+          for (const food of votes) {
+            count.set(food, (count.get(food) ?? 0) + 1);
+          }
+
+          for (const [food, n] of count) {
+            console.log(`${food.padEnd(6)} ${"█".repeat(n)} ${n}`);
+          }
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Set: no duplicates</h2>
+      <p>A <code class="k-sel">Set</code> is a collection where every value appears only once. Adding something that's already there does nothing:</p>
+      <div class="runnable" data-lang="typescript" data-title="Unique visitors">
+        <script type="text/plain">
+          const visitors = new Set<string>();
+          for (const name of ["Lina", "Omar", "Lina", "Maya", "Omar"]) {
+            visitors.add(name);
+          }
+          console.log(visitors);
+          console.log(visitors.size, "different people");
+          console.log(visitors.has("Maya"));
+
+          // quick trick: remove duplicates from an array
+          const unique = [...new Set([3, 1, 3, 2, 1])];
+          console.log(unique);
+        </script>
+      </div>
+
+      <h3>Record: an object with known key and value types</h3>
+      <div class="runnable" data-lang="typescript" data-title="Record">
+        <script type="text/plain">
+          type Day = "mon" | "tue" | "wed";
+
+          const steps: Record<Day, number> = { mon: 8000, tue: 10500, wed: 6200 };
+          console.log(steps.tue);
+
+          const emoji: Record<string, string> = { sun: "☀️", rain: "🌧️" };
+          console.log(emoji["sun"]);
+        </script>
+      </div>
+      <p><code>Record&lt;Day, number&gt;</code> means "an object with exactly the keys mon, tue and wed, each holding a number". Leave one out, and TypeScript complains.</p>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Write a generic function <code>last&lt;T&gt;(items: T[]): T</code>.</li>
+          <li>Make a <code>Map&lt;string, string&gt;</code> of English to Spanish words, and translate three words.</li>
+          <li>Use a <code>Set</code> to find how many different letters are in "mississippi".</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="typescript" data-title="Your generics">
+        <script type="text/plain">
+          function last<T>(items: T[]): T {
+            return items[items.length - 1];
+          }
+          console.log(last(["a", "b", "c"]));
+          console.log(new Set("mississippi").size);
+        </script>
+      </div>
+
+      <div class="quiz">
+        <p class="q">first&lt;T&gt;(items: T[]): T is called with [true, false]. What is T?</p>
+        <div class="opts">
+          <button>T[]</button>
+          <button data-correct>boolean</button>
+          <button>any</button>
+        </div>
+        <p class="why">TypeScript fills in the blank from the array you pass: an array of booleans makes T = boolean.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>function f&lt;T&gt;(x: T): T</code>: T is a type blank, filled in for each call.</li>
+          <li><code>interface Box&lt;T&gt; { contents: T }</code>. <code>Array&lt;number&gt;</code> = <code>number[]</code>.</li>
+          <li><code>new Map&lt;K, V&gt;()</code>: <code>set</code>, <code>get</code>, <code>has</code>, <code>size</code>.</li>
+          <li><code>new Set&lt;T&gt;()</code>: unique values. <code>Record&lt;K, V&gt;</code>: an object type.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/typescript.min.js"></script>
+<script src="../../assets/vendor/typescript-libs.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

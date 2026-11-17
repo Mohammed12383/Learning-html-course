@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your First Program · Hello TypeScript</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="01-console">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 01 &middot; <b>First steps</b></p>
+      <div class="hero-code" aria-hidden="true">console.log</div>
+      <h1>Your First Program</h1>
+      <p class="lead">Every programmer's first step is making the computer show something. In TypeScript, that's <code>console.log()</code>. You'll also see how TypeScript catches typos before your code runs.</p>
+      <ul class="learn">
+        <li>console.log()</li>
+        <li>Text and numbers</li>
+        <li>Semicolons and comments</li>
+        <li>Type errors vs runtime errors</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>console.log() shows things</h2>
+      <p>The <strong>console</strong> is a place where programs write messages. Every web browser has one hidden in its developer tools, and in this course it's the <strong>Output</strong> box. <code class="k-prop">console.log()</code> writes a line there.</p>
+
+      <div class="anatomy" role="img" aria-label="console dot log, open bracket, the text Hello in quotes, close bracket, semicolon">
+        <div class="part text"><span>console</span><small>the console</small></div>
+        <div class="part punc"><span>.</span><small>"use its..."</small></div>
+        <div class="part prop"><span>log</span><small>log function</small></div>
+        <div class="part punc"><span>(</span><small></small></div>
+        <div class="part val"><span>"Hello!"</span><small>what to show</small></div>
+        <div class="part punc"><span>);</span><small>semicolon:<br>end of the line</small></div>
+      </div>
+
+      <div class="runnable" data-lang="typescript" data-title="Three logs">
+        <script type="text/plain">
+          console.log("Hello!");
+          console.log("My name is TypeScript.");
+          console.log("I can show anything you like 🎈");
+        </script>
+      </div>
+
+      <p>Text in quotes is called a <strong>string</strong>. You can use double quotes <code>"..."</code>, single quotes <code>'...'</code> or backticks <code>`...`</code> (more about those in lesson 4). The <strong>semicolon</strong> <code>;</code> marks the end of a line of code. TypeScript can often guess where lines end, but it's a good habit to write it.</p>
+    </section>
+
+    <section>
+      <h2>Text, numbers and math</h2>
+      <div class="runnable" data-lang="typescript" data-title="Quotes change everything">
+        <script type="text/plain">
+          console.log(5 + 3);
+          console.log("5 + 3");
+          console.log(7 * 6);
+          console.log("I am", 12, "years old");
+        </script>
+      </div>
+      <p>Without quotes, <code>5 + 3</code> is math, so you see <code>8</code>. With quotes, it's just text. Put several things in one <code>console.log</code> with commas, and they're shown with spaces in between.</p>
+    </section>
+
+    <section>
+      <h2>Comments</h2>
+      <p>Comments are notes for humans. The computer ignores them. <code>//</code> starts a comment that lasts until the end of the line. <code>/* ... */</code> can cover several lines.</p>
+      <div class="runnable" data-lang="typescript" data-title="Comments are ignored">
+        <script type="text/plain">
+          // This program greets the user
+          console.log("Welcome!");   // a comment after code
+
+          /* This is a longer comment.
+             It can go over several lines. */
+          // console.log("This line is switched off");
+          console.log("Bye!");
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Two kinds of mistakes</h2>
+      <p>TypeScript programmers meet two kinds of errors:</p>
+      <div class="split2">
+        <div>
+          <h4>type error</h4>
+          <p><strong>Found while you type</strong>, before running. Shown under the code with a red line. TypeScript is protecting you.</p>
+        </div>
+        <div>
+          <h4>runtime error</h4>
+          <p><strong>Happens while running.</strong> The program crashes at that line, and the error appears in the output.</p>
+        </div>
+      </div>
+
+      <p>Here's a typo: <code>lgo</code> instead of <code>log</code>. TypeScript knows every function the console has, so it spots the typo immediately and even suggests the right name:</p>
+
+      <div class="runnable" data-lang="typescript" data-title="A typo, caught early">
+        <script type="text/plain">
+          console.log("This line is fine");
+          console.lgo("This line has a typo");
+          console.log("This line never runs");
+        </script>
+      </div>
+      <p>Look at both places: the type error under the code, <em>and</em> the runtime error in the output (the code ran anyway, and crashed on line 2). Fix the typo and both disappear.</p>
+
+      <aside class="note tip">
+        <h4>How to read an error</h4>
+        <p>Every error tells you the <strong>line number</strong> and a <strong>message</strong>. Read the message slowly: "Property 'lgo' does not exist on type 'Console'. Did you mean 'log'?" says exactly what's wrong. In this course you also get a plain-language explanation.</p>
+      </aside>
+
+      <div class="runnable" data-lang="typescript" data-title="Find and fix the two mistakes">
+        <script type="text/plain">
+          console.log("Roses are red");
+          console.log("Violets are blue);
+          Console.log("TypeScript is fun");
+        </script>
+      </div>
+      <p>Fix them one at a time. (Hint: a quote is missing, and capital letters matter.)</p>
+    </section>
+
+    <section>
+      <h2>Other console messages</h2>
+      <div class="runnable" data-lang="typescript" data-title="warn and error">
+        <script type="text/plain">
+          console.log("A normal message");
+          console.warn("A warning (yellow)");
+          console.error("An error message (red)");
+        </script>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Log your name, your age and your favorite food, each on its own line.</li>
+          <li>Log the number of minutes in a week (60 × 24 × 7).</li>
+          <li>Make a little picture with several <code>console.log</code> lines, like a house or a smiley.</li>
+        </ol>
+      </aside>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Capital letters</strong>: <code>Console.log</code> or <code>console.Log</code> don't exist. It's <code>console.log</code>.</li>
+          <li><strong>Missing quote or bracket</strong>: every <code>"</code> and <code>(</code> needs a partner.</li>
+          <li><strong>Curly quotes</strong> “like these” from a word processor or the iPad keyboard. Code needs straight quotes <code>"</code>. On an iPad, turn off Smart Punctuation in Settings → General → Keyboard.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">When does TypeScript show a type error?</p>
+        <div class="opts">
+          <button>Only after the program crashes</button>
+          <button data-correct>While you write the code, before it runs</button>
+          <button>Never, only JavaScript shows errors</button>
+        </div>
+        <p class="why">Type errors are found by checking the code, so you see them while typing. That's TypeScript's superpower.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>console.log(...)</code> shows things in the output. Commas show several things.</li>
+          <li>Strings go in quotes. End lines with <code>;</code>.</li>
+          <li><code>// comment</code> and <code>/* comment */</code> are ignored.</li>
+          <li>Type errors appear while you type. Runtime errors appear when the program runs.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/typescript.min.js"></script>
+<script src="../../assets/vendor/typescript-libs.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

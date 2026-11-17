@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Functions · Hello TypeScript</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="09-functions">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 09 &middot; <b>Functions &amp; types</b></p>
+      <div class="hero-code" aria-hidden="true">=&gt;</div>
+      <h1>Functions</h1>
+      <p class="lead">A <strong>function</strong> is a mini-program with a name: write it once, use it whenever you need it. In TypeScript, a function also says what types it takes in and what type it gives back, so it can never be used the wrong way.</p>
+      <ul class="learn">
+        <li>Making and calling functions</li>
+        <li>Typed parameters</li>
+        <li>return and return types</li>
+        <li>Optional and default values</li>
+        <li>Arrow functions</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>A function is a little machine</h2>
+      <div class="flow" role="img" aria-label="Two numbers, 4 and 3, go into the function area. 12 comes out.">
+        <div class="fbox">put in: <b>4</b> and <b>3</b></div>
+        <div class="arrow"></div>
+        <div class="fbox fq">area(width, height)</div>
+        <div class="arrow"></div>
+        <div class="fbox">out comes: <b>12</b></div>
+      </div>
+
+      <div class="anatomy" role="img" aria-label="function area, open bracket, width colon number, comma, height colon number, close bracket, colon number, then the body">
+        <div class="part tag"><span>function</span><small>keyword</small></div>
+        <div class="part prop"><span> area</span><small>its name</small></div>
+        <div class="part text"><span>(width: number, height: number)</span><small>parameters,<br>each with a type</small></div>
+        <div class="part sel"><span>: number</span><small>the type it<br>gives back</small></div>
+        <div class="part punc"><span> { ... }</span><small>the code inside</small></div>
+      </div>
+
+      <div class="runnable" data-lang="typescript" data-title="Make and call a function">
+        <script type="text/plain">
+          function area(width: number, height: number): number {
+            return width * height;
+          }
+
+          console.log(area(4, 3));
+          console.log(area(10, 2));
+
+          const room = area(5, 4);
+          console.log(`The room is ${room} square meters`);
+        </script>
+      </div>
+      <p>Writing the function only <em>teaches</em> it. It runs when you <strong>call</strong> it with brackets: <code>area(4, 3)</code>. The values you pass in go into the <strong>parameters</strong> <code>width</code> and <code>height</code>. <code class="k-tag">return</code> sends the answer back.</p>
+    </section>
+
+    <section>
+      <h2>Watch a call happen</h2>
+      <div class="stepper" data-lang="typescript" data-title="Jump in, jump back">
+        <script type="text/plain">
+          function greet(name: string): string {
+            const message = `Hello, ${name}!`;
+            return message;
+          }
+
+          const text = greet("Lina");
+          console.log(text);
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "note": "TypeScript learns the function <code>greet</code>. It doesn't run yet."},
+            {"line": 6, "note": "A call: <code>greet(\"Lina\")</code>. Jump into the function."},
+            {"line": 1, "vars": {"name": "\"Lina\""}, "note": "Inside, the parameter <code>name</code> holds \"Lina\"."},
+            {"line": 2, "vars": {"name": "\"Lina\"", "message": "\"Hello, Lina!\""}, "note": "Build the message."},
+            {"line": 3, "vars": {"name": "\"Lina\"", "message": "\"Hello, Lina!\""}, "note": "<code>return</code> sends it back to where the function was called."},
+            {"line": 6, "vars": {"text": "\"Hello, Lina!\""}, "note": "Back outside. The function's own variables are gone, and <code>text</code> holds the answer."},
+            {"line": 7, "vars": {"text": "\"Hello, Lina!\""}, "out": "Hello, Lina!\n", "note": "Log it."}
+          ]
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Types protect your functions</h2>
+      <p>Because the parameters have types, TypeScript checks every call. Wrong type or wrong number of values? You'll know immediately:</p>
+      <div class="runnable" data-lang="typescript" data-title="Calling it the wrong way">
+        <script type="text/plain">
+          function double(n: number): number {
+            return n * 2;
+          }
+
+          console.log(double(21));
+          console.log(double("21"));     // wrong type
+          console.log(double(1, 2));     // too many values
+
+          function shout(text) {         // no type for text
+            return text.toUpperCase();
+          }
+        </script>
+      </div>
+      <p>The last function has a parameter without a type. TypeScript asks you to add one: <code>text: string</code>. Fix all three problems.</p>
+
+      <h3>Functions that don't return anything</h3>
+      <p>Some functions just <em>do</em> something, like logging. Their return type is <code class="k-sel">void</code>, which means "nothing comes back":</p>
+      <div class="runnable" data-lang="typescript" data-title="void functions">
+        <script type="text/plain">
+          function cheer(times: number): void {
+            for (let i = 0; i < times; i++) {
+              console.log("Hip hip hooray! 🎉");
+            }
+          }
+          cheer(3);
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Optional and default values</h2>
+      <div class="runnable" data-lang="typescript" data-title="? and =">
+        <script type="text/plain">
+          function makePizza(size: string, topping: string = "cheese", extra?: string): string {
+            let order = `A ${size} ${topping} pizza`;
+            if (extra) {
+              order += ` with extra ${extra}`;
+            }
+            return order;
+          }
+
+          console.log(makePizza("large"));
+          console.log(makePizza("small", "mushroom"));
+          console.log(makePizza("medium", "pepperoni", "olives"));
+        </script>
+      </div>
+      <ul>
+        <li><code>topping: string = "cheese"</code> has a <strong>default value</strong>, used when you leave it out.</li>
+        <li><code>extra?: string</code> is <strong>optional</strong>. If it's left out, it's <code>undefined</code>, so the code checks <code>if (extra)</code> before using it.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Arrow functions</h2>
+      <p>There's a shorter way to write functions, with an arrow <code>=&gt;</code>. Arrow functions are used everywhere in modern TypeScript, especially for small functions:</p>
+      <div class="runnable" data-lang="typescript" data-title="Arrow functions">
+        <script type="text/plain">
+          // the long way
+          function add(a: number, b: number): number {
+            return a + b;
+          }
+
+          // the arrow way: the same thing
+          const addArrow = (a: number, b: number): number => a + b;
+
+          // with a body in curly brackets
+          const describe = (n: number): string => {
+            const kind = n % 2 === 0 ? "even" : "odd";
+            return `${n} is ${kind}`;
+          };
+
+          console.log(add(2, 3), addArrow(2, 3));
+          console.log(describe(7));
+
+          // passing a small arrow function to map
+          console.log([1, 2, 3].map(n => n * 10));
+        </script>
+      </div>
+      <p>When an arrow function is just one expression, you don't need <code>{ }</code> or <code>return</code>: <code>n =&gt; n * 10</code> returns <code>n * 10</code>. Inside <code>map</code>, TypeScript already knows <code>n</code> is a number, so you don't need to write the type.</p>
+    </section>
+
+    <section>
+      <h2>Play with a function</h2>
+      <div class="code-explorer" data-lang="typescript" data-title="A banner function">
+        <input type="text" name="t" data-label="text" value="Hello TypeScript">
+        <input type="range" name="p" data-label="padding" min="0" max="8" value="2">
+        <select name="c" data-label="border">
+          <option>*</option><option>#</option><option>=</option><option>~</option>
+        </select>
+        <script type="text/plain">
+          function banner(text: string, padding: number, border: string): void {
+            const width = text.length + padding * 2;
+            const space = " ".repeat(padding);
+            console.log(border.repeat(width + 2));
+            console.log(border + space + text + space + border);
+            console.log(border.repeat(width + 2));
+          }
+
+          banner("{{t}}", {{p}}, "{{c}}");
+          banner("Made with a function", 1, "{{c}}");
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Write <code>square(n: number): number</code>.</li>
+          <li>Write <code>isAdult(age: number): boolean</code> that returns true for 18 and over.</li>
+          <li>Write an arrow function <code>initials</code> that turns "Sam Rivers" into "S.R.".</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="typescript" data-title="Your functions">
+        <script type="text/plain">
+          function square(n: number): number {
+            return n * n;
+          }
+          console.log(square(9));
+        </script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Forgetting to call it</strong>: writing <code>function</code> doesn't run it. Call it with <code>name()</code>.</li>
+          <li><strong>Forgetting return</strong>: if the return type is <code>number</code> but you don't return, TypeScript warns you.</li>
+          <li><strong>Logging instead of returning</strong>: <code>console.log</code> only shows the answer. <code>return</code> hands it back so you can use it.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">const triple = (n: number) =&gt; n * 3. What is triple(4) + 1?</p>
+        <div class="opts">
+          <button>12</button>
+          <button data-correct>13</button>
+          <button>An error</button>
+        </div>
+        <p class="why"><code>triple(4)</code> returns 12, then 12 + 1 = 13.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>function name(p: type): returnType { return ...; }</code></li>
+          <li>Call it: <code>name(value)</code>. TypeScript checks the types and the number of values.</li>
+          <li><code>void</code> means nothing is returned. <code>p?: type</code> optional, <code>p = value</code> default.</li>
+          <li>Arrow functions: <code>const f = (a: number) =&gt; a * 2;</code></li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/typescript.min.js"></script>
+<script src="../../assets/vendor/typescript-libs.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

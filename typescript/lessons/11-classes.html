@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Classes · Hello TypeScript</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="11-classes">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 11 &middot; <b>Functions &amp; types</b></p>
+      <div class="hero-code" aria-hidden="true">class</div>
+      <h1>Classes</h1>
+      <p class="lead">A <strong>class</strong> is a blueprint for making objects that have both data and actions. One <code>Player</code> class can make as many players as you need, each with their own name and score. TypeScript adds <strong>private</strong> parts, so nothing outside the class can mess with what's inside.</p>
+      <ul class="learn">
+        <li>Classes and objects</li>
+        <li>constructor and this</li>
+        <li>Methods</li>
+        <li>private and readonly</li>
+        <li>extends</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>A blueprint for objects</h2>
+      <aside class="note idea">
+        <h4>Think of it like this</h4>
+        <p>A class is a cookie cutter. The cookies you make with it are <strong>objects</strong> (also called <strong>instances</strong>). Every cookie has the same shape, but each one can have different sprinkles.</p>
+      </aside>
+
+      <div class="runnable" data-lang="typescript" data-title="Your first class">
+        <script type="text/plain">
+          class Dog {
+            name: string;
+            age: number;
+
+            constructor(name: string, age: number) {
+              this.name = name;
+              this.age = age;
+            }
+
+            bark(): void {
+              console.log(`${this.name} says: Woof! 🐶`);
+            }
+
+            haveBirthday(): void {
+              this.age++;
+              console.log(`Happy birthday ${this.name}! Now ${this.age}.`);
+            }
+          }
+
+          const rex = new Dog("Rex", 3);
+          const bella = new Dog("Bella", 5);
+
+          rex.bark();
+          bella.bark();
+          rex.haveBirthday();
+          console.log(rex.age, bella.age);
+        </script>
+      </div>
+
+      <ul>
+        <li><strong>Properties</strong> (<code>name</code>, <code>age</code>) are listed at the top, with their types.</li>
+        <li>The <code class="k-prop">constructor</code> runs automatically when you make a new object with <code class="k-tag">new</code>. It sets up the starting values.</li>
+        <li><code class="k-tag">this</code> means "this particular object". <code>this.name = name</code> stores the name inside <em>this</em> dog.</li>
+        <li><strong>Methods</strong> (<code>bark</code>, <code>haveBirthday</code>) are functions that belong to the object.</li>
+      </ul>
+
+      <div class="memory" role="img" aria-label="Two Dog objects: rex with name Rex and age 4, bella with name Bella and age 5">
+        <div class="slot other"><span class="nm">rex</span><span class="vl">name: "Rex"
+age: 4</span><span class="ty">a Dog</span></div>
+        <div class="slot other"><span class="nm">bella</span><span class="vl">name: "Bella"
+age: 5</span><span class="ty">a Dog</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>A shortcut: parameter properties</h2>
+      <p>Writing each property three times (at the top, in the constructor brackets, and with <code>this.x = x</code>) is a lot of typing. TypeScript has a shortcut: put <code>public</code> (or <code>private</code>, or <code>readonly</code>) in front of a constructor parameter, and it becomes a property automatically:</p>
+      <div class="runnable" data-lang="typescript" data-title="The same class, shorter">
+        <script type="text/plain">
+          class Dog {
+            constructor(public name: string, public age: number) {}
+
+            bark(): void {
+              console.log(`${this.name} says: Woof!`);
+            }
+          }
+
+          new Dog("Rex", 3).bark();
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>private and readonly: protect the inside</h2>
+      <p>Some data should only be changed by the class itself. Mark it <code class="k-tag">private</code>, and code outside the class can't touch it. <code class="k-tag">readonly</code> means it can never change after the constructor.</p>
+      <div class="runnable" data-lang="typescript" data-title="A piggy bank you can't cheat">
+        <script type="text/plain">
+          class PiggyBank {
+            private coins = 0;
+
+            constructor(readonly owner: string) {}
+
+            add(amount: number): void {
+              this.coins += amount;
+              console.log(`+${amount} 🪙  (${this.owner} has ${this.coins})`);
+            }
+
+            spend(amount: number): boolean {
+              if (amount > this.coins) {
+                console.log(`Not enough! ${this.owner} has only ${this.coins}.`);
+                return false;
+              }
+              this.coins -= amount;
+              console.log(`-${amount} 🛍️  (${this.owner} has ${this.coins})`);
+              return true;
+            }
+
+            get balance(): number {
+              return this.coins;
+            }
+          }
+
+          const mine = new PiggyBank("Sam");
+          mine.add(10);
+          mine.spend(25);
+          mine.spend(4);
+          console.log("Balance:", mine.balance);
+
+          mine.coins = 1000000;     // not allowed: coins is private
+        </script>
+      </div>
+      <p><code>get balance()</code> is a <strong>getter</strong>: it looks like a property from the outside (<code>mine.balance</code>, no brackets), but runs code inside. Others can <em>read</em> the balance, but only the class can change the coins. That's the whole point of private.</p>
+    </section>
+
+    <section>
+      <h2>Watch an object being made</h2>
+      <div class="stepper" data-lang="typescript" data-title="Inside new Player(&quot;Zara&quot;)">
+        <script type="text/plain">
+          class Player {
+            score = 0;
+            constructor(public name: string) {}
+            win(points: number): void {
+              this.score += points;
+            }
+          }
+          const p = new Player("Zara");
+          p.win(10);
+          console.log(p.name, p.score);
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "note": "TypeScript learns the <code>Player</code> blueprint. No player exists yet."},
+            {"line": 8, "note": "<code>new Player(\"Zara\")</code> makes a new, empty object."},
+            {"line": 2, "vars": {"this": "Player { score: 0 }"}, "note": "Properties with starting values are set first: score is 0."},
+            {"line": 3, "vars": {"this": "Player { score: 0, name: 'Zara' }", "name": "'Zara'"}, "note": "The constructor runs. <code>public name</code> stores the name inside the object."},
+            {"line": 8, "vars": {"p": "Player { score: 0, name: 'Zara' }"}, "note": "The finished object is stored in <code>p</code>."},
+            {"line": 9, "vars": {"p": "Player { score: 0, name: 'Zara' }"}, "note": "Call the method <code>win</code> on <code>p</code>."},
+            {"line": 5, "vars": {"this": "Player { score: 10, name: 'Zara' }", "points": "10"}, "note": "Inside the method, <code>this</code> is <code>p</code>. Its score becomes 10."},
+            {"line": 10, "vars": {"p": "Player { score: 10, name: 'Zara' }"}, "out": "Zara 10\n", "note": "Back outside: log the name and score."}
+          ]
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>extends: a class based on another</h2>
+      <p>A class can <strong>extend</strong> another: it gets everything from the parent class, and can add more or change some methods. <code>super(...)</code> calls the parent's constructor.</p>
+      <div class="runnable" data-lang="typescript" data-title="Animals">
+        <script type="text/plain">
+          class Animal {
+            constructor(public name: string) {}
+
+            speak(): string {
+              return "...";
+            }
+
+            introduce(): void {
+              console.log(`I'm ${this.name} and I say ${this.speak()}`);
+            }
+          }
+
+          class Cat extends Animal {
+            speak(): string {
+              return "Meow 🐱";
+            }
+          }
+
+          class Bird extends Animal {
+            constructor(name: string, public canTalk: boolean) {
+              super(name);          // run Animal's constructor first
+            }
+            speak(): string {
+              return this.canTalk ? "Hello! 🦜" : "Tweet 🐦";
+            }
+          }
+
+          const pets: Animal[] = [new Cat("Mochi"), new Bird("Kiwi", true), new Bird("Sunny", false)];
+          for (const pet of pets) {
+            pet.introduce();
+          }
+        </script>
+      </div>
+      <p>Notice <code>Animal[]</code>: a Cat and a Bird are both Animals, so they fit in the same array. Each one still uses its own <code>speak</code>.</p>
+
+      <h3>implements: promise to match an interface</h3>
+      <script type="text/plain" class="snippet" data-lang="typescript">
+        interface Drawable {
+          draw(): void;
+        }
+
+        class Circle implements Drawable {
+          draw(): void {
+            console.log("○");
+          }
+        }
+      </script>
+      <p><code>implements Drawable</code> promises that the class has everything the interface lists. If you forget <code>draw</code>, TypeScript tells you.</p>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Give <code>Dog</code> a method <code>sit()</code> that logs "Rex sits. Good dog!".</li>
+          <li>Make a class <code>Counter</code> with a private <code>count</code>, and methods <code>increment()</code>, <code>reset()</code> and a getter <code>value</code>.</li>
+          <li>Add a <code>Cow</code> class to the animals.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="typescript" data-title="Your class">
+        <script type="text/plain">
+          class Counter {
+            private count = 0;
+
+            increment(): void {
+              this.count++;
+            }
+
+            get value(): number {
+              return this.count;
+            }
+          }
+
+          const c = new Counter();
+          c.increment();
+          c.increment();
+          console.log(c.value);
+        </script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Forgetting <code>new</code></strong>: <code>Dog("Rex", 3)</code> is an error. Write <code>new Dog("Rex", 3)</code>.</li>
+          <li><strong>Forgetting <code>this.</code></strong>: inside a method, write <code>this.name</code>, not <code>name</code>.</li>
+          <li><strong>Forgetting <code>super()</code></strong> in a child class's constructor.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">What does private mean on a property?</p>
+        <div class="opts">
+          <button>It's hidden from the console</button>
+          <button data-correct>Only code inside the class can use it</button>
+          <button>It can never change</button>
+        </div>
+        <p class="why"><code>private</code> keeps it inside the class. "Can never change" is <code>readonly</code>.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>class Name { prop: type; constructor(...) { } method() { } }</code></li>
+          <li><code>new Name(...)</code> makes an object. <code>this</code> is the current object.</li>
+          <li><code>constructor(public x: type)</code> makes a property for you.</li>
+          <li><code>private</code>, <code>readonly</code>, <code>get</code>. <code>extends</code> + <code>super()</code>. <code>implements</code> an interface.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/typescript.min.js"></script>
+<script src="../../assets/vendor/typescript-libs.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

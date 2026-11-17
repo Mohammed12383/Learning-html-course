@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arrays · Hello TypeScript</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="07-arrays">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 07 &middot; <b>Data</b></p>
+      <div class="hero-code" aria-hidden="true">string[]</div>
+      <h1>Arrays</h1>
+      <p class="lead">An <strong>array</strong> is a list of values in order: the songs in a playlist, the messages in a chat, the scores in a game. In TypeScript, an array also knows what type its items are, so nothing wrong can sneak in.</p>
+      <ul class="learn">
+        <li>Making arrays</li>
+        <li>Adding and removing</li>
+        <li>Looping over arrays</li>
+        <li>map, filter and reduce</li>
+        <li>Sorting</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>A list in one variable</h2>
+      <p>Arrays use square brackets, with commas between the items. Each item has an <strong>index</strong>, starting at 0:</p>
+      <div class="cells" role="img" aria-label="An array of fruits: index 0 apple, 1 banana, 2 cherry, 3 mango">
+        <span class="cap">fruits =</span>
+        <div class="cell"><b>"apple"</b><small>0</small></div>
+        <div class="cell"><b>"banana"</b><small>1</small></div>
+        <div class="cell"><b>"cherry"</b><small>2</small></div>
+        <div class="cell"><b>"mango"</b><small>3</small></div>
+      </div>
+      <p>The type of an array is the type of its items followed by <code>[]</code>: <code>string[]</code> means "an array of strings", <code>number[]</code> means "an array of numbers".</p>
+
+      <div class="runnable" data-lang="typescript" data-title="Make an array and read from it">
+        <script type="text/plain">
+          const fruits: string[] = ["apple", "banana", "cherry", "mango"];
+
+          console.log(fruits);
+          console.log(fruits[0]);          // first
+          console.log(fruits[2]);          // third
+          console.log(fruits.at(-1));      // last
+          console.log(fruits.length, "fruits");
+          console.log(fruits.slice(1, 3)); // a piece: items 1 and 2
+
+          fruits.push(42);                 // TypeScript: a number isn't a string!
+        </script>
+      </div>
+      <p>The last line tries to add a number to an array of strings. TypeScript stops it. Delete that line, or change <code>42</code> to <code>"kiwi"</code>.</p>
+    </section>
+
+    <section>
+      <h2>Adding and removing</h2>
+      <div class="stepper" data-lang="typescript" data-title="Change a list">
+        <script type="text/plain">
+          const pets: string[] = ["cat", "dog"];
+          pets.push("fish");
+          pets[0] = "tiger";
+          pets.unshift("owl");
+          const last = pets.pop();
+          console.log(pets, last);
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "vars": {"pets": "[ 'cat', 'dog' ]"}, "note": "An array with two items. (<code>const</code> means the variable always points at this array, but the array itself can still change.)"},
+            {"line": 2, "vars": {"pets": "[ 'cat', 'dog', 'fish' ]"}, "note": "<code>push</code> adds to the <b>end</b>."},
+            {"line": 3, "vars": {"pets": "[ 'tiger', 'dog', 'fish' ]"}, "note": "Replace the item at index 0."},
+            {"line": 4, "vars": {"pets": "[ 'owl', 'tiger', 'dog', 'fish' ]"}, "note": "<code>unshift</code> adds to the <b>start</b>. Everything moves along."},
+            {"line": 5, "vars": {"pets": "[ 'owl', 'tiger', 'dog' ]", "last": "'fish'"}, "note": "<code>pop</code> removes the <b>last</b> item and gives it back."},
+            {"line": 6, "vars": {"pets": "[ 'owl', 'tiger', 'dog' ]", "last": "'fish'"}, "out": "[ 'owl', 'tiger', 'dog' ] fish\n", "note": "Log both."}
+          ]
+        </script>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Code</th><th>Does</th></tr></thead>
+          <tbody>
+            <tr><td><code>a.push(x)</code> / <code>a.pop()</code></td><td>Add to / remove from the end</td></tr>
+            <tr><td><code>a.unshift(x)</code> / <code>a.shift()</code></td><td>Add to / remove from the start</td></tr>
+            <tr><td><code>a.includes(x)</code></td><td>true if x is in the array</td></tr>
+            <tr><td><code>a.indexOf(x)</code></td><td>Position of x (−1 if not there)</td></tr>
+            <tr><td><code>a.splice(i, 1)</code></td><td>Remove 1 item at position i</td></tr>
+            <tr><td><code>a.join(", ")</code></td><td>Glue into one string</td></tr>
+            <tr><td><code>[...a, ...b]</code></td><td>A new array with everything from a and b</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Looping over an array</h2>
+      <div class="runnable" data-lang="typescript" data-title="for...of and forEach">
+        <script type="text/plain">
+          const friends = ["Lina", "Omar", "Maya"];
+
+          for (const friend of friends) {
+            console.log(`Hi ${friend}! 👋`);
+          }
+
+          friends.forEach((friend, index) => {
+            console.log(`${index + 1}. ${friend}`);
+          });
+        </script>
+      </div>
+      <p><code>forEach</code> runs a little function for every item. The <code>(friend, index) =&gt; { ... }</code> part is an <strong>arrow function</strong>: a quick way to write a function. You'll learn all about them in lesson 9.</p>
+    </section>
+
+    <section>
+      <h2>map, filter and reduce</h2>
+      <p>These three are the superstars of arrays. Each one takes a small function and uses it on every item:</p>
+
+      <div class="flow" role="img" aria-label="The array 1, 2, 3, 4. map times 2 gives 2, 4, 6, 8. filter keeps numbers over 4: 6, 8. reduce adds them up: 14.">
+        <div class="fbox">[1, 2, 3, 4]</div>
+        <div class="arrow"></div>
+        <div class="fbox fq">.map(n =&gt; n * 2) &nbsp; change every item</div>
+        <div class="arrow"></div>
+        <div class="fbox">[2, 4, 6, 8]</div>
+        <div class="arrow"></div>
+        <div class="fbox fq">.filter(n =&gt; n &gt; 4) &nbsp; keep only some</div>
+        <div class="arrow"></div>
+        <div class="fbox">[6, 8]</div>
+        <div class="arrow"></div>
+        <div class="fbox fq">.reduce((sum, n) =&gt; sum + n, 0) &nbsp; combine into one</div>
+        <div class="arrow"></div>
+        <div class="fbox">14</div>
+      </div>
+
+      <div class="runnable" data-lang="typescript" data-title="The three superstars">
+        <script type="text/plain">
+          const scores: number[] = [72, 95, 88, 64, 91];
+
+          const doubled = scores.map(s => s * 2);
+          const good = scores.filter(s => s >= 85);
+          const total = scores.reduce((sum, s) => sum + s, 0);
+
+          console.log("doubled:", doubled);
+          console.log("85 or more:", good);
+          console.log("total:", total, "average:", total / scores.length);
+          console.log("best:", Math.max(...scores));
+
+          const names = ["lina", "omar"].map(n => n.toUpperCase());
+          console.log(names);
+        </script>
+      </div>
+      <p><code>Math.max(...scores)</code> uses the <strong>spread</strong> <code>...</code> to pass every item to <code>Math.max</code> at once.</p>
+    </section>
+
+    <section>
+      <h2>Sorting (with a trap)</h2>
+      <div class="runnable" data-lang="typescript" data-title="Sorting numbers correctly">
+        <script type="text/plain">
+          const words = ["pear", "apple", "fig"];
+          console.log([...words].sort());
+
+          const nums = [10, 9, 1, 100];
+          console.log([...nums].sort());                  // surprise!
+          console.log([...nums].sort((a, b) => a - b));   // smallest first
+          console.log([...nums].sort((a, b) => b - a));   // biggest first
+        </script>
+      </div>
+      <p>By default, <code>sort()</code> sorts everything <em>as text</em>, so "100" comes before "9" (like in a dictionary). For numbers, give it a compare function: <code>(a, b) =&gt; a - b</code>. Also, <code>sort()</code> changes the original array, so <code>[...nums]</code> makes a copy first.</p>
+    </section>
+
+    <section>
+      <h2>Draw an array</h2>
+      <div class="code-explorer" data-lang="typescript" data-title="A bar chart from an array">
+        <input type="range" name="a" data-label="Mon" min="0" max="20" value="8">
+        <input type="range" name="b" data-label="Tue" min="0" max="20" value="14">
+        <input type="range" name="c" data-label="Wed" min="0" max="20" value="5">
+        <input type="range" name="d" data-label="Thu" min="0" max="20" value="17">
+        <input type="range" name="e" data-label="Fri" min="0" max="20" value="11">
+        <script type="text/plain">
+          const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+          const steps: number[] = [{{a}}, {{b}}, {{c}}, {{d}}, {{e}}];
+
+          steps.forEach((n, i) => {
+            console.log(`${days[i]} ${"█".repeat(n)} ${n}k`);
+          });
+
+          const best = Math.max(...steps);
+          console.log(`Best day: ${days[steps.indexOf(best)]} with ${best}k steps`);
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Make an array of 5 movies and log them numbered.</li>
+          <li>Use <code>filter</code> to keep only the even numbers from <code>[1, 2, 3, 4, 5, 6, 7, 8]</code>.</li>
+          <li>Use <code>map</code> to turn <code>["a", "b", "c"]</code> into <code>["A!", "B!", "C!"]</code>.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="typescript" data-title="Your arrays">
+        <script type="text/plain">
+          const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
+          const evens = numbers.filter(n => n % 2 === 0);
+          console.log(evens);
+        </script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Off by one</strong>: the last item is <code>a[a.length - 1]</code>, not <code>a[a.length]</code> (that's <code>undefined</code>).</li>
+          <li><strong>Sorting numbers without a compare function.</strong></li>
+          <li><strong>Forgetting that map and filter make a new array</strong>: store the result, like <code>const big = nums.filter(...)</code>.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">What does [1, 2, 3].map(n =&gt; n + 10) give?</p>
+        <div class="opts">
+          <button>[1, 2, 3, 10]</button>
+          <button data-correct>[11, 12, 13]</button>
+          <button>36</button>
+        </div>
+        <p class="why"><code>map</code> uses the function on every item and makes a new array of the results.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>const a: number[] = [1, 2, 3];</code>. <code>a[0]</code>, <code>a.at(-1)</code>, <code>a.length</code>.</li>
+          <li><code>push</code>/<code>pop</code> at the end, <code>unshift</code>/<code>shift</code> at the start.</li>
+          <li><code>map</code> changes every item, <code>filter</code> keeps some, <code>reduce</code> combines into one.</li>
+          <li>Sort numbers with <code>.sort((a, b) =&gt; a - b)</code>.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/typescript.min.js"></script>
+<script src="../../assets/vendor/typescript-libs.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

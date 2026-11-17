@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Real Projects · Hello TypeScript</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="15-real-projects">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 15 &middot; <b>The web &amp; beyond</b></p>
+      <div class="hero-code" aria-hidden="true">npm</div>
+      <h1>Real Projects</h1>
+      <p class="lead">In this course, TypeScript runs inside little code boxes. Real apps are bigger: many files, ready-made packages, and tools that compile and bundle everything. This lesson shows you how real TypeScript projects are organized, so you can start your own on a computer.</p>
+      <ul class="learn">
+        <li>Modules: import and export</li>
+        <li>Saving data with JSON</li>
+        <li>npm and packages</li>
+        <li>tsconfig.json</li>
+        <li>Starting a project with Vite</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Modules: split code into files</h2>
+      <p>Big programs are split into many files called <strong>modules</strong>. A module <code class="k-tag">export</code>s the things other files may use, and other files <code class="k-tag">import</code> them:</p>
+      <script type="text/plain" class="snippet" data-lang="typescript">
+        // math.ts
+        export function add(a: number, b: number): number {
+          return a + b;
+        }
+        export const PI = 3.14159;
+
+        // main.ts (in the same folder)
+        import { add, PI } from "./math";
+
+        console.log(add(2, 3));
+        console.log(PI);
+      </script>
+      <p>The types travel with the imports: in <code>main.ts</code>, TypeScript knows <code>add</code> needs two numbers. A typical project folder looks like this:</p>
+<pre class="tree"><span class="dir">my-app/</span>
+├── <span class="html">index.html</span>
+├── <span class="c">package.json</span>      <span class="c">← the project's name and the packages it uses</span>
+├── <span class="c">tsconfig.json</span>     <span class="c">← TypeScript settings</span>
+├── <span class="dir">node_modules/</span>     <span class="c">← downloaded packages (never edit these)</span>
+└── <span class="dir">src/</span>
+    ├── <span class="css">main.ts</span>
+    ├── <span class="css">tasks.ts</span>
+    └── <span class="css">style.css</span></pre>
+    </section>
+
+    <section>
+      <h2>Saving data with JSON</h2>
+      <p><strong>JSON</strong> is a way of writing data as text, so it can be saved or sent over the internet. <code>JSON.stringify</code> turns an object into text. <code>JSON.parse</code> turns the text back into an object:</p>
+      <div class="runnable" data-lang="typescript" data-title="Objects to text and back">
+        <script type="text/plain">
+          interface Settings {
+            theme: "light" | "dark";
+            volume: number;
+            username: string;
+          }
+
+          const mine: Settings = { theme: "dark", volume: 7, username: "zara" };
+
+          const text = JSON.stringify(mine);
+          console.log(text);
+          console.log(typeof text);
+
+          const back = JSON.parse(text) as Settings;
+          console.log(back.username, back.volume);
+        </script>
+      </div>
+      <p><code>as Settings</code> tells TypeScript what shape the parsed data has (TypeScript can't know what's inside a piece of text). In a web page, you can save JSON in the browser with <code>localStorage</code>, so it's still there next time:</p>
+
+      <div class="runnable" data-lang="typescript" data-title="A note that remembers" data-height="240">
+        <script type="text/plain" data-name="main.ts">
+          const box = document.querySelector<HTMLTextAreaElement>("#note")!;
+          const saved = document.querySelector<HTMLParagraphElement>("#saved")!;
+
+          // load what was saved last time (localStorage can be blocked, so be careful)
+          try {
+            box.value = localStorage.getItem("my-note") ?? "";
+          } catch {
+            saved.textContent = "Saving is switched off in this browser.";
+          }
+
+          box.addEventListener("input", () => {
+            try {
+              localStorage.setItem("my-note", box.value);
+              saved.textContent = `Saved ✓ (${box.value.length} characters)`;
+            } catch {
+              saved.textContent = "Couldn't save here.";
+            }
+          });
+        </script>
+        <script type="text/plain" data-name="index.html">
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>
+              body { font-family: system-ui, sans-serif; padding: 18px; background: #FFFBEF; }
+              textarea { width: 100%; height: 110px; font-size: 16px; padding: 12px; border-radius: 14px; border: 2px solid #F3E3B5; box-sizing: border-box; }
+              #saved { color: #9A6400; font-size: 14px; }
+            </style>
+          </head>
+          <body>
+            <h3>📝 My note</h3>
+            <textarea id="note" placeholder="Type something, then press Run again..."></textarea>
+            <p id="saved"></p>
+          </body>
+          </html>
+        </script>
+      </div>
+      <p>Type a note, then press <strong>Run</strong> to restart the page. The note comes back, because it was saved in the browser.</p>
+    </section>
+
+    <section>
+      <h2>npm: millions of free packages</h2>
+      <p><strong>npm</strong> (Node Package Manager) is a giant library of free code that other programmers share: date pickers, charts, games engines, animation tools. It comes with <strong>Node.js</strong>. In a terminal, inside your project folder:</p>
+      <script type="text/plain" class="snippet" data-lang="typescript">
+        npm install canvas-confetti          // download a package
+        npm install -D typescript            // TypeScript itself, for this project
+      </script>
+      <p>Then you import the package in your code like any module. Most popular packages come with types, so TypeScript knows exactly how to use them.</p>
+    </section>
+
+    <section>
+      <h2>tsconfig.json: TypeScript's settings</h2>
+      <p>Every TypeScript project has a <code>tsconfig.json</code> file with settings for the compiler. The most important one is <code>"strict": true</code>, which turns on all the safety checks. (This course uses strict mode too.)</p>
+      <script type="text/plain" class="snippet" data-lang="typescript">
+        {
+          "compilerOptions": {
+            "target": "ES2022",
+            "module": "ESNext",
+            "strict": true
+          },
+          "include": ["src"]
+        }
+      </script>
+      <p>Then <code>npx tsc</code> checks every file and turns them into JavaScript. When there's a type error, the terminal shows the file, line and message, just like the boxes in this course.</p>
+    </section>
+
+    <section>
+      <h2>Start a real project with Vite</h2>
+      <p><strong>Vite</strong> is a popular free tool that sets up a TypeScript web project for you and shows your page live in the browser, updating as you save. On a computer with Node.js installed:</p>
+      <ol class="steps">
+        <li><div><p>Open a terminal and type <code>npm create vite@latest my-app</code>. Choose <strong>Vanilla</strong>, then <strong>TypeScript</strong>.</p></div></li>
+        <li><div><p>Go into the folder and install: <code>cd my-app</code> then <code>npm install</code>.</p></div></li>
+        <li><div><p>Start it: <code>npm run dev</code>. Open the address it shows (like <code>http://localhost:5173</code>).</p></div></li>
+        <li><div><p>Edit <code>src/main.ts</code> in VS Code and save. The browser updates instantly.</p></div></li>
+        <li><div><p>When it's finished, <code>npm run build</code> makes a <code>dist</code> folder you can put online with Netlify or GitHub Pages (see HTML lesson 13).</p></div></li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>What comes after this?</h2>
+      <div class="trio">
+        <div><div class="big" style="color: var(--c-prop)">React</div><p>The most popular way to build big web apps. You write components in <code>.tsx</code> files: TypeScript with HTML mixed in.</p></div>
+        <div><div class="big" style="color: var(--c-val)">Node</div><p>TypeScript also runs on servers with Node.js: build your own APIs, bots and tools.</p></div>
+        <div><div class="big" style="color: var(--c-tag)">games</div><p>Libraries like Phaser make 2D browser games with TypeScript.</p></div>
+      </div>
+
+      <div class="quiz">
+        <p class="q">Which file holds TypeScript's settings, like strict mode?</p>
+        <div class="opts">
+          <button>package.json</button>
+          <button data-correct>tsconfig.json</button>
+          <button>index.html</button>
+        </div>
+        <p class="why"><code>tsconfig.json</code> is for TypeScript. <code>package.json</code> lists the project's packages and scripts.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>export</code> things from a file, <code>import { x } from "./file"</code> in another.</li>
+          <li><code>JSON.stringify</code> / <code>JSON.parse</code> to save and load data. <code>localStorage</code> keeps it in the browser.</li>
+          <li><code>npm install</code> gets packages. <code>tsconfig.json</code> sets <code>"strict": true</code>.</li>
+          <li><code>npm create vite@latest</code> starts a real project.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/typescript.min.js"></script>
+<script src="../../assets/vendor/typescript-libs.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

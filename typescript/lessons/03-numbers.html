@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Numbers &amp; Math · Hello TypeScript</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="03-numbers">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 03 &middot; <b>First steps</b></p>
+      <div class="hero-code" aria-hidden="true">2 + 2</div>
+      <h1>Numbers &amp; Math</h1>
+      <p class="lead">Scores, prices, positions in a game, the time on a clock: programs are full of numbers. TypeScript does math instantly, and its types make sure you only do math with real numbers.</p>
+      <ul class="learn">
+        <li>Math operators</li>
+        <li>Remainders and powers</li>
+        <li>++ and +=</li>
+        <li>The Math toolbox</li>
+        <li>Turning text into numbers</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>The math operators</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Operator</th><th>Does</th><th>Example</th><th>Answer</th></tr></thead>
+          <tbody>
+            <tr><td><code>+</code></td><td>add</td><td><code>7 + 2</code></td><td>9</td></tr>
+            <tr><td><code>-</code></td><td>subtract</td><td><code>7 - 2</code></td><td>5</td></tr>
+            <tr><td><code>*</code></td><td>multiply</td><td><code>7 * 2</code></td><td>14</td></tr>
+            <tr><td><code>/</code></td><td>divide</td><td><code>7 / 2</code></td><td>3.5</td></tr>
+            <tr><td><code>%</code></td><td>remainder (left over)</td><td><code>7 % 2</code></td><td>1</td></tr>
+            <tr><td><code>**</code></td><td>power</td><td><code>7 ** 2</code></td><td>49</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="code-explorer" data-lang="typescript" data-title="Try every operator">
+        <input type="range" name="a" data-label="a" min="0" max="50" value="17">
+        <input type="range" name="b" data-label="b" min="1" max="12" value="5">
+        <script type="text/plain">
+          const a: number = {{a}};
+          const b: number = {{b}};
+
+          console.log(`${a} + ${b} =`, a + b);
+          console.log(`${a} - ${b} =`, a - b);
+          console.log(`${a} * ${b} =`, a * b);
+          console.log(`${a} / ${b} =`, a / b);
+          console.log(`${a} % ${b} =`, a % b);
+          console.log(`${a} ** ${b} =`, a ** b);
+          console.log(`whole part of ${a} / ${b} =`, Math.floor(a / b));
+        </script>
+      </div>
+
+      <p>The remainder <code>%</code> is surprisingly handy: <code>n % 2</code> is <code>0</code> for even numbers and <code>1</code> for odd ones. For "how many whole times does it fit", use <code>Math.floor(a / b)</code>.</p>
+      <p>Math follows the usual order: brackets first, then <code>**</code>, then <code>*</code> <code>/</code> <code>%</code>, then <code>+</code> <code>-</code>. So <code>2 + 3 * 4</code> is 14, and <code>(2 + 3) * 4</code> is 20.</p>
+    </section>
+
+    <section>
+      <h2>Changing a number: += and ++</h2>
+      <div class="runnable" data-lang="typescript" data-title="Shortcuts">
+        <script type="text/plain">
+          let coins = 10;
+
+          coins += 5;      // same as coins = coins + 5
+          console.log(coins);
+
+          coins -= 3;      // same as coins = coins - 3
+          coins *= 2;      // same as coins = coins * 2
+          console.log(coins);
+
+          coins++;         // add 1
+          console.log(coins);
+          coins--;         // take 1 away
+          console.log(coins);
+        </script>
+      </div>
+      <p><code>++</code> and <code>--</code> are used constantly in loops, as you'll see in lesson 6.</p>
+    </section>
+
+    <section>
+      <h2>The Math toolbox</h2>
+      <p>TypeScript has a built-in object called <code>Math</code> full of useful functions:</p>
+      <div class="runnable" data-lang="typescript" data-title="Math functions">
+        <script type="text/plain">
+          console.log(Math.round(4.6));       // nearest whole number: 5
+          console.log(Math.floor(4.6));       // round down: 4
+          console.log(Math.ceil(4.2));        // round up: 5
+          console.log(Math.max(3, 9, 4));     // biggest: 9
+          console.log(Math.min(3, 9, 4));     // smallest: 3
+          console.log(Math.abs(-7));          // remove the minus: 7
+          console.log(Math.sqrt(81));         // square root: 9
+          console.log(Math.PI);               // 3.14159...
+
+          const price = 4.5;
+          console.log(price.toFixed(2));      // "4.50": always 2 decimals
+        </script>
+      </div>
+
+      <h3>Random numbers</h3>
+      <p><code>Math.random()</code> gives a random decimal from 0 up to (but not including) 1. To get a dice roll from 1 to 6, there's a famous recipe:</p>
+      <div class="runnable" data-lang="typescript" data-title="Roll a dice (run it a few times)">
+        <script type="text/plain">
+          const roll = Math.floor(Math.random() * 6) + 1;
+          console.log("🎲 You rolled", roll);
+        </script>
+      </div>
+      <p><code>Math.random() * 6</code> gives a number from 0 to 5.99. <code>Math.floor</code> chops it to 0–5. <code>+ 1</code> makes it 1–6.</p>
+    </section>
+
+    <section>
+      <h2>Text that looks like a number</h2>
+      <p>When people type into a web page, you always get <strong>text</strong>, even if they type <code>42</code>. TypeScript makes sure you convert it before doing math:</p>
+      <div class="runnable" data-lang="typescript" data-title="Convert text to numbers">
+        <script type="text/plain">
+          const typed: string = "42";
+
+          const n = Number(typed);      // turn text into a number
+          console.log(n + 1);
+
+          console.log(typed * 2);       // TypeScript: you can't do math with text!
+          console.log(typed + 1);       // allowed, but it joins text: "421"
+
+          console.log(Number("hello")); // NaN: "Not a Number"
+        </script>
+      </div>
+      <p>Two things to notice. TypeScript flags <code>typed * 2</code>, because multiplying text makes no sense. But <code>typed + 1</code> is allowed, because <code>+</code> also <em>joins</em> text: the result is <code>"421"</code>, which is probably a bug! When something can't be converted, you get <code>NaN</code>, a special number meaning "Not a Number".</p>
+
+      <aside class="note idea">
+        <h4>A tiny surprise</h4>
+        <p><code>0.1 + 0.2</code> gives <code>0.30000000000000004</code>. Computers can't store some decimals exactly. It happens in every language. Use <code>.toFixed(2)</code> when you show money to people.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Build it: split the bill</h2>
+      <div class="code-explorer" data-lang="typescript" data-title="Bill splitter">
+        <input type="range" name="bill" data-label="bill" min="10" max="200" value="60">
+        <input type="range" name="tip" data-label="tip %" min="0" max="25" value="10">
+        <input type="range" name="people" data-label="people" min="1" max="10" value="4">
+        <script type="text/plain">
+          const bill = {{bill}};
+          const tipPercent = {{tip}};
+          const people = {{people}};
+
+          const tip = bill * tipPercent / 100;
+          const total = bill + tip;
+          const each = total / people;
+
+          console.log(`Tip:   $${tip.toFixed(2)}`);
+          console.log(`Total: $${total.toFixed(2)}`);
+          console.log(`Each of ${people} pays $${each.toFixed(2)}`);
+        </script>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Work out how many seconds are in a year.</li>
+          <li>Convert 25 °C to Fahrenheit: <code>c * 9 / 5 + 32</code>.</li>
+          <li>Make a random number from 1 to 100.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="typescript" data-title="Your calculator">
+        <script type="text/plain">
+          const secondsInAYear = 60 * 60 * 24 * 365;
+          console.log(secondsInAYear);
+        </script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Joining instead of adding</strong>: <code>"5" + 3</code> is <code>"53"</code>. Convert with <code>Number()</code> first.</li>
+          <li><strong>Forgetting <code>Math.</code></strong>: it's <code>Math.round(x)</code>, not <code>round(x)</code>.</li>
+          <li><strong>toFixed gives text</strong>: <code>(4.5).toFixed(2)</code> is the string <code>"4.50"</code>. Do your math first, then use <code>toFixed</code> to show it.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">What is 17 % 5?</p>
+        <div class="opts">
+          <button>3</button>
+          <button data-correct>2</button>
+          <button>3.4</button>
+        </div>
+        <p class="why">5 fits into 17 three times (15), with 2 left over.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>+ - * / % **</code>. Brackets first.</li>
+          <li><code>x += 5</code>, <code>x++</code>, <code>x--</code> change a number.</li>
+          <li><code>Math.round floor ceil max min abs sqrt random</code>. <code>x.toFixed(2)</code> for display.</li>
+          <li><code>Number("42")</code> turns text into a number. <code>NaN</code> means it couldn't.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/typescript.min.js"></script>
+<script src="../../assets/vendor/typescript-libs.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

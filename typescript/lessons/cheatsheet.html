@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cheat Sheet · Hello TypeScript</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="cheatsheet" data-group="build">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Reference</p>
+      <div class="hero-code" aria-hidden="true">ts</div>
+      <h1>TypeScript Cheat Sheet</h1>
+      <p class="lead">Everything from the course on one page. Type in the box to find what you need.</p>
+      <label for="cheat-filter" class="eyebrow" style="margin-top: 8px">Search</label>
+      <input id="cheat-filter" class="cheat-search" type="search" placeholder="Try: array, click, loop, null, async..." autocomplete="off">
+    </header>
+
+    <section class="cheat">
+      <h2>Basics</h2>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>console.log(x)</code></td><td>Show something in the console</td><td><code>console.log("Hi", name);</code></td></tr>
+        <tr><td><code>// comment</code> <code>/* … */</code></td><td>Notes the computer ignores</td><td><code>// explain this</code></td></tr>
+        <tr><td><code>let x: type = value;</code></td><td>A variable that can change</td><td><code>let score: number = 0;</code></td></tr>
+        <tr><td><code>const x = value;</code></td><td>A variable that can't change (type inferred)</td><td><code>const name = "Sam";</code></td></tr>
+        <tr><td><code>string number boolean</code></td><td>The basic types</td><td><code>let ok: boolean = true;</code></td></tr>
+        <tr><td><code>typeof x</code></td><td>The type while running</td><td><code>typeof 5</code> → "number"</td></tr>
+        <tr><td><code>Number("42")</code> / <code>String(42)</code></td><td>Convert text ↔ number</td><td><code>Number(input.value)</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Numbers and text</h2>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>+ - * / % **</code></td><td>Math, remainder, power</td><td><code>17 % 5</code> → 2</td></tr>
+        <tr><td><code>x += 1</code> / <code>x++</code></td><td>Change a number</td><td><code>lives--</code></td></tr>
+        <tr><td><code>Math.round floor ceil</code></td><td>Rounding</td><td><code>Math.floor(4.7)</code> → 4</td></tr>
+        <tr><td><code>Math.max min abs sqrt</code></td><td>Biggest, smallest, distance from 0, root</td><td><code>Math.max(...nums)</code></td></tr>
+        <tr><td><code>Math.floor(Math.random() * 6) + 1</code></td><td>A dice roll from 1 to 6</td><td></td></tr>
+        <tr><td><code>x.toFixed(2)</code></td><td>Show with 2 decimals (gives text)</td><td><code>price.toFixed(2)</code></td></tr>
+        <tr><td><code>`Hi ${name}`</code></td><td>Template string: values inside text</td><td><code>`${a} + ${b}`</code></td></tr>
+        <tr><td><code>s.length s[0] s.at(-1)</code></td><td>Length, first, last character</td><td><code>"cat".length</code></td></tr>
+        <tr><td><code>s.slice(a, b)</code></td><td>A piece of text</td><td><code>"hello".slice(1, 3)</code></td></tr>
+        <tr><td><code>toUpperCase toLowerCase trim</code></td><td>Change capitals, remove spaces</td><td><code>input.value.trim()</code></td></tr>
+        <tr><td><code>includes startsWith indexOf</code></td><td>Search in text</td><td><code>s.includes("a")</code></td></tr>
+        <tr><td><code>replace replaceAll split repeat</code></td><td>Swap, break into array, repeat</td><td><code>"a,b".split(",")</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Decisions and loops</h2>
+      <script type="text/plain" class="snippet" data-lang="typescript">
+        if (score >= 90) {
+          console.log("A");
+        } else if (score >= 70) {
+          console.log("B");
+        } else {
+          console.log("Keep going");
+        }
+
+        for (let i = 0; i < 5; i++) { }
+        for (const item of items) { }
+        while (lives > 0) { }
+      </script>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>=== !==</code></td><td>Equal, not equal (always use 3 signs)</td><td><code>if (a === b)</code></td></tr>
+        <tr><td><code>&lt; &gt; &lt;= &gt;=</code></td><td>Compare numbers</td><td><code>if (age &gt;= 13)</code></td></tr>
+        <tr><td><code>&amp;&amp; || !</code></td><td>And, or, not</td><td><code>if (a &amp;&amp; !b)</code></td></tr>
+        <tr><td><code>q ? a : b</code></td><td>Pick one of two values</td><td><code>n === 1 ? "life" : "lives"</code></td></tr>
+        <tr><td><code>switch (x) { case …: break; default: }</code></td><td>Many options for one value</td><td><code>case "Monday":</code></td></tr>
+        <tr><td><code>break</code> / <code>continue</code></td><td>Leave the loop / skip to the next round</td><td><code>if (found) break;</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Arrays, objects and collections</h2>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>const a: number[] = [1, 2];</code></td><td>An array</td><td><code>a[0]</code>, <code>a.length</code></td></tr>
+        <tr><td><code>push pop unshift shift</code></td><td>Add/remove at the end/start</td><td><code>a.push(3)</code></td></tr>
+        <tr><td><code>includes indexOf splice</code></td><td>Search, find position, remove</td><td><code>a.splice(i, 1)</code></td></tr>
+        <tr><td><code>a.map(x =&gt; …)</code></td><td>Change every item (new array)</td><td><code>a.map(n =&gt; n * 2)</code></td></tr>
+        <tr><td><code>a.filter(x =&gt; …)</code></td><td>Keep some items</td><td><code>a.filter(n =&gt; n &gt; 0)</code></td></tr>
+        <tr><td><code>a.find(x =&gt; …)</code></td><td>First matching item</td><td><code>tasks.find(t =&gt; t.id === 3)</code></td></tr>
+        <tr><td><code>a.reduce((acc, x) =&gt; …, start)</code></td><td>Combine into one value</td><td><code>a.reduce((s, n) =&gt; s + n, 0)</code></td></tr>
+        <tr><td><code>a.sort((x, y) =&gt; x - y)</code></td><td>Sort numbers smallest first</td><td><code>[...a].sort(...)</code></td></tr>
+        <tr><td><code>[...a, ...b]</code> / <code>{ ...o }</code></td><td>Copy and combine</td><td><code>{ ...hero, level: 4 }</code></td></tr>
+        <tr><td><code>interface Name { p: type; q?: type }</code></td><td>The shape of an object (q optional)</td><td><code>const u: User = {…}</code></td></tr>
+        <tr><td><code>readonly p</code></td><td>Can't change after it's set</td><td><code>readonly id: number</code></td></tr>
+        <tr><td><code>const { a, b } = obj;</code></td><td>Take properties out</td><td><code>const { name } = user;</code></td></tr>
+        <tr><td><code>new Map&lt;K, V&gt;()</code></td><td>Key → value: set, get, has, size</td><td><code>prices.get("apple")</code></td></tr>
+        <tr><td><code>new Set&lt;T&gt;()</code></td><td>Unique values: add, has, size</td><td><code>[...new Set(a)]</code></td></tr>
+        <tr><td><code>JSON.stringify / JSON.parse</code></td><td>Object ↔ text</td><td><code>JSON.parse(text) as Task[]</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Functions, types and classes</h2>
+      <script type="text/plain" class="snippet" data-lang="typescript">
+        function area(w: number, h: number): number {
+          return w * h;
+        }
+        const double = (n: number): number => n * 2;
+
+        type Size = "small" | "medium" | "large";
+
+        class Player {
+          private score = 0;
+          constructor(public name: string) {}
+          win(points: number): void { this.score += points; }
+        }
+        const p = new Player("Zara");
+      </script>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>(p: type): returnType</code></td><td>Typed parameters and result</td><td><code>(name: string): string</code></td></tr>
+        <tr><td><code>void</code></td><td>Returns nothing</td><td><code>function log(): void</code></td></tr>
+        <tr><td><code>p?: type</code> / <code>p = value</code></td><td>Optional / default parameter</td><td><code>(size = "large")</code></td></tr>
+        <tr><td><code>A | B</code></td><td>Union: A or B</td><td><code>string | number</code></td></tr>
+        <tr><td><code>type T = …</code></td><td>Name a type</td><td><code>type Id = string | number;</code></td></tr>
+        <tr><td><code>x?.y</code> / <code>x ?? backup</code></td><td>Safe access / default for null or undefined</td><td><code>user?.name ?? "guest"</code></td></tr>
+        <tr><td><code>function f&lt;T&gt;(x: T): T</code></td><td>Generic: works for any type</td><td><code>first&lt;T&gt;(items: T[])</code></td></tr>
+        <tr><td><code>Record&lt;K, V&gt;</code></td><td>Object with known keys and values</td><td><code>Record&lt;string, number&gt;</code></td></tr>
+        <tr><td><code>class</code>, <code>new</code>, <code>this</code></td><td>Blueprint, make one, current object</td><td><code>new Dog("Rex")</code></td></tr>
+        <tr><td><code>private readonly get</code></td><td>Hidden, unchangeable, computed property</td><td><code>get balance()</code></td></tr>
+        <tr><td><code>extends</code> + <code>super()</code></td><td>A class based on another</td><td><code>class Cat extends Animal</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Web pages (DOM)</h2>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>document.querySelector&lt;T&gt;("sel")!</code></td><td>Find an element</td><td><code>querySelector&lt;HTMLButtonElement&gt;("#go")!</code></td></tr>
+        <tr><td><code>querySelectorAll&lt;T&gt;("sel")</code></td><td>Find all matching elements</td><td><code>.forEach(b =&gt; …)</code></td></tr>
+        <tr><td><code>el.textContent</code></td><td>Read or change the text</td><td><code>title.textContent = "Hi";</code></td></tr>
+        <tr><td><code>el.style.prop</code></td><td>Change CSS (camelCase)</td><td><code>el.style.backgroundColor = "pink";</code></td></tr>
+        <tr><td><code>el.classList.add remove toggle</code></td><td>Change CSS classes</td><td><code>btn.classList.toggle("on")</code></td></tr>
+        <tr><td><code>input.value</code></td><td>What's typed in a box (a string)</td><td><code>input.value.trim()</code></td></tr>
+        <tr><td><code>el.addEventListener("click", fn)</code></td><td>React to events: click, input, submit, keydown</td><td><code>() =&gt; { … }</code></td></tr>
+        <tr><td><code>event.preventDefault()</code></td><td>Stop a form from reloading the page</td><td><code>form.addEventListener("submit", …)</code></td></tr>
+        <tr><td><code>document.createElement("li")</code></td><td>Make a new element</td><td><code>list.append(li)</code></td></tr>
+        <tr><td><code>localStorage.setItem / getItem</code></td><td>Save text in the browser</td><td><code>localStorage.getItem("key")</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Async and projects</h2>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>setTimeout(fn, ms)</code></td><td>Run once, later (1000 ms = 1 s)</td><td><code>setTimeout(() =&gt; …, 2000)</code></td></tr>
+        <tr><td><code>setInterval(fn, ms)</code> / <code>clearInterval(id)</code></td><td>Repeat / stop repeating</td><td><code>const id = setInterval(tick, 100)</code></td></tr>
+        <tr><td><code>Promise&lt;T&gt;</code></td><td>A value that will be ready later</td><td><code>(): Promise&lt;User[]&gt;</code></td></tr>
+        <tr><td><code>async</code> / <code>await</code></td><td>Wait for a promise without freezing</td><td><code>const data = await load();</code></td></tr>
+        <tr><td><code>try { } catch { }</code></td><td>Handle things that can fail</td><td><code>try { await fetch(url) } catch …</code></td></tr>
+        <tr><td><code>export</code> / <code>import { x } from "./file"</code></td><td>Share code between files</td><td><code>export function add()</code></td></tr>
+        <tr><td><code>npm install name</code></td><td>Download a package</td><td><code>npm install canvas-confetti</code></td></tr>
+        <tr><td><code>npm create vite@latest</code></td><td>Start a TypeScript web project</td><td><code>npm run dev</code></td></tr>
+        <tr><td><code>"strict": true</code></td><td>All safety checks on (tsconfig.json)</td><td></td></tr>
+      </tbody></table></div>
+    </section>
+
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/typescript.min.js"></script>
+<script src="../../assets/vendor/typescript-libs.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loops · Hello TypeScript</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="06-loops">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 06 &middot; <b>Decisions &amp; loops</b></p>
+      <div class="hero-code" aria-hidden="true">for</div>
+      <h1>Loops</h1>
+      <p class="lead">A <strong>loop</strong> repeats code. Instead of writing the same line 100 times, you write it once and tell the computer how many times to repeat it. Loops count, search, draw patterns and go through lists.</p>
+      <ul class="learn">
+        <li>The for loop</li>
+        <li>while loops</li>
+        <li>for...of</li>
+        <li>break and continue</li>
+        <li>Loops inside loops</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>The for loop</h2>
+      <p>The classic loop has three parts in its brackets, separated by semicolons:</p>
+      <div class="anatomy" role="img" aria-label="for, open bracket, let i equals 0 the start, i less than 5 keep going while true, i plus plus after each round, close bracket">
+        <div class="part tag"><span>for (</span><small></small></div>
+        <div class="part text"><span>let i = 0;</span><small>1. start:<br>i begins at 0</small></div>
+        <div class="part val"><span> i &lt; 5;</span><small>2. keep going<br>while this is true</small></div>
+        <div class="part prop"><span> i++</span><small>3. after each round,<br>add 1 to i</small></div>
+        <div class="part tag"><span>) { ... }</span><small>the code to repeat</small></div>
+      </div>
+
+      <div class="stepper" data-lang="typescript" data-title="Watch the loop go round">
+        <script type="text/plain">
+          for (let i = 0; i < 3; i++) {
+            console.log("Round", i);
+          }
+          console.log("Done!");
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "vars": {"i": "0"}, "note": "Start: <code>let i = 0</code>. Then check: is 0 &lt; 3? <b>true</b>, so run the block."},
+            {"line": 2, "vars": {"i": "0"}, "out": "Round 0\n", "note": "Log the round."},
+            {"line": 1, "vars": {"i": "1"}, "note": "End of the block: <code>i++</code> makes i 1. Is 1 &lt; 3? <b>true</b>."},
+            {"line": 2, "vars": {"i": "1"}, "out": "Round 1\n", "note": "Log again."},
+            {"line": 1, "vars": {"i": "2"}, "note": "<code>i++</code>: i is 2. Is 2 &lt; 3? <b>true</b>."},
+            {"line": 2, "vars": {"i": "2"}, "out": "Round 2\n", "note": "Log again."},
+            {"line": 1, "vars": {"i": "3"}, "note": "<code>i++</code>: i is 3. Is 3 &lt; 3? <b>false</b>. The loop ends."},
+            {"line": 4, "out": "Done!\n", "note": "The code after the loop runs once."}
+          ]
+        </script>
+      </div>
+
+      <div class="code-explorer" data-lang="typescript" data-title="Build a loop">
+        <input type="range" name="a" data-label="start" min="0" max="20" value="1">
+        <input type="range" name="b" data-label="stop before" min="0" max="40" value="11">
+        <input type="range" name="c" data-label="step" min="1" max="5" value="2">
+        <script type="text/plain">
+          let line = "";
+          for (let i = {{a}}; i < {{b}}; i += {{c}}) {
+            line += i + "  ";
+          }
+          console.log(line);
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Adding up with a loop</h2>
+      <div class="runnable" data-lang="typescript" data-title="1 + 2 + ... + 100">
+        <script type="text/plain">
+          let total = 0;
+          for (let n = 1; n <= 100; n++) {
+            total += n;
+          }
+          console.log("The total is", total);
+        </script>
+      </div>
+      <p>The pattern: make a variable <em>before</em> the loop, change it <em>inside</em> the loop, use it <em>after</em> the loop.</p>
+    </section>
+
+    <section>
+      <h2>while: repeat as long as it's true</h2>
+      <p>A <code class="k-tag">while</code> loop has only a question. It's best when you don't know how many rounds you'll need:</p>
+      <div class="runnable" data-lang="typescript" data-title="How many days to a million?">
+        <script type="text/plain">
+          let coins = 1;
+          let days = 0;
+
+          while (coins < 1_000_000) {
+            coins *= 2;     // double every day
+            days++;
+          }
+
+          console.log(`Doubling 1 coin a day: a millionaire in ${days} days (${coins} coins)`);
+        </script>
+      </div>
+
+      <h3>Loops that never end</h3>
+      <p>If the question never becomes false, the loop runs forever: an <strong>infinite loop</strong>. In a real browser, that freezes the page. This course has a safety net that stops a loop after 10 million rounds. Press Run to see it:</p>
+      <div class="runnable" data-lang="typescript" data-noauto data-title="An infinite loop (press Run)">
+        <script type="text/plain">
+          let n = 1;
+          while (n > 0) {
+            n++;      // n only gets bigger, so n > 0 is always true
+          }
+          console.log("Never reached");
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>for...of: go through each item</h2>
+      <p><code>for (const x of something)</code> gives you each item in turn. It works on strings (each character) and on arrays (lesson 7):</p>
+      <div class="runnable" data-lang="typescript" data-title="One letter at a time">
+        <script type="text/plain">
+          for (const letter of "HELLO") {
+            console.log(letter, "👋");
+          }
+
+          let vowels = 0;
+          for (const ch of "programming is fun") {
+            if ("aeiou".includes(ch)) {
+              vowels++;
+            }
+          }
+          console.log("Vowels:", vowels);
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>break and continue</h2>
+      <ul>
+        <li><code class="k-tag">break</code> leaves the loop right away.</li>
+        <li><code class="k-tag">continue</code> skips the rest of this round and starts the next one.</li>
+      </ul>
+      <div class="runnable" data-lang="typescript" data-title="Find the first multiple of 7">
+        <script type="text/plain">
+          for (let n = 50; n < 100; n++) {
+            if (n % 7 !== 0) {
+              continue;          // not a multiple: skip
+            }
+            console.log("Found it:", n);
+            break;               // stop looking
+          }
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Loops inside loops</h2>
+      <p>The inner loop runs completely each time the outer loop goes round once. Move the slider:</p>
+      <div class="code-explorer" data-lang="typescript" data-title="Pattern maker">
+        <input type="range" name="n" data-label="size" min="1" max="10" value="5">
+        <select name="ch" data-label="character">
+          <option>⭐</option><option>🌸</option><option>#</option><option>🍕</option>
+        </select>
+        <script type="text/plain">
+          const size = {{n}};
+
+          for (let row = 1; row <= size; row++) {
+            let line = "";
+            for (let col = 1; col <= row; col++) {
+              line += "{{ch}}";
+            }
+            console.log(line);
+          }
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Count down from 10 to 1, then log "Lift off! 🚀". (Hint: <code>i--</code>.)</li>
+          <li>Log the 7 times table: "7 x 1 = 7" up to "7 x 10 = 70".</li>
+          <li>Make the pattern upside down.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="typescript" data-title="Your loop">
+        <script type="text/plain">
+          for (let i = 10; i >= 1; i--) {
+            console.log(i);
+          }
+          console.log("Lift off! 🚀");
+        </script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Off by one</strong>: <code>i &lt; 10</code> stops at 9. Use <code>i &lt;= 10</code> to include 10.</li>
+          <li><strong>Commas instead of semicolons</strong> in <code>for ( ; ; )</code>.</li>
+          <li><strong>Never changing the variable</strong> in a while loop, so it never ends.</li>
+          <li><strong>Resetting inside the loop</strong>: <code>let total = 0</code> belongs before the loop.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">How many times does this run?  for (let i = 0; i &lt; 4; i++)</p>
+        <div class="opts">
+          <button>3</button>
+          <button data-correct>4</button>
+          <button>5</button>
+        </div>
+        <p class="why">i is 0, 1, 2, 3. When i reaches 4, <code>4 &lt; 4</code> is false and the loop ends.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>for (let i = 0; i &lt; n; i++) { }</code>: start, keep going while, after each round.</li>
+          <li><code>while (question) { }</code> when you don't know how many rounds.</li>
+          <li><code>for (const x of things) { }</code> for each item.</li>
+          <li><code>break</code> leaves, <code>continue</code> skips to the next round.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/typescript.min.js"></script>
+<script src="../../assets/vendor/typescript-libs.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

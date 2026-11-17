@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Making Decisions · Hello TypeScript</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="05-if">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 05 &middot; <b>Decisions &amp; loops</b></p>
+      <div class="hero-code" aria-hidden="true">if</div>
+      <h1>Making Decisions</h1>
+      <p class="lead">"If the password is right, let them in. Otherwise, show an error." Programs constantly choose what to do. In this lesson you'll learn <code>if</code>, <code>else</code>, <code>switch</code>, and why TypeScript uses three equals signs.</p>
+      <ul class="learn">
+        <li>Comparing values</li>
+        <li>if, else if, else</li>
+        <li>&amp;&amp;, || and !</li>
+        <li>The ? : shortcut</li>
+        <li>switch</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Questions with true or false answers</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Operator</th><th>Means</th><th>Example</th><th>Answer</th></tr></thead>
+          <tbody>
+            <tr><td><code>===</code></td><td>is equal to</td><td><code>5 === 5</code></td><td>true</td></tr>
+            <tr><td><code>!==</code></td><td>is not equal to</td><td><code>5 !== 3</code></td><td>true</td></tr>
+            <tr><td><code>&gt;</code> / <code>&lt;</code></td><td>greater / less than</td><td><code>5 &gt; 8</code></td><td>false</td></tr>
+            <tr><td><code>&gt;=</code> / <code>&lt;=</code></td><td>or equal</td><td><code>5 &gt;= 5</code></td><td>true</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="note oops">
+        <h4>Why three equals signs?</h4>
+        <p><code>=</code> stores a value. <code>===</code> compares two values. There's also an old <code>==</code> that tries to be clever: it says <code>5 == "5"</code> is true, even though one is a number and one is text. That cleverness causes bugs, so always use <code>===</code> and <code>!==</code>.</p>
+      </aside>
+
+      <div class="runnable" data-lang="typescript" data-title="Ask some questions">
+        <script type="text/plain">
+          const age: number = 12;
+          console.log(age > 10);
+          console.log(age === 13);
+          console.log(age !== 13);
+          const pet: string = "cat";
+          console.log(pet === "Cat");      // capitals matter
+
+          console.log(age === "12");       // TypeScript: these can never be equal!
+        </script>
+      </div>
+      <p>Look at the last line. A number can never be equal to a string, so TypeScript warns you. In plain JavaScript you'd just quietly get <code>false</code> and wonder why.</p>
+    </section>
+
+    <section>
+      <h2>if and else</h2>
+      <div class="anatomy" role="img" aria-label="if, a condition in round brackets, then a block in curly brackets that runs when it's true">
+        <div class="part tag"><span>if</span><small>keyword</small></div>
+        <div class="part text"><span> (temperature &gt; 25)</span><small>the question,<br>in round brackets</small></div>
+        <div class="part punc"><span> { ... }</span><small>runs only if true,<br>in curly brackets</small></div>
+      </div>
+
+      <div class="runnable" data-lang="typescript" data-title="Two paths">
+        <script type="text/plain">
+          const temperature = 30;
+
+          if (temperature > 25) {
+            console.log("Hot! Wear shorts 🩳");
+          } else {
+            console.log("Bring a jacket 🧥");
+          }
+
+          console.log("Have a nice day");
+        </script>
+      </div>
+      <p>The curly brackets <code>{ }</code> hold the lines that belong to the <code>if</code> (this is called a <strong>block</strong>). The lines inside are pushed in with spaces to make them easy to see, but here it's the brackets that matter, not the spaces.</p>
+    </section>
+
+    <section>
+      <h2>else if: more choices</h2>
+      <p>TypeScript checks each question from top to bottom and runs the <strong>first</strong> block that's true. Then it skips the rest:</p>
+
+      <div class="stepper" data-lang="typescript" data-title="Which grade?">
+        <script type="text/plain">
+          const score = 72;
+
+          if (score >= 90) {
+            console.log("A: amazing!");
+          } else if (score >= 70) {
+            console.log("B: great job!");
+          } else if (score >= 50) {
+            console.log("C: you passed");
+          } else {
+            console.log("Keep practicing");
+          }
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "vars": {"score": "72"}, "note": "Store 72 in <code>score</code>."},
+            {"line": 3, "vars": {"score": "72"}, "note": "Is 72 &gt;= 90? <b>false</b>. Skip this block."},
+            {"line": 5, "vars": {"score": "72"}, "note": "Is 72 &gt;= 70? <b>true!</b> Go into this block."},
+            {"line": 6, "vars": {"score": "72"}, "out": "B: great job!\n", "note": "Log the message."},
+            {"line": 11, "vars": {"score": "72"}, "note": "A block ran, so all the remaining <code>else if</code> and <code>else</code> parts are skipped."}
+          ]
+        </script>
+      </div>
+
+      <div class="code-explorer" data-lang="typescript" data-title="What should I wear?">
+        <input type="range" name="t" data-label="temperature" min="-10" max="40" value="22">
+        <input type="checkbox" name="rain" data-label="raining?" data-on="true" data-off="false">
+        <script type="text/plain">
+          const temperature: number = {{t}};
+          const raining: boolean = {{rain}};
+
+          if (temperature >= 30) {
+            console.log("🥵 Super hot: t-shirt and shorts");
+          } else if (temperature >= 18) {
+            console.log("😎 Warm: a t-shirt is fine");
+          } else if (temperature >= 5) {
+            console.log("🧥 Cool: take a jacket");
+          } else {
+            console.log("🥶 Cold: coat, hat and gloves");
+          }
+
+          if (raining) {
+            console.log("☔ And bring an umbrella!");
+          }
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>And, or, not</h2>
+      <ul>
+        <li><code>&amp;&amp;</code> means <strong>and</strong>: both must be true.</li>
+        <li><code>||</code> means <strong>or</strong>: at least one must be true.</li>
+        <li><code>!</code> means <strong>not</strong>: flips true and false.</li>
+      </ul>
+      <div class="runnable" data-lang="typescript" data-title="Combining questions">
+        <script type="text/plain">
+          const age: number = 14;
+          const hasTicket: boolean = true;
+          const day: string = "Saturday";
+
+          if (age >= 12 && hasTicket) {
+            console.log("🎢 You can ride!");
+          }
+          if (day === "Saturday" || day === "Sunday") {
+            console.log("🎉 It's the weekend!");
+          }
+          if (!hasTicket) {
+            console.log("Please buy a ticket");
+          }
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>The ? : shortcut</h2>
+      <p>For a quick either-or value, use <code>question ? valueIfTrue : valueIfFalse</code>. It's called the <strong>ternary operator</strong>:</p>
+      <div class="runnable" data-lang="typescript" data-title="Pick one of two values">
+        <script type="text/plain">
+          const lives: number = 1;
+          const message = lives === 1 ? "1 life left" : `${lives} lives left`;
+          console.log(message);
+
+          const n = 7;
+          console.log(`${n} is ${n % 2 === 0 ? "even" : "odd"}`);
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>switch: one value, many cases</h2>
+      <p>When you compare one value against many options, <code>switch</code> is tidier than a long chain of <code>else if</code>:</p>
+      <div class="code-explorer" data-lang="typescript" data-title="Day planner">
+        <select name="d" data-label="day">
+          <option>Monday</option><option>Tuesday</option><option selected>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option>
+        </select>
+        <script type="text/plain">
+          const day: string = "{{d}}";
+
+          switch (day) {
+            case "Monday":
+              console.log("📚 Back to school");
+              break;
+            case "Wednesday":
+              console.log("⚽ Football practice");
+              break;
+            case "Friday":
+              console.log("🍕 Pizza night!");
+              break;
+            case "Saturday":
+            case "Sunday":
+              console.log("🛋️ Weekend! Relax.");
+              break;
+            default:
+              console.log("📅 A normal day");
+          }
+        </script>
+      </div>
+      <p>Each <code>case</code> ends with <code>break</code>. Without it, the code would "fall through" and keep running the next case too. <code>default</code> runs when no case matches. Saturday and Sunday share one block by being written one after the other.</p>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Make a variable <code>n</code> and log whether it's positive, negative or zero.</li>
+          <li>Log "child" (under 13), "teen" (13 to 19) or "adult" for an <code>age</code> variable.</li>
+          <li>Add a Thursday case to the day planner.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="typescript" data-title="Your decisions">
+        <script type="text/plain">
+          const n: number = -4;
+          if (n > 0) {
+            console.log("positive");
+          }
+        </script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>One = instead of three</strong> inside the brackets: <code>if (x = 5)</code> stores 5! TypeScript usually warns you.</li>
+          <li><strong>Forgetting the round brackets</strong> around the question, or the curly brackets around the block.</li>
+          <li><strong>Forgetting break</strong> in a switch case.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">Which operator should you use to compare two values?</p>
+        <div class="opts">
+          <button>=</button>
+          <button>==</button>
+          <button data-correct>===</button>
+        </div>
+        <p class="why"><code>===</code> compares without any surprising conversions. <code>=</code> stores a value.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>Compare with <code>=== !== &lt; &gt; &lt;= &gt;=</code>.</li>
+          <li><code>if (q) { } else if (q2) { } else { }</code>. Only the first true block runs.</li>
+          <li><code>&amp;&amp;</code> and, <code>||</code> or, <code>!</code> not. <code>q ? a : b</code> picks a value.</li>
+          <li><code>switch</code> with <code>case</code>, <code>break</code> and <code>default</code>.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/typescript.min.js"></script>
+<script src="../../assets/vendor/typescript-libs.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smarter Types · Hello TypeScript</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="10-types">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 10 &middot; <b>Functions &amp; types</b></p>
+      <div class="hero-code" aria-hidden="true">A | B</div>
+      <h1>Smarter Types</h1>
+      <p class="lead">Real values aren't always just "a string" or "a number". A size might be "small", "medium" or "large", and nothing else. A user might be logged in, or might be nobody. TypeScript's type system can describe all of that exactly.</p>
+      <ul class="learn">
+        <li>Union types: this or that</li>
+        <li>Literal types</li>
+        <li>Narrowing</li>
+        <li>null, undefined, ?. and ??</li>
+        <li>any vs unknown</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Union types: this or that</h2>
+      <p>A <strong>union type</strong> is written with a bar <code>|</code>, which means "or". <code>string | number</code> means "a string or a number":</p>
+      <div class="runnable" data-lang="typescript" data-title="An id can be text or a number">
+        <script type="text/plain">
+          let id: string | number;
+
+          id = 42;
+          console.log(id);
+          id = "A-42";
+          console.log(id);
+          id = true;          // not allowed: only string or number
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Narrowing: which one is it?</h2>
+      <p>If a value could be a string <em>or</em> a number, TypeScript won't let you use string methods on it until you check. Checking with <code>typeof</code> <strong>narrows</strong> the type: inside the <code>if</code>, TypeScript knows exactly what it is.</p>
+      <div class="runnable" data-lang="typescript" data-title="Check, then use">
+        <script type="text/plain">
+          function describe(value: string | number): string {
+            if (typeof value === "string") {
+              // here, TypeScript knows value is a string
+              return `text with ${value.length} letters`;
+            } else {
+              // here, it must be a number
+              return `the number ${value.toFixed(1)}`;
+            }
+          }
+
+          console.log(describe("hello"));
+          console.log(describe(3.14159));
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Literal types: only these exact values</h2>
+      <p>A type can be a list of exact values. This is perfect for choices like sizes, directions or colors. In VS Code you even get a menu of the allowed values as you type:</p>
+      <div class="runnable" data-lang="typescript" data-title="Only three sizes exist">
+        <script type="text/plain">
+          type Size = "small" | "medium" | "large";
+
+          function price(size: Size): number {
+            if (size === "small") return 3;
+            if (size === "medium") return 4.5;
+            return 6;
+          }
+
+          console.log(price("small"));
+          console.log(price("large"));
+          console.log(price("huge"));     // not a Size!
+        </script>
+      </div>
+      <p><code class="k-tag">type</code> gives a name to any type, so you can reuse it. Here <code>Size</code> means one of exactly three strings. A typo like <code>"smal"</code> is caught too.</p>
+    </section>
+
+    <section>
+      <h2>Shapes with a "kind"</h2>
+      <p>A very useful pattern: a union of objects that each have a <code>kind</code> property. Checking the <code>kind</code> tells TypeScript which shape you have:</p>
+      <div class="code-explorer" data-lang="typescript" data-title="Area of any shape">
+        <select name="k" data-label="shape">
+          <option value='{ kind: "circle", radius: 3 }'>circle</option>
+          <option value='{ kind: "square", side: 4 }' selected>square</option>
+          <option value='{ kind: "rectangle", width: 5, height: 2 }'>rectangle</option>
+        </select>
+        <script type="text/plain">
+          type Shape =
+            | { kind: "circle"; radius: number }
+            | { kind: "square"; side: number }
+            | { kind: "rectangle"; width: number; height: number };
+
+          function area(s: Shape): number {
+            switch (s.kind) {
+              case "circle":
+                return Math.PI * s.radius ** 2;
+              case "square":
+                return s.side * s.side;
+              case "rectangle":
+                return s.width * s.height;
+            }
+          }
+
+          const shape: Shape = {{k}};
+          console.log(`A ${shape.kind} with area ${area(shape).toFixed(2)}`);
+        </script>
+      </div>
+      <p>Inside <code>case "circle":</code>, TypeScript knows the shape has a <code>radius</code>, so <code>s.radius</code> is allowed. In the square case, <code>s.radius</code> would be an error, because squares don't have one.</p>
+    </section>
+
+    <section>
+      <h2>null and undefined: "nothing"</h2>
+      <p>Two special values mean "nothing here": <code>undefined</code> (never set) and <code>null</code> (set to nothing on purpose). They cause more bugs than anything else in JavaScript. TypeScript makes you handle them:</p>
+      <div class="runnable" data-lang="typescript" data-title="Maybe there's a user, maybe not">
+        <script type="text/plain">
+          interface User {
+            name: string;
+            nickname?: string;
+          }
+
+          function findUser(id: number): User | null {
+            if (id === 1) return { name: "Lina", nickname: "Lee" };
+            if (id === 2) return { name: "Omar" };
+            return null;   // nobody found
+          }
+
+          const user = findUser(3);
+          console.log(user.name);          // TypeScript: user might be null!
+
+          // ?. stops if the left side is null/undefined
+          console.log(user?.name);
+
+          // ?? gives a backup value when the left side is null/undefined
+          const someone = findUser(2);
+          console.log(someone?.nickname ?? "no nickname");
+        </script>
+      </div>
+      <ul>
+        <li><code>a?.b</code> (<strong>optional chaining</strong>): if <code>a</code> is null or undefined, the result is <code>undefined</code> instead of a crash.</li>
+        <li><code>a ?? b</code> (<strong>nullish coalescing</strong>): use <code>a</code>, but if it's null or undefined, use <code>b</code> instead.</li>
+      </ul>
+      <p>Line 13 is flagged <em>and</em> it crashes when it runs. Delete it, and the rest works.</p>
+    </section>
+
+    <section>
+      <h2>any and unknown</h2>
+      <div class="split2">
+        <div>
+          <h4>any</h4>
+          <p><strong>Switches type checking off.</strong> Anything goes, so TypeScript can't help you. Avoid it.</p>
+        </div>
+        <div>
+          <h4>unknown</h4>
+          <p><strong>"I don't know yet."</strong> Safe: TypeScript makes you check the type before using it.</p>
+        </div>
+      </div>
+      <div class="runnable" data-lang="typescript" data-title="any hides bugs">
+        <script type="text/plain">
+          const a: any = "hello";
+          console.log(a.toFixed(2));      // no type error... but it crashes when run!
+
+          const b: unknown = "hello";
+          if (typeof b === "string") {
+            console.log(b.toUpperCase()); // safe: we checked first
+          }
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Make <code>type Direction = "up" | "down" | "left" | "right";</code> and a function that logs an arrow emoji for each.</li>
+          <li>Add a <code>"triangle"</code> to <code>Shape</code> with <code>base</code> and <code>height</code>. TypeScript will show you where the <code>area</code> function needs updating.</li>
+          <li>Use <code>??</code> to log a default name when a variable is <code>null</code>.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="typescript" data-title="Your types">
+        <script type="text/plain">
+          type Direction = "up" | "down" | "left" | "right";
+
+          function arrow(d: Direction): string {
+            if (d === "up") return "⬆️";
+            return "❓";
+          }
+          console.log(arrow("up"), arrow("left"));
+        </script>
+      </div>
+
+      <div class="quiz">
+        <p class="q">type Pet = "cat" | "dog". Which line is an error?</p>
+        <div class="opts">
+          <button>let p: Pet = "cat";</button>
+          <button data-correct>let p: Pet = "fish";</button>
+          <button>let p: Pet = "dog";</button>
+        </div>
+        <p class="why"><code>Pet</code> only allows the exact strings "cat" and "dog".</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>A | B</code> means A or B. Check with <code>typeof</code> to narrow it.</li>
+          <li><code>type Size = "s" | "m" | "l";</code> allows only those values.</li>
+          <li>Handle <code>null</code>/<code>undefined</code> with <code>if</code>, <code>?.</code> and <code>??</code>.</li>
+          <li>Prefer <code>unknown</code> over <code>any</code>.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/typescript.min.js"></script>
+<script src="../../assets/vendor/typescript-libs.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

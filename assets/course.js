@@ -280,6 +280,7 @@
     this.fixedHeight = opts.height || 0;
     this.onNavigate = opts.onNavigate || null;
     this.quietForms = !!opts.quietForms;
+    this.fresh = !!opts.fresh;   // start every run in a brand-new page (for programs)
     this.files = opts.files || null;
 
     var view = el('div', { class: 'pg-view' + (opts.devices ? ' devices' : '') });
@@ -344,6 +345,14 @@
     if (!doc) return;
     var y = 0;
     try { y = doc.scrollingElement ? doc.scrollingElement.scrollTop : 0; } catch (e) { y = 0; }
+    if (this.fresh) {
+      var nf = el('iframe', { title: 'Live website preview' });
+      nf.style.cssText = this.frame.style.cssText;
+      this.wrap.replaceChild(nf, this.frame);
+      this.frame = nf;
+      doc = this.doc();
+      if (!doc) return;
+    }
     if (!/^\s*<!doctype/i.test(html)) html = '<!DOCTYPE html>\n' + html;
     html = withAssets(html);
     doc.open();

@@ -188,6 +188,11 @@
     2353: 'This object has a property that its type doesn\'t allow. Check the spelling.',
     2554: 'You called the function with the wrong number of values.',
     2588: 'You can\'t change a const. Use let if the value needs to change.',
+    2540: 'This property is read-only. It is set when the object is made, and can\'t be changed after.',
+    2564: 'This class property has no starting value. Give it one, or set it in the constructor.',
+    2341: 'This is private: only code inside the class can use it.',
+    2416: 'This method doesn\'t match the one it replaces from the parent class or interface.',
+    2420: 'The class is missing something its interface requires.',
     18047: 'This might be null (missing). Check that it exists first, for example with an if, or add ! if you are sure.',
     18048: 'This might be undefined. Check that it has a value first.',
     2531: 'This might be null (missing). Check that it exists first.',
@@ -242,7 +247,7 @@
     view.appendChild(bar);
 
     if (opts.page && api.Preview) {
-      this.preview = new api.Preview({ height: opts.height || 0, quietForms: true });
+      this.preview = new api.Preview({ height: opts.height || 0, quietForms: true, fresh: true });
       this.preview.view.classList.add('embedded-preview');
       view.appendChild(this.preview.view);
     }
@@ -415,8 +420,8 @@
     var files = {}, versions = {};
     var libs = window.TS_LIBS || {};
     var opts = {
-      target: ts.ScriptTarget.ES2020,
-      lib: ['lib.es2020.d.ts', 'lib.dom.d.ts'],
+      target: ts.ScriptTarget.ES2022,
+      lib: ['lib.es2022.d.ts', 'lib.dom.d.ts', 'lib.dom.iterable.d.ts'],
       strict: true,
       noEmit: true,
       moduleDetection: ts.ModuleDetectionKind.Force,
@@ -431,7 +436,7 @@
       },
       getCurrentDirectory: function () { return '/'; },
       getCompilationSettings: function () { return opts; },
-      getDefaultLibFileName: function () { return '/lib.es2020.d.ts'; },
+      getDefaultLibFileName: function () { return '/lib.es2022.d.ts'; },
       fileExists: function (f) { return files[f] !== undefined || libs[f] !== undefined; },
       readFile: function (f) { return files[f] !== undefined ? files[f] : libs[f]; },
       directoryExists: function () { return true; },
@@ -450,7 +455,7 @@
       },
       transpile: function (code) {
         return ts.transpileModule(code, {
-          compilerOptions: { target: ts.ScriptTarget.ES2020, module: ts.ModuleKind.None },
+          compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.None },
           transformers: { before: [loopGuard] }
         }).outputText;
       }
@@ -520,13 +525,14 @@
       },
       error: function (e) {
         hadError = true;
-        var msg = e && e.message ? e.message : String(e);
+        var msg = (e && e.message ? e.message : String(e)).replace(/^Failed to execute '\w+' on '\w+': /, '');
         var type = e && e.name ? e.name : 'Error';
         out.setStatus('error', 'Error');
         var help = /is not a function/.test(msg) ? 'You tried to call something that isn\'t a function.'
           : /Cannot read propert/.test(msg) ? 'You used a property of something that is null or undefined (missing).'
           : /loop ran 10 million/.test(msg) ? 'Check the loop\'s condition: something inside the loop must eventually make it false.'
-          : /is not defined/.test(msg) ? 'This name doesn\'t exist when the code runs. Check the spelling.' : '';
+          : /is not defined/.test(msg) ? 'This name doesn\'t exist when the code runs. Check the spelling.'
+          : type === 'SyntaxError' ? 'Part of the code can\'t be read, like a missing quote or bracket. The type errors under the code show where.' : '';
         out.error(type + ' while running', msg, help);
       }
     };
@@ -544,10 +550,10 @@
       html = /<\/body>/i.test(html) ? html.replace(/<\/body>/i, user + '</body>') : html + user;
       out.preview.write(html, 'index.html');
     } else {
-      if (!out.hiddenFrame) {
-        out.hiddenFrame = el('iframe', { class: 'hidden-runner', title: 'Program runner', 'aria-hidden': 'true', tabindex: '-1' });
-        out.view.appendChild(out.hiddenFrame);
-      }
+      // a brand-new page for every run, so old variables and timers are gone
+      if (out.hiddenFrame) out.hiddenFrame.remove();
+      out.hiddenFrame = el('iframe', { class: 'hidden-runner', title: 'Program runner', 'aria-hidden': 'true', tabindex: '-1' });
+      out.view.appendChild(out.hiddenFrame);
       var doc = out.hiddenFrame.contentDocument;
       doc.open(); doc.write('<!DOCTYPE html><html><head>' + prelude + '</head><body>' + user + '</body></html>'); doc.close();
     }
@@ -692,12 +698,17 @@
      ============================================================ */
   var visibleQueue = window.IntersectionObserver ? new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
-      if (e.isIntersecting && e.target.__onVisible) { var f = e.target.__onVisible; e.target.__onVisible = null; visibleQueue.unobserve(e.target); f(); }
+      if (e.isIntersecting && e.target.__onVisible) {
+        var fns = e.target.__onVisible;
+        e.target.__onVisible = null;
+        visibleQueue.unobserve(e.target);
+        fns.forEach(function (f) { f(); });
+      }
     });
   }, { rootMargin: '200px' }) : null;
   function whenVisible(node, fn) {
     if (!visibleQueue) { fn(); return; }
-    node.__onVisible = fn;
+    (node.__onVisible = node.__onVisible || []).push(fn);
     visibleQueue.observe(node);
   }
 
@@ -768,10 +779,12 @@
 
     var checkTimer, fileName = '/r' + api.nextId() + '.ts';
     function check() {
-      if (lang !== 'typescript') return;
+      if (lang !== 'typescript') return 0;
       var svc = tsService();
-      if (!svc) return;
-      showTSDiagnostics(svc.check(fileName, files[0].code), active === 0 ? editor : { setMarks: function () {} }, diagBox);
+      if (!svc) return 0;
+      var diags = svc.check(fileName, files[0].code);
+      showTSDiagnostics(diags, active === 0 ? editor : { setMarks: function () {} }, diagBox);
+      return diags.length;
     }
     var ready = false;
     function select(i) {
@@ -786,7 +799,15 @@
       auto = auto === true;
       var code = files[0].code;
       if (lang === 'python') return runPython(code, out, active === 0 ? editor : null, auto);
-      if (lang === 'typescript') { check(); return runTS(code, out, editor, files[1] ? files[1].code : null); }
+      if (lang === 'typescript') {
+        var errors = check();
+        runTS(code, out, editor, files[1] ? files[1].code : null);
+        if (errors) {
+          var n = out.note('⚠ This code has ' + (errors === 1 ? 'a type error' : errors + ' type errors') + ' (shown under the code). In a real project you would fix ' + (errors === 1 ? 'it' : 'them') + ' first. It ran anyway, so you can see what happens.', 'warn');
+          out.console.insertBefore(n, out.console.firstChild);
+        }
+        return;
+      }
       if (lang === 'cpp') return runCpp(code, out, active === 0 ? editor : null, expected, original);
     }
     runBtn.addEventListener('click', function () { run(false); });

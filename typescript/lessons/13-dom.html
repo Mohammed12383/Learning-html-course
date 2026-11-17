@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TypeScript + Web Pages · Hello TypeScript</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="13-dom">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 13 &middot; <b>The web &amp; beyond</b></p>
+      <div class="hero-code" aria-hidden="true">document</div>
+      <h1>TypeScript + Web Pages</h1>
+      <p class="lead">This is where everything comes together. HTML builds the page, CSS makes it pretty, and TypeScript makes it <em>do</em> things: react to clicks, respond to typing, add and remove things. Every example in this lesson is a real, working web page.</p>
+      <ul class="learn">
+        <li>Finding elements</li>
+        <li>Changing text and styles</li>
+        <li>Clicks and typing</li>
+        <li>Adding new elements</li>
+        <li>Forms</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>The page is an object called document</h2>
+      <p>When a browser loads HTML, it turns every tag into an object that your code can read and change. All of them live inside an object called <code class="k-prop">document</code>. This is called the <strong>DOM</strong> (Document Object Model). Each example below has two tabs: <code>main.ts</code> (the code) and <code>index.html</code> (the page). Click the tabs to see both.</p>
+
+      <div class="runnable" data-lang="typescript" data-title="Find an element and change it" data-height="200">
+        <script type="text/plain" data-name="main.ts">
+          const title = document.querySelector<HTMLHeadingElement>("#title")!;
+
+          title.textContent = "Changed by TypeScript! ✨";
+          title.style.color = "#8F7BFF";
+          title.style.fontSize = "34px";
+
+          console.log("The heading now says:", title.textContent);
+        </script>
+        <script type="text/plain" data-name="index.html">
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>
+              body { font-family: system-ui, sans-serif; padding: 20px; }
+            </style>
+          </head>
+          <body>
+            <h1 id="title">Hello from HTML</h1>
+            <p>The heading above was written in the HTML file.</p>
+          </body>
+          </html>
+        </script>
+      </div>
+
+      <div class="anatomy" role="img" aria-label="document dot querySelector, the element type in angle brackets, the CSS selector in brackets, and an exclamation mark">
+        <div class="part prop"><span>document.querySelector</span><small>"find the first<br>element that matches"</small></div>
+        <div class="part sel"><span>&lt;HTMLHeadingElement&gt;</span><small>what kind of<br>element it is</small></div>
+        <div class="part val"><span>("#title")</span><small>a CSS selector,<br>like in the HTML course</small></div>
+        <div class="part punc"><span>!</span><small>"I'm sure it exists"</small></div>
+      </div>
+
+      <ul>
+        <li><code>querySelector</code> takes the same selectors as CSS: <code>"#title"</code> (an id), <code>".card"</code> (a class), <code>"button"</code> (a tag).</li>
+        <li>The type in angle brackets tells TypeScript what kind of element you'll get, so it knows which properties exist (a button has different properties from an input).</li>
+        <li>If nothing matches, <code>querySelector</code> gives <code>null</code>. The <code>!</code> at the end tells TypeScript "trust me, it's there". Remove the <code>!</code> and you'll see TypeScript worry that it might be null.</li>
+        <li><code>.textContent</code> is the text inside. <code>.style.color</code>, <code>.style.fontSize</code> and so on change the CSS (in camelCase: <code>font-size</code> becomes <code>fontSize</code>).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Reacting to clicks</h2>
+      <p><code>addEventListener</code> says "when this happens, run this function". The thing that happens is called an <strong>event</strong>: a click, a key press, typing, scrolling...</p>
+
+      <div class="runnable" data-lang="typescript" data-title="A like button" data-height="200">
+        <script type="text/plain" data-name="main.ts">
+          const button = document.querySelector<HTMLButtonElement>("#like")!;
+          const countText = document.querySelector<HTMLSpanElement>("#count")!;
+
+          let likes = 0;
+          let liked = false;
+
+          button.addEventListener("click", () => {
+            liked = !liked;
+            likes += liked ? 1 : -1;
+            countText.textContent = String(likes);
+            button.classList.toggle("on", liked);
+            button.textContent = liked ? "❤️ Liked" : "🤍 Like";
+          });
+        </script>
+        <script type="text/plain" data-name="index.html">
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>
+              body { font-family: system-ui, sans-serif; padding: 30px; text-align: center; }
+              button {
+                font-size: 18px; padding: 12px 26px; border-radius: 999px;
+                border: 2px solid #FF5C8A; background: white; color: #FF5C8A;
+                cursor: pointer; transition: all 0.2s;
+              }
+              button.on { background: #FF5C8A; color: white; transform: scale(1.08); }
+            </style>
+          </head>
+          <body>
+            <button id="like">🤍 Like</button>
+            <p><span id="count">0</span> likes</p>
+          </body>
+          </html>
+        </script>
+      </div>
+      <p><code>classList.toggle("on", liked)</code> adds the CSS class <code>on</code> when <code>liked</code> is true and removes it when false. Changing classes is the cleanest way to change how things look: the CSS describes each look, and TypeScript just switches between them.</p>
+    </section>
+
+    <section>
+      <h2>Reacting to typing</h2>
+      <p>The <code>"input"</code> event fires every time the text in a box changes. An input element's <code>.value</code> is always a <code>string</code>:</p>
+
+      <div class="runnable" data-lang="typescript" data-title="A live name tag" data-height="230">
+        <script type="text/plain" data-name="main.ts">
+          const nameBox = document.querySelector<HTMLInputElement>("#name")!;
+          const colorBox = document.querySelector<HTMLInputElement>("#color")!;
+          const tag = document.querySelector<HTMLDivElement>("#tag")!;
+
+          function update(): void {
+            const name = nameBox.value.trim() || "Your name";
+            tag.textContent = `👋 Hi, I'm ${name}`;
+            tag.style.background = colorBox.value;
+          }
+
+          nameBox.addEventListener("input", update);
+          colorBox.addEventListener("input", update);
+          update();
+        </script>
+        <script type="text/plain" data-name="index.html">
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>
+              body { font-family: system-ui, sans-serif; padding: 20px; }
+              input { font-size: 16px; padding: 8px 12px; border-radius: 10px; border: 2px solid #ddd; }
+              #tag {
+                margin-top: 18px; padding: 18px 24px; border-radius: 18px;
+                font-size: 22px; font-weight: 700; color: #231F35;
+              }
+            </style>
+          </head>
+          <body>
+            <input id="name" placeholder="Type your name">
+            <input id="color" type="color" value="#FFD6E7">
+            <div id="tag"></div>
+          </body>
+          </html>
+        </script>
+      </div>
+      <p>Type in the box and pick a color in the preview. <code>nameBox.value.trim() || "Your name"</code> means: use the typed name, or if it's empty, use "Your name" instead.</p>
+    </section>
+
+    <section>
+      <h2>Making new elements</h2>
+      <p>You can create elements from scratch with <code>document.createElement</code>, fill them in, and add them to the page with <code>append</code>. This is how apps show lists of messages, products or tasks from data:</p>
+
+      <div class="runnable" data-lang="typescript" data-title="Cards from an array" data-height="260">
+        <script type="text/plain" data-name="main.ts">
+          interface Pet {
+            name: string;
+            emoji: string;
+            color: string;
+          }
+
+          const pets: Pet[] = [
+            { name: "Mochi", emoji: "🐱", color: "#FFE1EA" },
+            { name: "Rex", emoji: "🐶", color: "#E1E8FF" },
+            { name: "Kiwi", emoji: "🦜", color: "#DDF5E8" },
+            { name: "Bubbles", emoji: "🐠", color: "#FFF1C9" },
+          ];
+
+          const grid = document.querySelector<HTMLDivElement>("#grid")!;
+
+          for (const pet of pets) {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.style.background = pet.color;
+            card.innerHTML = `<span class="big">${pet.emoji}</span><strong>${pet.name}</strong>`;
+            card.addEventListener("click", () => card.classList.toggle("picked"));
+            grid.append(card);
+          }
+        </script>
+        <script type="text/plain" data-name="index.html">
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>
+              body { font-family: system-ui, sans-serif; padding: 16px; }
+              #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
+              .card {
+                display: grid; justify-items: center; gap: 6px; padding: 18px;
+                border-radius: 18px; cursor: pointer; transition: transform 0.2s;
+              }
+              .card:hover { transform: translateY(-4px); }
+              .card.picked { outline: 3px solid #231F35; }
+              .big { font-size: 40px; }
+            </style>
+          </head>
+          <body>
+            <p>Click a pet to pick it:</p>
+            <div id="grid"></div>
+          </body>
+          </html>
+        </script>
+      </div>
+      <p>Add a fifth pet to the array: a new card appears. The page is built from the data. That idea (data in, page out) is how almost every web app works.</p>
+    </section>
+
+    <section>
+      <h2>Forms: add to a list</h2>
+      <p>For a form, listen to the <code>"submit"</code> event and call <code>event.preventDefault()</code>, which stops the browser from reloading the page:</p>
+
+      <div class="runnable" data-lang="typescript" data-title="A guest list" data-height="300">
+        <script type="text/plain" data-name="main.ts">
+          const form = document.querySelector<HTMLFormElement>("#form")!;
+          const input = document.querySelector<HTMLInputElement>("#guest")!;
+          const list = document.querySelector<HTMLUListElement>("#list")!;
+          const total = document.querySelector<HTMLParagraphElement>("#total")!;
+
+          const guests: string[] = [];
+
+          function render(): void {
+            list.innerHTML = "";
+            for (const g of guests) {
+              const li = document.createElement("li");
+              li.textContent = g;
+              list.append(li);
+            }
+            total.textContent = `${guests.length} guests`;
+          }
+
+          form.addEventListener("submit", (event: SubmitEvent) => {
+            event.preventDefault();
+            const name = input.value.trim();
+            if (name === "") return;
+            guests.push(name);
+            input.value = "";
+            render();
+          });
+
+          render();
+        </script>
+        <script type="text/plain" data-name="index.html">
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>
+              body { font-family: system-ui, sans-serif; padding: 20px; background: #FBF8FF; }
+              form { display: flex; gap: 8px; }
+              input { flex: 1; font-size: 16px; padding: 10px 14px; border-radius: 12px; border: 2px solid #E6E0F5; }
+              button { font-size: 16px; padding: 10px 18px; border: none; border-radius: 12px; background: #8F7BFF; color: white; }
+              li { padding: 6px 0; }
+            </style>
+          </head>
+          <body>
+            <h2>🎉 Party guests</h2>
+            <form id="form">
+              <input id="guest" placeholder="Guest name">
+              <button>Add</button>
+            </form>
+            <ul id="list"></ul>
+            <p id="total"></p>
+          </body>
+          </html>
+        </script>
+      </div>
+      <p>Type a name in the preview and press Add (or Enter). Notice the <code>render</code> function: whenever the data changes, it rebuilds the list from the <code>guests</code> array. Keep your data in variables, and redraw the page from it.</p>
+    </section>
+
+    <section>
+      <h2>Common element types</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>HTML tag</th><th>TypeScript type</th><th>Useful properties</th></tr></thead>
+          <tbody>
+            <tr><td><code>&lt;button&gt;</code></td><td><code>HTMLButtonElement</code></td><td><code>textContent</code>, <code>disabled</code></td></tr>
+            <tr><td><code>&lt;input&gt;</code></td><td><code>HTMLInputElement</code></td><td><code>value</code>, <code>checked</code>, <code>valueAsNumber</code></td></tr>
+            <tr><td><code>&lt;div&gt;</code></td><td><code>HTMLDivElement</code></td><td><code>textContent</code>, <code>innerHTML</code>, <code>style</code>, <code>classList</code></td></tr>
+            <tr><td><code>&lt;img&gt;</code></td><td><code>HTMLImageElement</code></td><td><code>src</code>, <code>alt</code></td></tr>
+            <tr><td><code>&lt;form&gt;</code></td><td><code>HTMLFormElement</code></td><td><code>reset()</code></td></tr>
+            <tr><td>several at once</td><td><code>querySelectorAll</code></td><td>a list you can loop with <code>for...of</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>In the like button, show a little "🎉" message when likes reach 1.</li>
+          <li>In the name tag, also change the text size based on how long the name is.</li>
+          <li>In the guest list, stop people adding the same name twice (hint: <code>guests.includes(name)</code>).</li>
+        </ol>
+      </aside>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Wrong selector</strong>: <code>"title"</code> finds a <code>&lt;title&gt;</code> tag. For <code>id="title"</code>, write <code>"#title"</code>.</li>
+          <li><strong>Forgetting <code>preventDefault()</code></strong> in a submit event: the page reloads and everything is lost.</li>
+          <li><strong>Doing math with <code>input.value</code></strong>: it's a string. Use <code>Number(input.value)</code> or <code>input.valueAsNumber</code>.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">Which line finds the element with class="card"?</p>
+        <div class="opts">
+          <button>document.querySelector("card")</button>
+          <button data-correct>document.querySelector(".card")</button>
+          <button>document.querySelector("#card")</button>
+        </div>
+        <p class="why">Same as CSS: a dot means class, a hash means id.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>document.querySelector&lt;Type&gt;("selector")!</code> finds an element.</li>
+          <li><code>.textContent</code>, <code>.style.x</code>, <code>.classList.toggle()</code>, <code>.value</code> read and change it.</li>
+          <li><code>el.addEventListener("click", () =&gt; { ... })</code> reacts to events.</li>
+          <li><code>document.createElement("li")</code> + <code>parent.append(child)</code> adds elements. Keep data in arrays and redraw.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/typescript.min.js"></script>
+<script src="../../assets/vendor/typescript-libs.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

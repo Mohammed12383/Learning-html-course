@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Final Project · Hello TypeScript</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="16-final-project">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 16 &middot; <b>Build</b></p>
+      <div class="hero-code" aria-hidden="true">app</div>
+      <h1>Final Project: Daybloom Tasks</h1>
+      <p class="lead">In the HTML course you built Daybloom, a pretend planner app. Now you'll make part of it actually work: a colorful to-do list where you can add tasks, tick them off, filter them and delete them. It even remembers your tasks. It's a real app, built with everything from this course.</p>
+      <ul class="learn">
+        <li>Planning an app</li>
+        <li>Types for your data</li>
+        <li>Actions that change data</li>
+        <li>Drawing the page from data</li>
+        <li>Saving</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Use the finished app</h2>
+      <p>Add a task, tick one off, try the filters, delete one. Then press <strong>Run</strong>: your tasks are still there, because they're saved in the browser.</p>
+
+      <div class="runnable" data-lang="typescript" data-height="440" data-title="Daybloom Tasks" data-hint="Click the index.html tab to see the page and its styles. Press Reset to bring the original code back.">
+        <script type="text/plain" data-name="main.ts">
+          type Filter = "all" | "active" | "done";
+
+          interface Task {
+            id: number;
+            text: string;
+            done: boolean;
+            color: string;
+          }
+
+          const COLORS = ["#FFE1EA", "#E1E8FF", "#DDF5E8", "#FFF1C9", "#EEE6FF"];
+          const STORAGE_KEY = "daybloom-tasks";
+
+          // ---------- The data the page is drawn from ----------
+          let tasks: Task[] = load();
+          let filter: Filter = "all";
+          let nextId = tasks.reduce((max, t) => Math.max(max, t.id), 0) + 1;
+
+          // ---------- The elements we need ----------
+          const form = document.querySelector<HTMLFormElement>("#add-form")!;
+          const input = document.querySelector<HTMLInputElement>("#new-task")!;
+          const list = document.querySelector<HTMLUListElement>("#list")!;
+          const counter = document.querySelector<HTMLSpanElement>("#counter")!;
+          const clearButton = document.querySelector<HTMLButtonElement>("#clear")!;
+          const filterButtons = document.querySelectorAll<HTMLButtonElement>(".filters button");
+
+          // ---------- Saving and loading ----------
+          function load(): Task[] {
+            try {
+              const saved = localStorage.getItem(STORAGE_KEY);
+              if (saved) return JSON.parse(saved) as Task[];
+            } catch {
+              // saving is blocked in this browser: start fresh
+            }
+            return [
+              { id: 1, text: "Water the plants 🌱", done: true, color: COLORS[2] },
+              { id: 2, text: "Finish the TypeScript course 🎓", done: false, color: COLORS[1] },
+              { id: 3, text: "Call grandma ☎️", done: false, color: COLORS[0] },
+            ];
+          }
+
+          function save(): void {
+            try {
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+            } catch {
+              // ignore: the app still works, it just won't remember
+            }
+          }
+
+          // ---------- Actions: they change the data, then update the page ----------
+          function addTask(text: string): void {
+            const color = COLORS[tasks.length % COLORS.length];
+            tasks.push({ id: nextId++, text, done: false, color });
+            update();
+          }
+
+          function toggleTask(id: number): void {
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+              task.done = !task.done;
+            }
+            update();
+          }
+
+          function deleteTask(id: number): void {
+            tasks = tasks.filter(t => t.id !== id);
+            update();
+          }
+
+          // ---------- Drawing the page from the data ----------
+          function visibleTasks(): Task[] {
+            if (filter === "active") return tasks.filter(t => !t.done);
+            if (filter === "done") return tasks.filter(t => t.done);
+            return tasks;
+          }
+
+          function render(): void {
+            list.innerHTML = "";
+            const shown = visibleTasks();
+
+            for (const task of shown) {
+              const li = document.createElement("li");
+              li.className = task.done ? "task done" : "task";
+              li.style.background = task.color;
+
+              const check = document.createElement("button");
+              check.className = "check";
+              check.textContent = task.done ? "✓" : "";
+              check.setAttribute("aria-label", task.done ? "Mark as not done" : "Mark as done");
+              check.addEventListener("click", () => toggleTask(task.id));
+
+              const text = document.createElement("span");
+              text.className = "text";
+              text.textContent = task.text;
+
+              const remove = document.createElement("button");
+              remove.className = "delete";
+              remove.textContent = "✕";
+              remove.setAttribute("aria-label", "Delete task");
+              remove.addEventListener("click", () => deleteTask(task.id));
+
+              li.append(check, text, remove);
+              list.append(li);
+            }
+
+            if (shown.length === 0) {
+              const empty = document.createElement("li");
+              empty.className = "empty";
+              empty.textContent = filter === "done" ? "Nothing finished yet. You've got this! 💪" : "All clear! Add something above ✨";
+              list.append(empty);
+            }
+
+            const left = tasks.filter(t => !t.done).length;
+            counter.textContent = left === 1 ? "1 task left" : `${left} tasks left`;
+            filterButtons.forEach(b => b.classList.toggle("on", b.dataset.filter === filter));
+          }
+
+          function update(): void {
+            save();
+            render();
+          }
+
+          // ---------- Events: what happens when you click or type ----------
+          form.addEventListener("submit", (event: SubmitEvent) => {
+            event.preventDefault();
+            const text = input.value.trim();
+            if (text === "") return;
+            addTask(text);
+            input.value = "";
+          });
+
+          filterButtons.forEach(button => {
+            button.addEventListener("click", () => {
+              filter = button.dataset.filter as Filter;
+              render();
+            });
+          });
+
+          clearButton.addEventListener("click", () => {
+            tasks = tasks.filter(t => !t.done);
+            update();
+          });
+
+          render();
+        </script>
+        <script type="text/plain" data-name="index.html">
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Daybloom Tasks</title>
+            <style>
+              * { box-sizing: border-box; }
+              body {
+                margin: 0;
+                padding: 28px 16px;
+                font-family: system-ui, sans-serif;
+                color: #231F35;
+                background:
+                  radial-gradient(circle at 10% 0%, #FFE1EA 0, transparent 40%),
+                  radial-gradient(circle at 90% 100%, #E1E8FF 0, transparent 45%),
+                  #FFFBF5;
+              }
+              .app {
+                max-width: 460px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 28px;
+                padding: 24px;
+                box-shadow: 0 24px 50px rgba(60, 40, 120, 0.12);
+              }
+              header { display: flex; justify-content: space-between; align-items: baseline; }
+              h1 { margin: 0; font-size: 26px; }
+              #counter { color: #8A8499; font-size: 14px; font-weight: 600; }
+
+              form { display: flex; gap: 8px; margin: 18px 0 12px; }
+              #new-task {
+                flex: 1; font: inherit; font-size: 16px; padding: 12px 14px;
+                border: 2px solid #ECEAF2; border-radius: 14px; outline: none;
+              }
+              #new-task:focus { border-color: #8F7BFF; }
+              form button {
+                font: inherit; font-weight: 700; padding: 0 18px; cursor: pointer;
+                border: none; border-radius: 14px; background: #231F35; color: white;
+              }
+
+              .filters { display: flex; gap: 6px; margin-bottom: 14px; }
+              .filters button {
+                font: inherit; font-size: 14px; padding: 6px 14px; cursor: pointer;
+                border: none; border-radius: 999px; background: #F3F1F8;
+              }
+              .filters button.on { background: #8F7BFF; color: white; }
+
+              #list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+              .task {
+                display: flex; align-items: center; gap: 12px;
+                padding: 12px 14px; border-radius: 16px; transition: transform 0.15s;
+              }
+              .task:hover { transform: translateX(4px); }
+              .check {
+                width: 26px; height: 26px; flex: none; cursor: pointer; font-weight: 800;
+                border-radius: 50%; border: 2px solid #231F35; background: white;
+              }
+              .done .check { background: #231F35; color: white; }
+              .text { flex: 1; }
+              .done .text { text-decoration: line-through; opacity: 0.5; }
+              .delete { border: none; background: none; font-size: 16px; cursor: pointer; opacity: 0.4; }
+              .delete:hover { opacity: 1; }
+              .empty { text-align: center; color: #8A8499; padding: 16px; }
+              footer { display: flex; justify-content: flex-end; margin-top: 14px; }
+              #clear { font: inherit; font-size: 13px; border: none; background: none; color: #8A8499; cursor: pointer; text-decoration: underline; }
+            </style>
+          </head>
+          <body>
+            <main class="app">
+              <header>
+                <h1>🌼 My day</h1>
+                <span id="counter"></span>
+              </header>
+
+              <form id="add-form">
+                <input id="new-task" placeholder="Add a task..." autocomplete="off" aria-label="New task">
+                <button>Add</button>
+              </form>
+
+              <div class="filters">
+                <button data-filter="all">All</button>
+                <button data-filter="active">To do</button>
+                <button data-filter="done">Done</button>
+              </div>
+
+              <ul id="list"></ul>
+
+              <footer><button id="clear">Clear finished</button></footer>
+            </main>
+          </body>
+          </html>
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Step 1: the big idea</h2>
+      <p>Almost every app works the same way. The <strong>data</strong> lives in variables. The <strong>page</strong> is drawn from the data. When you click something, you change the data, and the page is drawn again:</p>
+      <div class="flow" role="img" aria-label="A loop: you click or type, an action changes the data, the data is saved, render draws the page again from the data.">
+        <div class="fbox">you click or type (an <b>event</b>)</div>
+        <div class="arrow"></div>
+        <div class="fbox fq">an <b>action</b> changes the data: addTask, toggleTask, deleteTask</div>
+        <div class="arrow"></div>
+        <div class="fbox">the data is <b>saved</b></div>
+        <div class="arrow"></div>
+        <div class="fbox fq"><b>render()</b> draws the page from the data</div>
+      </div>
+      <p>The code is organized in exactly that order. Find each section in the code by its <code>// ----------</code> comment.</p>
+    </section>
+
+    <section>
+      <h2>Step 2: types for the data</h2>
+      <p class="muted small">From lessons 8 and 10.</p>
+      <p>A task is an <code>interface</code> with four properties. The filter is a <strong>literal type</strong> with exactly three allowed values, so a typo like <code>"actve"</code> is impossible.</p>
+      <script type="text/plain" class="snippet" data-lang="typescript">
+        type Filter = "all" | "active" | "done";
+
+        interface Task {
+          id: number;
+          text: string;
+          done: boolean;
+          color: string;
+        }
+      </script>
+      <p>Each task gets a unique <code>id</code> number, so the app can find exactly the right task when you click its button, even if two tasks have the same text.</p>
+    </section>
+
+    <section>
+      <h2>Step 3: saving and loading</h2>
+      <p class="muted small">From lesson 15.</p>
+      <p><code>load()</code> reads the saved tasks with <code>localStorage</code> and <code>JSON.parse</code>. If there's nothing saved yet, it returns three example tasks. <code>save()</code> does the opposite with <code>JSON.stringify</code>. Both are wrapped in <code>try</code>/<code>catch</code>, because some browsers block saving, and the app should still work.</p>
+    </section>
+
+    <section>
+      <h2>Step 4: actions</h2>
+      <p class="muted small">From lessons 7 and 9.</p>
+      <p>Each action is a small function that changes the <code>tasks</code> array, then calls <code>update()</code>:</p>
+      <ul>
+        <li><code>addTask</code> uses <code>push</code> and picks a pastel color in turn with <code>%</code>.</li>
+        <li><code>toggleTask</code> uses <code>find</code> to get the task with that id and flips <code>done</code> with <code>!</code>.</li>
+        <li><code>deleteTask</code> uses <code>filter</code> to keep every task <em>except</em> that id.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Step 5: drawing the page</h2>
+      <p class="muted small">From lesson 13.</p>
+      <p><code>render()</code> empties the list, then builds one <code>&lt;li&gt;</code> for each visible task with <code>createElement</code>, sets its classes and color, and connects its buttons with <code>addEventListener</code>. If there are no tasks to show, it shows a friendly message instead. Finally it updates the counter and highlights the active filter button with <code>classList.toggle</code>.</p>
+      <p>The CSS in <code>index.html</code> does the styling: the <code>done</code> class crosses out the text and fills in the circle. TypeScript only switches the class on and off.</p>
+    </section>
+
+    <section>
+      <h2>Make it yours</h2>
+      <aside class="note task">
+        <h4>Ideas to remix Daybloom Tasks</h4>
+        <ol>
+          <li><strong>Your colors</strong>: change the <code>COLORS</code> array and the purple <code>#8F7BFF</code> in the CSS.</li>
+          <li><strong>Emoji picker</strong>: add a <code>&lt;select&gt;</code> next to the input with a few emoji, and add the chosen one to each new task.</li>
+          <li><strong>Edit tasks</strong>: double-click a task's text to change it (hint: the <code>"dblclick"</code> event and <code>prompt</code>, or an input).</li>
+          <li><strong>Due today</strong>: add a <code>due?: string</code> property and show it under the task.</li>
+          <li><strong>Celebrate</strong>: when the last task is ticked off, show a big "🎉 All done!" message.</li>
+        </ol>
+      </aside>
+      <p>Changes you make here are temporary. When you like your version, press <strong>Copy</strong> on each tab and keep it, or build it as a real project with Vite (lesson 15).</p>
+    </section>
+
+    <section>
+      <h2>What to learn next</h2>
+      <ol class="steps">
+        <li><div><p><strong>Build your own small apps</strong>: a quiz, a habit tracker, a recipe box, a memory game. Use the same pattern: data, actions, render, events.</p></div></li>
+        <li><div><p><strong>Set up a real project</strong> on a computer with Vite (lesson 15) and put it online.</p></div></li>
+        <li><div><p><strong>Learn a framework</strong>: React is the most popular. It uses the same idea of drawing the page from data, but does the redrawing for you.</p></div></li>
+        <li><div><p><strong>Read the docs</strong>: the official handbook at <strong>typescriptlang.org/docs</strong> is excellent, and <strong>MDN Web Docs</strong> explains every DOM property.</p></div></li>
+      </ol>
+
+      <div class="quiz">
+        <p class="q">In Daybloom Tasks, what happens after deleteTask changes the tasks array?</p>
+        <div class="opts">
+          <button>Nothing, the task disappears by itself</button>
+          <button data-correct>update() saves the data and render() draws the page again</button>
+          <button>The page reloads</button>
+        </div>
+        <p class="why">Data first, then draw. The page always shows what's in the <code>tasks</code> array.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>You did it</h4>
+        <p>You started with <code>console.log("Hello, world!")</code>. Now you can use types to catch mistakes, organize data with arrays, objects and interfaces, write functions and classes, make web pages react to clicks and typing, wait for things with async, and build a complete app that saves its data. That's real web development. Go build something you're proud of. 🌼</p>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/typescript.min.js"></script>
+<script src="../../assets/vendor/typescript-libs.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Text (Strings) · Hello TypeScript</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="04-strings">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 04 &middot; <b>First steps</b></p>
+      <div class="hero-code" aria-hidden="true">`${x}`</div>
+      <h1>Text (Strings)</h1>
+      <p class="lead">Names, messages, labels on buttons: web pages are full of text. In this lesson you'll build sentences from variables, cut text into pieces and change it with string methods.</p>
+      <ul class="learn">
+        <li>Joining text</li>
+        <li>Template strings</li>
+        <li>Characters by position</li>
+        <li>Slicing</li>
+        <li>String methods</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Template strings: the easy way</h2>
+      <p>You can join strings with <code>+</code>, but it gets messy. <strong>Template strings</strong> are much nicer. Use backticks <code>`</code> instead of quotes, and put any value inside <code>${ }</code>:</p>
+
+      <div class="anatomy" role="img" aria-label="A template string: a backtick, the text Hi, a dollar and curly brackets around name, then an exclamation mark and a closing backtick">
+        <div class="part val"><span>`Hi </span><small>backtick + text</small></div>
+        <div class="part prop"><span>${name}</span><small>a value dropped in</small></div>
+        <div class="part val"><span>!`</span><small>closing backtick</small></div>
+      </div>
+
+      <div class="runnable" data-lang="typescript" data-title="Two ways to build a sentence">
+        <script type="text/plain">
+          const name = "Sam";
+          const age = 12;
+
+          // with + (works, but fiddly)
+          console.log("Hi " + name + ", you are " + age + "!");
+
+          // with a template string (easier)
+          console.log(`Hi ${name}, you are ${age}!`);
+          console.log(`Next year you'll be ${age + 1}.`);
+          console.log(`Your name has ${name.length} letters.`);
+        </script>
+      </div>
+      <p>On an iPad keyboard, the backtick is on the numbers page: press and hold the apostrophe key. On most computer keyboards it's top left, under <kbd>Esc</kbd>.</p>
+    </section>
+
+    <section>
+      <h2>Every character has a position</h2>
+      <p>A string is a row of characters, numbered from <strong>0</strong>. <code>.length</code> tells you how many there are.</p>
+      <div class="cells" role="img" aria-label="The word CODING: C is index 0, O 1, D 2, I 3, N 4, G 5">
+        <div class="cell hl"><b>C</b><small>0</small></div>
+        <div class="cell"><b>O</b><small>1</small></div>
+        <div class="cell"><b>D</b><small>2</small></div>
+        <div class="cell"><b>I</b><small>3</small></div>
+        <div class="cell"><b>N</b><small>4</small></div>
+        <div class="cell hl"><b>G</b><small>5</small></div>
+      </div>
+      <div class="runnable" data-lang="typescript" data-title="Characters by position">
+        <script type="text/plain">
+          const word = "CODING";
+          console.log(word[0]);              // first
+          console.log(word[3]);              // fourth (we start at 0!)
+          console.log(word.at(-1));          // last
+          console.log(word.length);          // 6
+          console.log(word[word.length - 1]);  // also the last
+        </script>
+      </div>
+
+      <h3>Slicing</h3>
+      <p><code>text.slice(start, end)</code> cuts out a piece, from <code>start</code> up to (not including) <code>end</code>:</p>
+      <div class="code-explorer" data-lang="typescript" data-title="Slice a word">
+        <input type="text" name="w" data-label="word" value="strawberry">
+        <input type="range" name="s" data-label="start" min="0" max="10" value="0">
+        <input type="range" name="e" data-label="end" min="0" max="10" value="5">
+        <script type="text/plain">
+          const word = "{{w}}";
+
+          console.log(`slice({{s}}, {{e}}) is '${word.slice({{s}}, {{e}})}'`);
+          console.log("first 3:", word.slice(0, 3));
+          console.log("from 5 on:", word.slice(5));
+          console.log("backwards:", word.split("").reverse().join(""));
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>String methods</h2>
+      <p>Strings come with lots of built-in <strong>methods</strong>, used with a dot. In VS Code, type a dot after a string and a list of every method pops up. That list exists because TypeScript knows the value is a string.</p>
+
+      <div class="runnable" data-lang="typescript" data-title="Useful methods">
+        <script type="text/plain">
+          const text = "  Hello, TypeScript world!  ";
+
+          console.log(text.toUpperCase());
+          console.log(text.toLowerCase());
+          console.log(text.trim());                       // remove spaces at the ends
+          console.log(text.replace("world", "fans"));
+          console.log(text.includes("Type"));             // true or false
+          console.log(text.trim().startsWith("Hello"));
+          console.log(text.indexOf("Type"));              // where it starts
+          console.log("ha".repeat(3));
+          console.log("7".padStart(3, "0"));              // "007"
+          console.log("red,green,blue".split(","));       // into a list
+        </script>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Method</th><th>Does</th></tr></thead>
+          <tbody>
+            <tr><td><code>.toUpperCase()</code> / <code>.toLowerCase()</code></td><td>CAPITALS / small letters</td></tr>
+            <tr><td><code>.trim()</code></td><td>Remove spaces at the start and end</td></tr>
+            <tr><td><code>.includes(x)</code></td><td>true if x is inside</td></tr>
+            <tr><td><code>.startsWith(x)</code> / <code>.endsWith(x)</code></td><td>true or false</td></tr>
+            <tr><td><code>.indexOf(x)</code></td><td>Position of x (−1 if not found)</td></tr>
+            <tr><td><code>.replace(a, b)</code> / <code>.replaceAll(a, b)</code></td><td>Swap the first a / every a for b</td></tr>
+            <tr><td><code>.slice(start, end)</code></td><td>Cut out a piece</td></tr>
+            <tr><td><code>.split(sep)</code></td><td>Break into an array (lesson 7)</td></tr>
+            <tr><td><code>.repeat(n)</code> / <code>.padStart(n, c)</code></td><td>Repeat / pad to a length</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Methods never change the original string. They give you a new one.</p>
+    </section>
+
+    <section>
+      <h2>Build it: a name badge</h2>
+      <div class="runnable" data-lang="typescript" data-title="Badge maker">
+        <script type="text/plain">
+          const rawName = "  zara noor ";
+          const job = "pilot";
+
+          const clean = rawName.trim();
+          const [first, last] = clean.split(" ");
+          const nice = first[0].toUpperCase() + first.slice(1) + " " + last[0].toUpperCase() + last.slice(1);
+
+          const badge = `| ${nice} · ${job.toUpperCase()} |`;
+          console.log("-".repeat(badge.length));
+          console.log(badge);
+          console.log("-".repeat(badge.length));
+          console.log(`Initials: ${first[0].toUpperCase()}.${last[0].toUpperCase()}.`);
+        </script>
+      </div>
+      <p>Line 5 is a neat trick: <code>const [first, last] = ...</code> takes the two words from the array and puts them in two variables at once.</p>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Make the badge show your own name and dream job.</li>
+          <li>Log a word backwards.</li>
+          <li>Replace every "a" in a sentence with "🍕" using <code>replaceAll</code>.</li>
+        </ol>
+      </aside>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Quotes instead of backticks</strong>: <code>"Hi ${name}"</code> shows the <code>${name}</code> literally.</li>
+          <li><strong>Counting from 1</strong>: the first character is <code>[0]</code>.</li>
+          <li><strong>length with brackets</strong>: it's <code>text.length</code>, not <code>text.length()</code>. TypeScript will tell you.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">name is "Mo". Which line shows Hi Mo?</p>
+        <div class="opts">
+          <button>console.log("Hi ${name}")</button>
+          <button data-correct>console.log(`Hi ${name}`)</button>
+          <button>console.log('Hi' + name)</button>
+        </div>
+        <p class="why">Only backticks make <code>${ }</code> work. The last one gives "HiMo" with no space.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>`Hi ${name}`</code> builds text with values inside.</li>
+          <li><code>text[0]</code>, <code>text.at(-1)</code>, <code>text.length</code>, <code>text.slice(a, b)</code>.</li>
+          <li>Methods: <code>toUpperCase</code>, <code>trim</code>, <code>includes</code>, <code>replace</code>, <code>split</code>.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/typescript.min.js"></script>
+<script src="../../assets/vendor/typescript-libs.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

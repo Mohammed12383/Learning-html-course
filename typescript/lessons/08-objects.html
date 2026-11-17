@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Objects &amp; Interfaces · Hello TypeScript</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="08-objects">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 08 &middot; <b>Data</b></p>
+      <div class="hero-code" aria-hidden="true">interface</div>
+      <h1>Objects &amp; Interfaces</h1>
+      <p class="lead">A user has a name, an email and an age. A song has a title, an artist and a length. An <strong>object</strong> groups related values together under one name. An <strong>interface</strong> describes the shape an object must have, and TypeScript makes sure it does.</p>
+      <ul class="learn">
+        <li>Making objects</li>
+        <li>Reading and changing properties</li>
+        <li>Interfaces and types</li>
+        <li>Optional properties</li>
+        <li>Arrays of objects</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Many values, one name</h2>
+      <p>An object is written with curly brackets. Inside are <strong>properties</strong>: a name, a colon, and a value.</p>
+
+      <div class="memory" role="img" aria-label="An object called pet with three properties: name Rex, age 3, and isGoodBoy true">
+        <div class="slot other"><span class="nm">pet</span><span class="vl">name: "Rex"
+age: 3
+isGoodBoy: true</span><span class="ty">an object</span></div>
+      </div>
+
+      <div class="runnable" data-lang="typescript" data-title="Make an object">
+        <script type="text/plain">
+          const pet = {
+            name: "Rex",
+            age: 3,
+            isGoodBoy: true,
+          };
+
+          console.log(pet);
+          console.log(pet.name);              // read with a dot
+          console.log(pet["age"]);            // or with brackets
+
+          pet.age = 4;                        // change a property
+          console.log(`${pet.name} is now ${pet.age}`);
+
+          pet.color = "brown";                // TypeScript: pet has no 'color'!
+        </script>
+      </div>
+      <p>TypeScript remembers the shape of the object: it has <code>name</code>, <code>age</code> and <code>isGoodBoy</code>, nothing else. So adding <code>color</code> later is flagged. That catches typos like <code>pet.nmae</code> too.</p>
+    </section>
+
+    <section>
+      <h2>Interfaces: describe the shape</h2>
+      <p>An <code class="k-tag">interface</code> is a type for objects. It lists every property and its type. Then any object with that type must match exactly:</p>
+
+      <div class="runnable" data-lang="typescript" data-title="An interface for users">
+        <script type="text/plain">
+          interface User {
+            name: string;
+            email: string;
+            age: number;
+          }
+
+          const lina: User = {
+            name: "Lina",
+            email: "lina@example.com",
+            age: 13,
+          };
+
+          const omar: User = {
+            name: "Omar",
+            age: "eleven",
+          };
+
+          console.log(lina.name, lina.email);
+        </script>
+      </div>
+      <p>Omar has two problems: <code>age</code> is text instead of a number, and <code>email</code> is missing. TypeScript points at the first one. Fix it, and the next problem appears. Keep going until Omar matches the <code>User</code> shape.</p>
+
+      <aside class="note idea">
+        <h4>interface or type?</h4>
+        <p>You'll also see <code>type User = { name: string; ... }</code>. For describing objects, <code>interface</code> and <code>type</code> do almost the same thing. This course uses <code>interface</code> for object shapes and <code>type</code> for everything else (lesson 10).</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Optional and read-only properties</h2>
+      <div class="runnable" data-lang="typescript" data-title="? and readonly">
+        <script type="text/plain">
+          interface Song {
+            readonly id: number;    // can never change
+            title: string;
+            artist: string;
+            featuring?: string;     // optional: may be missing
+          }
+
+          const song: Song = { id: 1, title: "Sunrise", artist: "The Waves" };
+          const duet: Song = { id: 2, title: "Together", artist: "Mia", featuring: "Leo" };
+
+          for (const s of [song, duet]) {
+            const extra = s.featuring ? ` (feat. ${s.featuring})` : "";
+            console.log(`${s.title} by ${s.artist}${extra}`);
+          }
+
+          song.id = 99;             // not allowed: id is readonly
+        </script>
+      </div>
+      <ul>
+        <li>A <code>?</code> after the name makes a property <strong>optional</strong>. If it's missing, its value is <code>undefined</code>.</li>
+        <li><code>readonly</code> means the property can be set when the object is made, but never changed after.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Objects inside objects, and arrays of objects</h2>
+      <p>Real data is a mix of objects and arrays. An array of objects is like a table, where each object is one row:</p>
+
+      <div class="runnable" data-lang="typescript" data-title="A little contacts book">
+        <script type="text/plain">
+          interface Contact {
+            name: string;
+            phone: string;
+            address: { city: string; country: string };
+          }
+
+          const contacts: Contact[] = [
+            { name: "Lina", phone: "555-0101", address: { city: "Muscat", country: "Oman" } },
+            { name: "Omar", phone: "555-0145", address: { city: "Cairo", country: "Egypt" } },
+            { name: "Maya", phone: "555-0199", address: { city: "Muscat", country: "Oman" } },
+          ];
+
+          for (const c of contacts) {
+            console.log(`${c.name.padEnd(6)} ${c.phone}  ${c.address.city}`);
+          }
+
+          const inMuscat = contacts.filter(c => c.address.city === "Muscat").map(c => c.name);
+          console.log("In Muscat:", inMuscat);
+        </script>
+      </div>
+      <p>Notice <code>c.address.city</code>: dots chain to go deeper into the object.</p>
+    </section>
+
+    <section>
+      <h2>Handy tricks</h2>
+      <div class="runnable" data-lang="typescript" data-title="Destructuring, spread and looping">
+        <script type="text/plain">
+          const hero = { name: "Zara", level: 3, hp: 80 };
+
+          // take properties out into variables
+          const { name, level } = hero;
+          console.log(name, level);
+
+          // a copy with one property changed
+          const stronger = { ...hero, level: 4 };
+          console.log(stronger);
+
+          // loop over all properties
+          for (const [key, value] of Object.entries(hero)) {
+            console.log(`${key} → ${value}`);
+          }
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Write an interface <code>Movie</code> with <code>title</code>, <code>year</code> and an optional <code>rating</code>.</li>
+          <li>Make an array of three movies and log the titles of the ones from after 2010.</li>
+          <li>Add a property that isn't in the interface. Read the error.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="typescript" data-title="Your objects">
+        <script type="text/plain">
+          interface Movie {
+            title: string;
+            year: number;
+          }
+
+          const movies: Movie[] = [
+            { title: "Space Cats", year: 2019 },
+          ];
+          console.log(movies);
+        </script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>= instead of :</strong> inside an object. It's <code>{ name: "Rex" }</code>.</li>
+          <li><strong>Forgetting commas</strong> between properties.</li>
+          <li><strong>Missing a required property</strong>: TypeScript tells you which one.</li>
+          <li><strong>Reading an optional property without checking</strong>: it might be <code>undefined</code>.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">interface Pet { name: string; age?: number }. Which object is NOT allowed?</p>
+        <div class="opts">
+          <button>{ name: "Bo" }</button>
+          <button>{ name: "Bo", age: 2 }</button>
+          <button data-correct>{ age: 2 }</button>
+        </div>
+        <p class="why"><code>name</code> is required. <code>age</code> has a <code>?</code>, so it can be left out.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>const o = { key: value, ... };</code> Read with <code>o.key</code>.</li>
+          <li><code>interface Name { prop: type; }</code> describes an object's shape.</li>
+          <li><code>prop?:</code> optional, <code>readonly</code> can't change.</li>
+          <li><code>Name[]</code> is an array of objects. <code>{ ...o }</code> copies, <code>const { a } = o</code> takes properties out.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/typescript.min.js"></script>
+<script src="../../assets/vendor/typescript-libs.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>
