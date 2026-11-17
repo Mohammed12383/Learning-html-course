@@ -16,7 +16,10 @@ Four visual programming courses for total beginners: **HTML & CSS**, **Python**,
   Each file holds the whole course. Open it in a web browser.
 - **The reading book, for any viewer (even the iPad Files preview):** `hello-courses-book.html`.
   All four courses in one page (HTML, then Python, then C++, then TypeScript), with nothing that needs to run: just scroll down. Every example shows its code and the result it made (websites and drawings as pictures, program output as text), step-throughs are written out as stages, and quiz answers are shown. Use it to read anywhere; use the course files above to change and run the code.
-- **The video:** `hello-html-course-video.mp4` (about 20 minutes, 1080p). The whole HTML course as a motion-graphics video: code types itself on the left while the real website builds on the right, with labels, size rulers and captions. Plays on any phone, tablet or computer.
+- **The videos** (1080p MP4, they play on any phone, tablet or computer):
+  - `hello-html-course-video.mp4` (about 20 minutes): code types itself on the left while the real website builds on the right, with labels, size rulers and captions.
+  - `hello-python-course-video.mp4` (about 17 minutes): programs type themselves and run, with real output, typed answers, turtle drawings, and memory boxes that show the variables changing step by step.
+  - `hello-cpp-course-video.mp4` (about 16 minutes): the same for C++, compiled with a real compiler, including the compiler's error messages explained.
 - **As a website:** turn on GitHub Pages for this repository (Settings → Pages → Deploy from a branch → pick the branch → `/ (root)` → Save). Then open `https://<your-username>.github.io/Learning-html-course/` (the HTML course links to the others), or a single-file course such as `.../hello-python-course.html`. On an iPad, tap Share → **Add to Home Screen** to get an app icon.
 - **On a computer:** download the repository and double-click `index.html`, `python/index.html`, `typescript/index.html` or `cpp/index.html`.
 
@@ -42,7 +45,7 @@ assets/course.css     the courses' design
 assets/course.js      the course engine: menus, progress, playgrounds, quizzes
 assets/code.js        code boxes for Python, TypeScript and C++
 assets/vendor/        Skulpt (Python in the browser) and the TypeScript compiler, with their licenses
-video/                the course video: engine.js (animation), html-course.js (the script), render.js, audio.py
+video/                the course videos: engine.js (animation), *-course.js (the scripts), render.js, audio.py
 tools/                build-single-file.py (makes the one-file courses), update-cpp-outputs.py,
                       build-reading-book.js + reading-book.css (makes the reading book)
 ```
@@ -53,5 +56,6 @@ tools/                build-single-file.py (makes the one-file courses), update-
 python3 tools/update-cpp-outputs.py     # C++ only: recompile examples and save their outputs (needs g++)
 python3 tools/build-single-file.py      # rebuild the one-file courses
 node tools/build-reading-book.js        # rebuild the reading book (needs Playwright + Chromium; runs every example)
-node video/render.js html-course        # render the video (needs Playwright, ffmpeg, Python 3 + numpy)
+node video/render.js html-course        # render a video: html-course, python-course or cpp-course
+                                        # (needs Playwright, ffmpeg, Python 3 + numpy, and g++ for C++)
 ```

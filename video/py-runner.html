@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Python runner for the videos</title></head>
+<body>
+<div id="turtle"></div>
+<script src="../assets/vendor/skulpt.min.js"></script>
+<script src="../assets/vendor/skulpt-stdlib.js"></script>
+<script>
+/* Turtle canvases get twice as many pixels (with the drawing scaled to match), so pictures stay sharp in the video. */
+(function () {
+  const SCALE = 2;
+  const create = document.createElement.bind(document);
+  window.rawCanvas = () => create('canvas');
+  const W = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, 'width');
+  const H = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, 'height');
+  document.createElement = function (tag, o) {
+    const e = create(tag, o);
+    if (String(tag).toLowerCase() !== 'canvas') return e;
+    let lw = 300, lh = 150, ctx = null;
+    const reset = () => { if (ctx) ctx.setTransform(1, 0, 0, 1, 0, 0); };
+    Object.defineProperty(e, 'width', { get: () => lw, set: v => { lw = +v; W.set.call(e, lw * SCALE); e.style.width = lw + 'px'; reset(); } });
+    Object.defineProperty(e, 'height', { get: () => lh, set: v => { lh = +v; H.set.call(e, lh * SCALE); e.style.height = lh + 'px'; reset(); } });
+    const getCtx = e.getContext.bind(e);
+    e.getContext = function (type, opts) {
+      const c = getCtx(type, opts);
+      if (type === '2d' && c && !c.__scaled) {
+        c.__scaled = true; ctx = c;
+        const st = c.setTransform.bind(c);
+        c.setTransform = function (a, b, cc, d, ee, f) { if (typeof a === 'object') return st(a); return st(a * SCALE, b * SCALE, cc * SCALE, d * SCALE, ee * SCALE, f * SCALE); };
+        c.resetTransform = function () { return st(SCALE, 0, 0, SCALE, 0, 0); };
+        st(SCALE, 0, 0, SCALE, 0, 0);
+      }
+      return c;
+    };
+    return e;
+  };
+})();
+/* Runs a Python program with Skulpt (the same Python as the course) and returns what it printed,
+   the typed answers, any error, and the turtle drawing as a picture. Used by video/render.js. */
+window.runPy = function (code, answers) {
+  answers = (answers || []).slice();
+  const parts = [];
+  const write = (k, text) => { const last = parts[parts.length - 1]; if (last && last.k === k) last.text += text; else parts.push({ k, text }); };
+  const target = document.getElementById('turtle');
+  target.innerHTML = '';
+  const usesTurtle = /\bturtle\b/.test(code);
+  const prelude = '';
+  Sk.configure({
+    output: t => write('out', t),
+    read: f => { if (!Sk.builtinFiles || !Sk.builtinFiles.files[f]) throw "File not found: '" + f + "'"; return Sk.builtinFiles.files[f]; },
+    inputfun: p => { if (p) write('out', p); const a = answers.length ? answers.shift() : ''; write('in', a + '\n'); return a; },
+    inputfunTakesPrompt: true,
+    __future__: Sk.python3,
+    execLimit: 20000
+  });
+  Sk.sysmodules = new Sk.builtin.dict([]);
+  Sk.TurtleGraphics = { target: 'turtle', width: 400, height: 300 };
+  const lines = prelude ? 2 : 0;
+  return Sk.misceval.asyncToPromise(() => Sk.importMainWithBody('<stdin>', false, prelude + code, true)).then(() => null, e => {
+    const text = e && e.toString ? e.toString() : String(e);
+    const m = /^(\w+): ([\s\S]*?)(?: on line (\d+))?\s*$/.exec(text);
+    return m ? { type: m[1], msg: m[2], line: m[3] ? +m[3] - lines : 0 } : { type: 'Error', msg: text, line: 0 };
+  }).then(err => new Promise(r => setTimeout(() => r(err), usesTurtle ? 400 : 0))).then(err => {
+    let image = null;
+    const canvases = target.querySelectorAll('canvas');
+    if (usesTurtle && canvases.length) {
+      const c = window.rawCanvas();
+      c.width = canvases[0].width * 2; c.height = canvases[0].height * 2;
+      const g = c.getContext('2d');
+      g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height);
+      canvases.forEach(x => g.drawImage(x, 0, 0, c.width, c.height));
+      image = c.toDataURL('image/png');
+    }
+    return { parts, error: err, image };
+  });
+};
+</script>
+</body>
+</html>

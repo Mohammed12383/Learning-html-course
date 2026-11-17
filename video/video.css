@@ -142,3 +142,40 @@ html, body { margin: 0; background: #0E0D16; overflow: hidden; }
 
 .wipe { position: absolute; top: -100px; bottom: -100px; width: 2600px; left: -2600px; background: var(--g); transform: skewX(-12deg); }
 .wipe.two { background: var(--ink); }
+
+/* programs: the output panel, memory boxes and highlighted lines */
+.ed-line { position: absolute; left: 0; right: 0; }
+.ed-line.now { background: color-mix(in srgb, var(--g) 16%, transparent); box-shadow: inset 6px 0 0 var(--g); }
+.ed-line.err { background: color-mix(in srgb, #C93434 13%, transparent); box-shadow: inset 6px 0 0 #C93434; }
+.run { background: #fff; }
+.run-bar { height: 70px; display: flex; align-items: center; gap: 14px; padding: 0 22px; background: var(--code-bg); border-bottom: 2px solid var(--line); }
+.run-label { font-size: 17px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+.run-btn { margin-left: auto; font-weight: 700; font-size: 22px; color: #fff; background: var(--c-val); padding: 8px 20px; border-radius: 999px; box-shadow: 0 4px 12px rgba(18,128,90,.25); }
+.run-btn.pressed { transform: scale(0.9); filter: brightness(1.15); }
+.run-status { font-size: 19px; font-weight: 700; padding: 6px 14px; border-radius: 999px; background: var(--chrome); color: var(--ink-2); min-width: 120px; text-align: center; }
+.run-status[data-state="running"] { background: color-mix(in srgb, var(--c-prop) 15%, #fff); color: var(--c-prop); }
+.run-status[data-state="done"] { background: color-mix(in srgb, var(--c-val) 15%, #fff); color: var(--c-val); }
+.run-status[data-state="error"] { background: color-mix(in srgb, #C93434 13%, #fff); color: #C93434; }
+.run-body { position: absolute; left: 0; right: 0; top: 70px; bottom: 0; display: flex; flex-direction: column; }
+.stdin { padding: 16px 22px; border-bottom: 2px solid var(--line); background: var(--code-bg); }
+.stdin-title { font-size: 17px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+.stdin-title code { font-family: var(--font-code); text-transform: none; letter-spacing: 0; color: var(--c-tag); }
+.stdin pre { margin: 8px 0 0; font-family: var(--font-code); font-size: 23px; color: var(--c-prop); }
+.mem { padding: 18px 22px 22px; border-bottom: 2px solid var(--line); }
+.mem-title { font-size: 17px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 14px; }
+.mem-boxes { display: flex; flex-wrap: wrap; gap: 18px 20px; }
+.mem-empty { font-size: 22px; color: var(--ink-3); }
+.vb { display: grid; justify-items: center; gap: 6px; }
+.vb-name { font-family: var(--font-code); font-size: 20px; color: var(--c-prop); }
+.vb-val { font-family: var(--font-code); font-size: 25px; padding: 8px 16px; min-width: 70px; text-align: center; border: 3px solid var(--line); border-radius: 14px; background: var(--code-bg); white-space: pre; }
+.vb.changed .vb-val { border-color: var(--c-val); background: color-mix(in srgb, var(--c-val) 10%, #fff); }
+.turtle { padding: 14px; background: var(--chrome); border-bottom: 2px solid var(--line); display: flex; justify-content: center; }
+.turtle img { display: block; width: 560px; height: 420px; border-radius: 12px; background: #fff; }
+.console-wrap { position: relative; flex: 1; overflow: hidden; }
+.console { padding: 18px 24px; font-family: var(--font-code); font-size: 24px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--ink); }
+.c-in { color: var(--c-prop); font-weight: 500; }
+.c-err { color: #C93434; }
+.err-box { margin-top: 12px; padding: 14px 18px; border-radius: 16px; background: #FDF0F0; border: 2px solid #F0B8B8; font-family: var(--font-body); font-size: 23px; line-height: 1.35; white-space: normal; }
+.err-box strong { color: #C93434; font-size: 24px; }
+.err-box .msg { font-family: var(--font-code); font-size: 21px; margin-top: 6px; color: var(--ink); }
+.err-box .help { margin-top: 8px; color: var(--ink-2); }

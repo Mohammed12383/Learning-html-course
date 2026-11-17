@@ -29,7 +29,12 @@
   const lerp = (a, b, p) => a + (b - a) * p;
   const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   // caption markup: *bold* and `code`
-  const rich = s => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*([^*]+)\*/g, '<b>$1</b>');
+  const rich = s => {
+    const codes = [];
+    return esc(s).replace(/`([^`]+)`/g, (m, c) => { codes.push(c); return '\u0001' + (codes.length - 1) + '\u0002'; })
+      .replace(/\*([^*]+)\*/g, '<b>$1</b>')
+      .replace(/\u0001(\d+)\u0002/g, (m, i) => '<code>' + codes[+i] + '</code>');
+  };
   const words = s => String(s).replace(/<[^>]+>/g, '').split(/\s+/).filter(Boolean).length;
   const readTime = s => clamp(1.5 + words(s) * 0.36, 2.6, 10);
   const graphemes = s => (window.Intl && Intl.Segmenter ? [...new Intl.Segmenter('en', { granularity: 'grapheme' }).segment(s)].map(x => x.segment) : Array.from(s));
@@ -40,6 +45,12 @@
     if (html != null) e.innerHTML = html;
     if (parent) parent.appendChild(e);
     return e;
+  }
+
+  function hashKey(s) {
+    let h1 = 0x811c9dc5, h2 = 0x01000193;
+    for (let i = 0; i < s.length; i++) { const c = s.charCodeAt(i); h1 = Math.imul(h1 ^ c, 16777619); h2 = Math.imul(h2 + c, 2246822519) ^ (h2 >>> 13); }
+    return (h1 >>> 0).toString(36) + (h2 >>> 0).toString(36) + s.length.toString(36);
   }
 
   /* ---------- Anim: opacity / move / scale / rotate keyframes for one element ---------- */
@@ -86,6 +97,8 @@
       this.captions = [];
       this.sections = [];      // [{t0, t1, group, n, title}]
       this.pending = [];
+      this.jobs = [];                       // programs whose output the renderer must prepare
+      this.collect = /collect/.test(location.search);
       this.measureCtx = document.createElement('canvas').getContext('2d');
       this.bg = el('div', 'layer', null, stage);
       this.scenes = el('div', 'layer', null, stage);
@@ -364,8 +377,9 @@
       this.V = V; this.o = o;
       const layout = o.layout || 'split';
       const top = o.top || 120, h = o.height || 730;
-      this.edBox = layout === 'site' ? null : (o.ed || (layout === 'code' ? { x: 340, y: top, w: 1240, h } : { x: 70, y: top, w: 900, h }));
-      this.brBox = layout === 'code' ? null : (o.br || (layout === 'site' ? { x: 230, y: top, w: 1460, h } : { x: 1000, y: top, w: 850, h }));
+      this.edBox = layout === 'site' ? null : (o.ed || (layout === 'code' ? { x: 340, y: top, w: 1240, h } : layout === 'run' ? { x: 70, y: top, w: o.edWidth || 1000, h } : { x: 70, y: top, w: 900, h }));
+      this.brBox = layout === 'code' || layout === 'run' ? null : (o.br || (layout === 'site' ? { x: 230, y: top, w: 1460, h } : { x: 1000, y: top, w: 850, h }));
+      this.runBox = layout === 'run' ? (o.run || { x: 70 + (o.edWidth || 1000) + 30, y: top, w: 1850 - (70 + (o.edWidth || 1000) + 30), h }) : null;
       this.shot = o.shot || V.shot();
       const s = this.shot.e;
       this.files = Object.assign({}, o.files || { 'index.html': '' });
@@ -379,9 +393,11 @@
       this.vwKeys = [];
       this.overlays = [];
       this.vw0 = o.viewport || null;
-      this.LH = 42; this.FONT = '400 26px "JetBrains Mono"';
+      this.FS = o.font || 26; this.LH = Math.round(this.FS * 1.62); this.FONT = '400 ' + this.FS + 'px "JetBrains Mono"';
+      this.runs = []; this.stepSets = [];
       if (this.edBox) this.buildEditor(s);
       if (this.brBox) this.buildBrowser(s);
+      if (this.runBox) this.buildRun(s);
       this.ov = el('div', 'ov', null, s);
       this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       this.svg.setAttribute('width', W); this.svg.setAttribute('height', H);
@@ -389,6 +405,7 @@
       const t = V.t;
       if (this.edP) V.pop(this.edP, t + 0.05, { from: { o: 0, x: -60 }, d: 0.7, ease: ease.out, sfx: false });
       if (this.brP) V.pop(this.brP, t + 0.18, { from: { o: 0, x: 60 }, d: 0.7, ease: ease.out, sfx: false });
+      if (this.runP) V.pop(this.runP, t + 0.18, { from: { o: 0, x: 60 }, d: 0.7, ease: ease.out, sfx: false });
       V.add(tt => this.render(tt), 0, this.shot.start, 1e9);
       V.add(tt => this.renderOverlays(tt), 1, this.shot.start, 1e9);
       V.t += o.delay == null ? 0.7 : o.delay;
@@ -402,9 +419,12 @@
       this.scrollEl = el('div', 'ed-scroll', null, body);
       this.flashEl = el('div', null, null, this.scrollEl);
       this.selEl = el('div', null, null, this.scrollEl);
+      this.lineEl = el('div', null, null, this.scrollEl);
       this.gutterEl = el('pre', 'ed-gutter', null, this.scrollEl);
       this.codeEl = el('pre', 'ed-code', null, this.scrollEl);
       this.caretEl = el('div', 'ed-caret', null, this.scrollEl);
+      [this.gutterEl, this.codeEl].forEach(e => { e.style.fontSize = this.FS + 'px'; e.style.lineHeight = this.LH + 'px'; });
+      this.caretEl.style.height = Math.round(this.LH * 0.8) + 'px';
       this.lastCode = null; this.lastTabs = null;
     }
     buildBrowser(s) {
@@ -532,6 +552,7 @@
         this.cur.page = o.page || names.find(n => /\.html$/.test(n)) || names[0];
         this.cur.cursor = this.cur.files[this.cur.active].length;
         op.after = JSON.parse(JSON.stringify(this.cur));
+        if (this.runBox) this.runs.push({ t0: this.V.t, clear: true });
       });
     }
     hover(sel, o) {
@@ -590,10 +611,12 @@
       if (this.shot.end != null && t >= this.shot.end) return;
       const st = this.stateAt(t);
       this.state = st;
+      this.mark = this.runBox ? this.runMark(t) : null;
       if (this.edBox) this.renderEditor(t, st);
       if (this.brBox) this.renderSite(t, st.s);
+      if (this.runBox) this.renderRun(t);
     }
-    lang(name) { return /\.css$/.test(name) ? 'css' : 'html'; }
+    lang(name) { return /\.css$/.test(name) ? 'css' : /\.py$/.test(name) ? 'python' : /\.(cpp|h|hpp)$/.test(name) ? 'cpp' : /\.ts$/.test(name) ? 'typescript' : 'html'; }
     lineCol(code, pos) {
       const before = code.slice(0, pos);
       const line = (before.match(/\n/g) || []).length;
@@ -628,7 +651,13 @@
       this.scrollEl.style.transform = 'translateY(' + (-scroll) + 'px)';
       const x = codeX + this.V.measure(lc.lineText, this.FONT);
       this.caretEl.style.left = x + 'px';
-      this.caretEl.style.top = (padT + lc.line * LH + 4) + 'px';
+      this.caretEl.style.top = (padT + lc.line * LH + Math.round(LH * 0.1)) + 'px';
+      // a highlighted line: the line running now (step by step) or a line with an error
+      const mk = this.mark;
+      if (mk) {
+        this.lineEl.className = 'ed-line ' + mk.kind;
+        this.lineEl.style.cssText = 'top:' + (padT + (mk.line - 1) * LH) + 'px;height:' + LH + 'px';
+      } else this.lineEl.className = '';
       const blink = st.busy || Math.floor(t * 2.2) % 2 === 0;
       this.caretEl.style.opacity = this.o.caret === false ? '0' : (blink ? '1' : '0');
       // selection
@@ -637,7 +666,7 @@
         const x0 = codeX + this.V.measure(a.lineText, this.FONT);
         const x1 = a.line === b.line ? codeX + this.V.measure(b.lineText, this.FONT) : x0 + 200;
         this.selEl.className = 'ed-sel';
-        this.selEl.style.cssText = 'left:' + (x0 - 3) + 'px;top:' + (padT + a.line * LH) + 'px;width:' + (x1 - x0 + 6) + 'px';
+        this.selEl.style.cssText = 'left:' + (x0 - 3) + 'px;top:' + (padT + a.line * LH) + 'px;width:' + (x1 - x0 + 6) + 'px;height:' + LH + 'px';
       } else this.selEl.className = '';
       if (st.flash) {
         const a = this.lineCol(code, st.flash.a), b = this.lineCol(code, st.flash.b);
@@ -737,6 +766,170 @@
       // panels slide in: follow their animation
       const m = /translate\(([-\d.]+)px,\s*([-\d.]+)px\)/.exec(p.style.transform || '');
       return m ? { x: +m[1], y: +m[2] } : { x: 0, y: 0 };
+    }
+
+
+    /* ----- programs: run them and show the output ----- */
+    buildRun(s) {
+      const p = this.runP = el('div', 'panel run', null, s);
+      this.place(p, this.runBox);
+      const bar = el('div', 'run-bar', '<span class="run-label">Output</span><span class="run-btn">▶ Run</span><span class="run-status"></span>', p);
+      this.runBtn = bar.querySelector('.run-btn');
+      this.statusEl = bar.querySelector('.run-status');
+      const body = this.runBody = el('div', 'run-body', null, p);
+      this.stdinEl = el('div', 'stdin', null, body);
+      this.memEl = el('div', 'mem', null, body);
+      this.turtleEl = el('div', 'turtle', '<img alt="">', body);
+      this.turtleImg = this.turtleEl.querySelector('img');
+      this.consoleWrap = el('div', 'console-wrap', null, body);
+      this.consoleEl = el('div', 'console', null, this.consoleWrap);
+      this.lastRunKey = null;
+    }
+    // run the code in the editor; o.answers = typed answers for input(), o.stdin = input for cin
+    run(o) {
+      o = o || {};
+      const V = this.V;
+      const code = this.cur.files[this.cur.active];
+      const lang = this.lang(this.cur.active);
+      const job = { lang, code, answers: o.answers || [], stdin: o.stdin || '' };
+      const key = hashKey(JSON.stringify(job));
+      V.jobs.push(Object.assign({ key }, job));
+      let res = (window.VIDEO_OUTPUTS || {})[key];
+      if (!res) {
+        if (!V.collect) throw new Error('No saved output for this ' + lang + ' program (render.js prepares them): ' + code.slice(0, 60));
+        res = { parts: [{ k: 'out', text: '...\n' }] };
+      }
+      const t0 = V.t;
+      const press = t0 + 0.15;
+      let t = press + 0.25 + (lang === 'cpp' ? 0.9 : 0.35);
+      const start = t;
+      const items = [];
+      for (const part of res.parts) {
+        if (part.k === 'in') {
+          const d = 0.5 + part.text.length / 8;
+          items.push({ k: 'in', text: part.text, t0: t + 0.5, t1: t + d });
+          for (let i = 0; i < part.text.length - 1; i++) V.sfx(t + 0.5 + (i + 0.5) * (d - 0.5) / part.text.length, 'key');
+          t += d + 0.15;
+        } else {
+          const lines = part.text.split('\n').length;
+          const d = clamp((lines - 1) * (o.lineTime || 0.09), 0.04, o.maxReveal || 3.2);
+          items.push({ k: part.k, text: part.text, t0: t, t1: t + d });
+          t += d;
+        }
+      }
+      let imgT = null;
+      if (res.image) { imgT = t; t += o.drawTime || 2.4; }
+      let errT = null;
+      if (res.error) { errT = t + 0.1; t += 0.6; V.sfx(errT, 'pop'); }
+      const end = t;
+      V.sfx(press, 'click');
+      this.runs.push({ t0, press, start, end, items, res, imgT, errT, stdin: o.stdin || '', lang, drawTime: o.drawTime || 2.4 });
+      return this.act(end - t0, o, () => {});
+    }
+    // play one of the course's own step-through examples (key like 'python/02/0')
+    stepper(key, o) {
+      const S = (window.COURSE_STEPPERS || {})[key];
+      if (!S) throw new Error('No step-through example ' + key);
+      this.set({ [this.cur.active]: S.code });
+      return this.steps(o && o.only ? S.steps.slice(0, o.only) : S.steps, o);
+    }
+    // step through a program: [{line, vars: {name: value}, out, note}]
+    steps(list, o) {
+      o = o || {};
+      const V = this.V;
+      const t0 = V.t;
+      let t = t0;
+      let out = '';
+      const steps = list.map((s, i) => {
+        const d = o.each || Math.max(2.2, s.note ? readTime(s.note) - 0.3 : 2.2);
+        out += s.out || '';
+        const st = { t, line: s.line, vars: s.vars || {}, out, prev: i ? list[i - 1].vars || {} : {} };
+        if (s.note) V.caption(s.note, t, t + d);
+        V.sfx(t, 'click');
+        t += d;
+        return st;
+      });
+      this.stepSets.push({ t0, end: t, steps });
+      V.t = t + (o.pause == null ? 0.3 : o.pause);
+      return t0;
+    }
+    latest(t) {
+      let r = null, s = null;
+      for (const x of this.runs) if (x.t0 <= t) r = x;
+      for (const x of this.stepSets) if (x.t0 <= t) s = x;
+      if (r && s) return r.t0 > s.t0 ? { run: r } : { steps: s };
+      return r ? { run: r } : s ? { steps: s } : {};
+    }
+    runMark(t) {
+      const L = this.latest(t);
+      if (L.steps) {
+        let cur = null;
+        for (const st of L.steps.steps) if (st.t <= t) cur = st;
+        return cur && t < L.steps.end + 0.6 ? { line: cur.line, kind: 'now' } : null;
+      }
+      if (L.run && !L.run.clear && L.run.res.error && L.run.res.error.line && L.run.errT <= t) return { line: L.run.res.error.line, kind: 'err' };
+      return null;
+    }
+    renderRun(t) {
+      const L = this.latest(t);
+      let key = '', html = '', status = 'Ready', state = 'idle', stdin = '', mem = '', img = null, imgP = 0;
+      if (L.run && L.run.clear) { /* a fresh example: empty output */ }
+      else if (L.run) {
+        const r = L.run;
+        stdin = r.stdin;
+        if (t < r.start) { status = r.lang === 'cpp' ? 'Compiling…' : 'Running…'; state = 'running'; }
+        else if (t < r.end) { status = 'Running…'; state = 'running'; }
+        else if (r.res.compile) { status = 'Didn\'t compile'; state = 'error'; }
+        else if (r.res.error) { status = 'Error' + (r.res.error.line ? ' on line ' + r.res.error.line : ''); state = 'error'; }
+        else { status = 'Finished'; state = 'done'; }
+        for (const it of r.items) {
+          if (t < it.t0) break;
+          const p = clamp((t - it.t0) / Math.max(0.001, it.t1 - it.t0), 0, 1);
+          let text = it.text;
+          if (p < 1) {
+            if (it.k === 'in') text = text.slice(0, Math.floor(p * text.length));
+            else { const lines = text.split('\n'); text = lines.slice(0, Math.max(1, Math.ceil(p * lines.length))).join('\n'); }
+          }
+          key += it.k + text.length + ',';
+          html += '<span class="c-' + it.k + '">' + esc(text) + '</span>';
+        }
+        if (r.errT != null && t >= r.errT) {
+          const e = r.res.error;
+          key += 'E';
+          html += '<div class="err-box"><strong>' + esc(e.title) + '</strong>' + (e.msg ? '<div class="msg">' + esc(e.msg) + '</div>' : '') + (e.help ? '<div class="help"><b>What this means:</b> ' + esc(e.help) + '</div>' : '') + '</div>';
+        }
+        if (r.imgT != null && t >= r.imgT) { img = r.res.image; imgP = clamp((t - r.imgT) / r.drawTime, 0, 1); }
+        if (t >= r.press && t < r.press + 0.3) this.runBtn.classList.add('pressed'); else this.runBtn.classList.remove('pressed');
+      } else if (L.steps) {
+        let cur = null;
+        for (const st of L.steps.steps) if (st.t <= t) cur = st;
+        if (cur) {
+          status = 'Step ' + (L.steps.steps.indexOf(cur) + 1) + ' of ' + L.steps.steps.length; state = 'running';
+          key = 'S' + L.steps.t0 + '/' + L.steps.steps.indexOf(cur);
+          html = '<span class="c-out">' + esc(cur.out) + '</span>';
+          const names = Object.keys(cur.vars);
+          mem = '<div class="mem-title">Memory: the variables</div><div class="mem-boxes">' + (names.length ? names.map(n =>
+            '<div class="vb' + (cur.prev[n] !== cur.vars[n] ? ' changed' : '') + '"><span class="vb-name">' + esc(n) + '</span><span class="vb-val">' + esc(cur.vars[n]) + '</span></div>').join('') : '<span class="mem-empty">nothing stored yet</span>') + '</div>';
+          this.memAge = t - cur.t;
+        }
+      }
+      if (this.statusEl.textContent !== status) this.statusEl.textContent = status;
+      this.statusEl.setAttribute('data-state', state);
+      if (stdin !== this.lastStdin) { this.lastStdin = stdin; this.stdinEl.innerHTML = stdin ? '<div class="stdin-title">Typed in for <code>cin</code></div><pre>' + esc(stdin) + '</pre>' : ''; this.stdinEl.style.display = stdin ? '' : 'none'; }
+      if (mem !== this.lastMem) { this.lastMem = mem; this.memEl.innerHTML = mem; this.memEl.style.display = mem ? '' : 'none'; }
+      if (mem) {
+        const s = 1 + 0.14 * Math.max(0, 1 - (this.memAge || 0) / 0.35);
+        this.memEl.querySelectorAll('.vb.changed .vb-val').forEach(v => { v.style.transform = 'scale(' + s.toFixed(3) + ')'; });
+      }
+      if (img !== this.lastImg) { this.lastImg = img; this.turtleEl.style.display = img ? '' : 'none'; if (img) { this.turtleImg.src = img; if (!this.turtleImg.complete) this.V.pending.push(this.turtleImg.decode().catch(() => {})); } }
+      if (img) this.turtleImg.style.clipPath = 'circle(' + (ease.inOut(imgP) * 75).toFixed(2) + '% at 50% 50%)';
+      if (key !== this.lastRunKey) {
+        this.lastRunKey = key;
+        this.consoleEl.innerHTML = html;
+        // keep the newest lines in view
+        const over = this.consoleEl.scrollHeight - this.consoleWrap.clientHeight;
+        this.consoleEl.style.transform = over > 0 ? 'translateY(' + (-over) + 'px)' : '';
+      }
     }
 
     /* ----- overlays: callouts, boxes, rulers, cursor ----- */

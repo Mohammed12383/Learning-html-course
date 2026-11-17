@@ -12,7 +12,8 @@
   time, so sections are rendered in parallel and joined at the end.
 */
 const { chromium } = require('playwright');
-const { spawn, execFileSync } = require('child_process');
+const { spawn, execFileSync, spawnSync } = require('child_process');
+const vm = require('vm');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
@@ -45,6 +46,87 @@ function prepare() {
   const files = {};
   for (const f of ['index.html', 'about.html', 'style.css']) files[f] = fs.readFileSync(path.join(ROOT, 'my-site', f), 'utf8');
   fs.writeFileSync(path.join(BUILD, 'assets.js'), 'window.VIDEO_ASSETS = ' + JSON.stringify(assets) + ';\nwindow.VIDEO_FILES = ' + JSON.stringify(files) + ';\n');
+  // the course's step-through examples, so the video can play them
+  const steppers = {}, code = {};
+  const unhtml = h => h.replace(/<code>([\s\S]*?)<\/code>/g, '`$1`').replace(/<(b|strong)>([\s\S]*?)<\/\1>/g, '*$2*').replace(/<[^>]+>/g, '')
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
+  const dedent = t => { const lines = t.replace(/^\n+|\s+$/g, '').split('\n'); const n = Math.min(...lines.filter(l => l.trim()).map(l => l.match(/^ */)[0].length)); return lines.map(l => l.slice(n)).join('\n'); };
+  for (const course of ['python', 'cpp', 'typescript']) {
+    const dir = path.join(ROOT, course, 'lessons');
+    if (!fs.existsSync(dir)) continue;
+    for (const f of fs.readdirSync(dir).filter(f => /^\d\d-/.test(f))) {
+      const src = fs.readFileSync(path.join(dir, f), 'utf8');
+      const re = /<div class="stepper"[^>]*>\s*<script type="text\/plain">([\s\S]*?)<\/script>\s*<script type="application\/json">([\s\S]*?)<\/script>/g;
+      const rr = /<div class="runnable"[^>]*data-title="([^"]*)"[^>]*>\s*<script type="text\/plain"(?: data-name="[^"]*")?>([\s\S]*?)<\/script>/g;
+      let q;
+      while ((q = rr.exec(src))) code[course + '/' + f.slice(0, 2) + '/' + unhtml(q[1])] = dedent(q[2]);
+      let m, k = 0;
+      while ((m = re.exec(src))) {
+        const steps = JSON.parse(m[2]).map(x => Object.assign({}, x, { note: x.note ? unhtml(x.note) : '' }));
+        steppers[course + '/' + f.slice(0, 2) + '/' + k++] = { code: dedent(m[1]), steps };
+      }
+    }
+  }
+  fs.writeFileSync(path.join(BUILD, 'steppers.js'), 'window.COURSE_STEPPERS = ' + JSON.stringify(steppers) + ';\nwindow.COURSE_CODE = ' + JSON.stringify(code) + ';\n');
+  const outJs = path.join(BUILD, 'outputs-' + NAME + '.js');
+  if (!fs.existsSync(outJs)) fs.writeFileSync(outJs, 'window.VIDEO_OUTPUTS = {};\n');
+}
+
+/* ---------- running the programs in the video, once, before drawing ---------- */
+// the course's own plain-language error explanations (from assets/code.js)
+const CODE_JS = fs.readFileSync(path.join(ROOT, 'assets/code.js'), 'utf8');
+const PY_HELP = vm.runInNewContext('(' + CODE_JS.match(/var PY_HELP = (\{[\s\S]*?\n  \});/)[1] + ')');
+const CPP_HELP = vm.runInNewContext('(' + CODE_JS.match(/var CPP_HELP = (\[[\s\S]*?\n  \]);/)[1] + ')');
+const cppHelp = msg => (CPP_HELP.find(h => h[0].test(msg)) || [0, ''])[1];
+
+function runCpp(code, stdin) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'video-cpp-'));
+  try {
+    fs.writeFileSync(path.join(dir, 'main.cpp'), code);
+    const c = spawnSync('g++', ['-std=c++20', '-O1', '-o', path.join(dir, 'prog'), path.join(dir, 'main.cpp')], { encoding: 'utf8', timeout: 120000 });
+    if (c.status !== 0) {
+      const errs = (c.stderr || '').split('\n').map(l => /main\.cpp:(\d+):(\d+): error: (.*)/.exec(l)).filter(Boolean);
+      const e = errs[0] || [null, '0', '0', (c.stderr || 'Compile error').split('\n')[0]];
+      return { parts: [], compile: true, error: { title: 'Error on line ' + e[1], msg: e[3], line: +e[1], help: cppHelp(e[3]) } };
+    }
+    const r = spawnSync(path.join(dir, 'prog'), [], { input: stdin || '', encoding: 'utf8', timeout: 5000 });
+    const res = { parts: [{ k: 'out', text: r.stdout || '' }] };
+    if (r.error || r.status !== 0) res.error = { title: r.error ? 'The program never finished' : 'The program crashed', msg: (r.stderr || '').split('\n')[0], line: 0, help: '' };
+    return res;
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+}
+
+async function prepareOutputs(browser) {
+  const cacheFile = path.join(BUILD, 'outputs-' + NAME + '.json');
+  const cache = fs.existsSync(cacheFile) ? JSON.parse(fs.readFileSync(cacheFile, 'utf8')) : {};
+  const ctx = await browser.newContext();
+  const p = await ctx.newPage();
+  const errors = [];
+  p.on('pageerror', e => errors.push(e.message));
+  await p.goto('file://' + path.join(__dirname, NAME + '.html') + '?collect');
+  await p.waitForFunction(() => window.VIDEO && window.VIDEO.ready, null, { timeout: 60000 });
+  if (errors.length) throw new Error('Page errors: ' + errors.join(' | '));
+  const jobs = await p.evaluate(() => window.VIDEO.jobs);
+  const todo = jobs.filter(j => !cache[j.key]);
+  let py = null;
+  for (const j of todo) {
+    if (j.lang === 'python') {
+      if (!py) { py = await ctx.newPage(); await py.goto('file://' + path.join(__dirname, 'py-runner.html')); }
+      const r = await py.evaluate(([c, a]) => window.runPy(c, a), [j.code, j.answers]);
+      if (r.error) r.error = { title: r.error.type + (r.error.line ? ' on line ' + r.error.line : ''), msg: r.error.msg, line: r.error.line, help: PY_HELP[r.error.type] || '' };
+      cache[j.key] = r;
+    } else if (j.lang === 'cpp') {
+      cache[j.key] = runCpp(j.code, j.stdin);
+    } else throw new Error('No runner for ' + j.lang);
+    const r = cache[j.key];
+    console.log('  ran a ' + j.lang + ' program: ' + (r.error ? r.error.title : 'ok') + (r.image ? ' (with a drawing)' : ''));
+  }
+  await ctx.close();
+  const keep = {};
+  jobs.forEach(j => { keep[j.key] = cache[j.key]; });
+  fs.writeFileSync(cacheFile, JSON.stringify(keep));
+  fs.writeFileSync(path.join(BUILD, 'outputs-' + NAME + '.js'), 'window.VIDEO_OUTPUTS = ' + JSON.stringify(keep) + ';\n');
+  return jobs.length;
 }
 
 async function openPage(browser) {
@@ -74,6 +156,8 @@ function encoder(file) {
 (async () => {
   prepare();
   const browser = await chromium.launch();
+  const ran = await prepareOutputs(browser);
+  if (ran) console.log(ran + ' programs in this video have their output ready');
   const main = await openPage(browser);
   const info = await main.evaluate(() => ({ duration: window.VIDEO.duration, sections: window.VIDEO.sections.map(s => ({ t0: s.t0, t1: s.t1, n: s.n, title: s.title })), events: window.VIDEO.events }));
   const D = info.duration;
