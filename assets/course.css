@@ -118,6 +118,15 @@ body[data-group="build"]  { --g: var(--ink); }
 
 /* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+.noscript {
+  max-width: 700px;
+  margin: 24px auto;
+  padding: 18px 20px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;

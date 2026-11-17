@@ -4,8 +4,11 @@ A visual HTML and CSS course for total beginners. Every lesson shows a short exp
 
 ## How to open the course
 
+- **One file, any device (iPad, phone, computer):** `hello-html-course.html` is the whole course in a single file: every lesson, the pictures and the live editors. Copy just that file anywhere and open it in a web browser.
 - **On a computer:** download or clone this repository, then double-click `index.html`. It opens in your browser. No installs needed.
-- **Online:** turn on GitHub Pages for this repository (Settings → Pages → choose the `main` branch → Save). The course will be at `https://<your-username>.github.io/Learning-html-course/`.
+- **Online, as a real website:** turn on GitHub Pages for this repository (Settings → Pages → Deploy from a branch → pick the branch → `/ (root)` → Save). The course will be at `https://<your-username>.github.io/Learning-html-course/hello-html-course.html`. On an iPad, open that address in Safari, tap Share → **Add to Home Screen**, and it gets its own icon like an app.
+
+After changing any lesson, rebuild the single file with `python3 tools/build-single-file.py`.
 
 ## What's inside
 

@@ -39,12 +39,26 @@
 
   var body = document.body;
   var ROOT = body.getAttribute('data-root') || '.';
+  // "Single file" mode: the whole course is inside one HTML file,
+  // and #lesson-name in the address picks which lesson is shown.
+  var SINGLE = body.hasAttribute('data-single');
   var CURRENT = body.getAttribute('data-lesson') || '';
   var current = LESSONS.filter(function (l) { return l.id === CURRENT; })[0];
   if (current) body.setAttribute('data-group', current.group);
 
-  function lessonHref(id) { return ROOT + '/lessons/' + id + '.html'; }
-  function homeHref() { return ROOT + '/index.html'; }
+  function lessonHref(id) { return SINGLE ? '#' + id : ROOT + '/lessons/' + id + '.html'; }
+  function homeHref() { return SINGLE ? '#home' : ROOT + '/index.html'; }
+
+  // In the single file, pictures are stored inside the file. The code you see
+  // still says images/cat.svg; it is swapped for the stored picture when shown.
+  function withAssets(html) {
+    var A = window.COURSE_ASSETS;
+    if (!A) return html;
+    return html.replace(/(["'(])((?:\.\/)?images\/[\w.-]+)/g, function (m, q, path) {
+      var k = path.replace(/^\.\//, '');
+      return A[k] ? q + A[k] : m;
+    });
+  }
 
   /* ---------- Progress (saved only in this browser) ---------- */
   var KEY = 'hello-html:done';
@@ -323,6 +337,7 @@
     var y = 0;
     try { y = doc.scrollingElement ? doc.scrollingElement.scrollTop : 0; } catch (e) { y = 0; }
     if (!/^\s*<!doctype/i.test(html)) html = '<!DOCTYPE html>\n' + html;
+    html = withAssets(html);
     doc.open();
     doc.write(html);
     doc.close();
@@ -820,6 +835,8 @@
   /* ============================================================
      Course menu, header, lesson end, home page map
      ============================================================ */
+  var menuBtn = null;
+  var closeMenu = function () {};
   function buildHeader() {
     var h = el('header', { class: 'site-header' });
     h.innerHTML = '<a class="logo" href="' + homeHref() + '"><span class="logo-mark">&lt;/&gt;</span>Hello HTML</a>' +
@@ -844,6 +861,8 @@
         document.body.appendChild(scrim);
       });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+      menuBtn = btn;
+      closeMenu = close;
     }
     body.insertBefore(h, body.firstChild);
   }
@@ -880,9 +899,9 @@
     document.querySelectorAll('.card[data-id]').forEach(function (c) { c.classList.toggle('done', done.indexOf(c.getAttribute('data-id')) >= 0); });
   }
 
-  function buildLessonEnd() {
-    var end = document.querySelector('.lesson-end');
-    if (!end || !current) return;
+  function buildLessonEnd(end, lesson) {
+    if (!end || !lesson) return;
+    var current = lesson;
     var i = LESSONS.indexOf(current);
     var prev = LESSONS[i - 1], next = LESSONS[i + 1];
     var box = el('div', { class: 'done-box' });
@@ -939,24 +958,62 @@
     });
   }
 
+  /* ---------- Turn the markup in a part of the page into live components ---------- */
+  function initComponents(root) {
+    root.querySelectorAll('script.snippet').forEach(makeSnippet);
+    root.querySelectorAll('.quiz').forEach(makeQuiz);
+    root.querySelectorAll('.playground').forEach(function (host) {
+      makePlayground(host, readFiles(host), {
+        title: host.getAttribute('data-title'),
+        devices: host.hasAttribute('data-devices'),
+        height: +host.getAttribute('data-height') || 0,
+        stack: host.hasAttribute('data-stack'),
+        hint: host.hasAttribute('data-hint') ? host.getAttribute('data-hint') : undefined
+      });
+    });
+    root.querySelectorAll('.explorer').forEach(makeExplorer);
+  }
+
+  /* ---------- Single file: show one lesson at a time ---------- */
+  function route() {
+    var id = decodeURIComponent((location.hash || '').slice(1)) || 'home';
+    var target = document.querySelector('[data-page="' + id.replace(/[^\w-]/g, '') + '"]');
+    if (!target) { id = 'home'; target = document.querySelector('[data-page="home"]'); }
+    var shell = document.getElementById('lesson-shell');
+    var isHome = id === 'home';
+    if (shell) shell.hidden = isHome;
+    document.querySelectorAll('[data-page]').forEach(function (p) { p.hidden = p !== target; });
+    CURRENT = id;
+    current = LESSONS.filter(function (l) { return l.id === id; })[0];
+    body.setAttribute('data-group', current ? current.group : (id === 'cheatsheet' ? 'build' : 'basics'));
+    document.querySelectorAll('.sidebar a').forEach(function (a) {
+      if (a.getAttribute('href') === '#' + id) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+    closeMenu();
+    if (menuBtn) menuBtn.hidden = isHome;
+    document.title = (current ? current.title + ' · ' : id === 'cheatsheet' ? 'Cheat Sheet · ' : '') + 'Hello HTML';
+    if (!target.hasAttribute('data-ready')) {
+      target.setAttribute('data-ready', '');
+      initComponents(target);
+      if (current) buildLessonEnd(target.querySelector('.lesson-end'), current);
+    }
+    // Start every lesson at the top (instant, so smooth scrolling can't stop halfway)
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }
+
   /* ---------- Boot ---------- */
   buildSidebar();
   buildHeader();
   buildMap();
-  buildLessonEnd();
   refreshProgress();
   buildCheatFilter();
   makeSwatches();
-  document.querySelectorAll('script.snippet').forEach(makeSnippet);
-  document.querySelectorAll('.quiz').forEach(makeQuiz);
-  document.querySelectorAll('.playground').forEach(function (host) {
-    makePlayground(host, readFiles(host), {
-      title: host.getAttribute('data-title'),
-      devices: host.hasAttribute('data-devices'),
-      height: +host.getAttribute('data-height') || 0,
-      stack: host.hasAttribute('data-stack'),
-      hint: host.hasAttribute('data-hint') ? host.getAttribute('data-hint') : undefined
-    });
-  });
-  document.querySelectorAll('.explorer').forEach(makeExplorer);
+  if (SINGLE) {
+    window.addEventListener('hashchange', route);
+    route();
+  } else {
+    buildLessonEnd(document.querySelector('.lesson-end'), current);
+    initComponents(document);
+  }
 })();
