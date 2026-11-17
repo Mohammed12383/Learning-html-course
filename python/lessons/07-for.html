@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loops with for · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="07-for">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 07 &middot; <b>Decisions &amp; loops</b></p>
+      <div class="hero-code" aria-hidden="true">for</div>
+      <h1>Loops with for</h1>
+      <p class="lead">Computers never get bored. A <strong>loop</strong> repeats some code as many times as you like: 3 times or 3 million. Loops are how programs draw patterns, count, and go through every item in a list.</p>
+      <ul class="learn">
+        <li>for and range()</li>
+        <li>Counting with a loop</li>
+        <li>Looping over text</li>
+        <li>Drawing shapes with loops</li>
+        <li>Loops inside loops</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Repeat without copying</h2>
+      <p>Say you want to print "Hip hip hooray!" five times. You could copy the line five times. But what about 500 times? A <code class="k-tag">for</code> loop does it in two lines:</p>
+
+      <div class="runnable" data-lang="python" data-title="Your first loop">
+        <script type="text/plain">
+          for i in range(5):
+              print("Hip hip hooray! 🎉")
+
+          print("Done cheering")
+        </script>
+      </div>
+
+      <div class="anatomy" role="img" aria-label="for i in range 5 colon: for keyword, the loop variable i, in, range 5 meaning 5 times, colon">
+        <div class="part tag"><span>for</span><small>keyword</small></div>
+        <div class="part text"><span> i</span><small>a variable that<br>counts for you</small></div>
+        <div class="part tag"><span> in</span><small></small></div>
+        <div class="part prop"><span> range(5)</span><small>the numbers<br>0, 1, 2, 3, 4</small></div>
+        <div class="part punc"><span>:</span><small>then repeat the<br>pushed-in lines</small></div>
+      </div>
+
+      <p>Just like <code>if</code>, the lines that repeat are pushed in by 4 spaces. Lines that aren't pushed in run once, after the loop is finished. Change <code>5</code> to <code>50</code>.</p>
+    </section>
+
+    <section>
+      <h2>The loop variable counts for you</h2>
+      <p>Each time around the loop, <code>i</code> holds the next number from <code>range()</code>. Remember, computers count from 0:</p>
+
+      <div class="runnable" data-lang="python" data-title="Watch i change">
+        <script type="text/plain">
+          for i in range(5):
+              print("Round", i)
+        </script>
+      </div>
+
+      <h3>range() in three flavors</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>You write</th><th>You get</th><th>Means</th></tr></thead>
+          <tbody>
+            <tr><td><code>range(5)</code></td><td>0, 1, 2, 3, 4</td><td>5 numbers starting at 0</td></tr>
+            <tr><td><code>range(1, 6)</code></td><td>1, 2, 3, 4, 5</td><td>start at 1, stop <strong>before</strong> 6</td></tr>
+            <tr><td><code>range(0, 20, 5)</code></td><td>0, 5, 10, 15</td><td>count in steps of 5</td></tr>
+            <tr><td><code>range(10, 0, -1)</code></td><td>10, 9, 8 … 1</td><td>count backwards</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="code-explorer" data-lang="python" data-title="Build a range">
+        <input type="range" name="a" data-label="start" min="0" max="20" value="1">
+        <input type="range" name="b" data-label="stop" min="0" max="30" value="11">
+        <input type="range" name="c" data-label="step" min="1" max="5" value="2">
+        <script type="text/plain">
+          for n in range({{a}}, {{b}}, {{c}}):
+              print(n, end="  ")
+          print()
+          print("count:", len(range({{a}}, {{b}}, {{c}})))
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Adding things up in a loop</h2>
+      <p>A very common pattern: start a variable at 0 <em>before</em> the loop, and add to it <em>inside</em> the loop. Step through it and watch the boxes:</p>
+
+      <div class="stepper" data-lang="python" data-title="Add up 1 + 2 + 3">
+        <script type="text/plain">
+          total = 0
+          for n in range(1, 4):
+              total = total + n
+          print("Total:", total)
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "vars": {"total": "0"}, "note": "Start with an empty total: 0."},
+            {"line": 2, "vars": {"total": "0", "n": "1"}, "note": "First time round: <code>n</code> is <b>1</b>."},
+            {"line": 3, "vars": {"total": "1", "n": "1"}, "note": "total = 0 + 1 = <b>1</b>"},
+            {"line": 2, "vars": {"total": "1", "n": "2"}, "note": "Back to the top of the loop. Now <code>n</code> is <b>2</b>."},
+            {"line": 3, "vars": {"total": "3", "n": "2"}, "note": "total = 1 + 2 = <b>3</b>"},
+            {"line": 2, "vars": {"total": "3", "n": "3"}, "note": "Next number: <code>n</code> is <b>3</b>."},
+            {"line": 3, "vars": {"total": "6", "n": "3"}, "note": "total = 3 + 3 = <b>6</b>"},
+            {"line": 2, "vars": {"total": "6", "n": "3"}, "note": "<code>range(1, 4)</code> has no more numbers (it stops <em>before</em> 4). The loop is finished."},
+            {"line": 4, "vars": {"total": "6", "n": "3"}, "out": "Total: 6\n", "note": "The line after the loop runs once and prints the total."}
+          ]
+        </script>
+      </div>
+
+      <div class="runnable" data-lang="python" data-title="Add up 1 to 100">
+        <script type="text/plain">
+          total = 0
+          for n in range(1, 101):
+              total += n
+          print("1 + 2 + ... + 100 =", total)
+        </script>
+      </div>
+      <p>Python adds 100 numbers faster than you can blink. Try 1 to a million.</p>
+    </section>
+
+    <section>
+      <h2>Looping over text</h2>
+      <p>A <code>for</code> loop can go through anything that has items in a row. For a string, you get one letter each time:</p>
+
+      <div class="runnable" data-lang="python" data-title="One letter at a time">
+        <script type="text/plain">
+          word = "HELLO"
+          for letter in word:
+              print(letter, "👋")
+
+          vowels = 0
+          for letter in "programming is fun":
+              if letter in "aeiou":
+                  vowels += 1
+          print("Vowels:", vowels)
+        </script>
+      </div>
+      <p>The second loop has an <code>if</code> inside it: the extra indent means "only count it if it's a vowel". You'll loop over lists in lesson 9.</p>
+    </section>
+
+    <section>
+      <h2>Drawing with loops</h2>
+      <p>Python comes with a <strong>turtle</strong>: a little pen that moves around and draws. (Lesson 14 is all about it.) A square is "go forward, turn 90°" four times, which is a perfect job for a loop. Move the sliders:</p>
+
+      <div class="code-explorer" data-lang="python" data-title="Shape maker">
+        <input type="range" name="sides" data-label="sides" min="3" max="12" value="5">
+        <input type="range" name="size" data-label="size" min="20" max="70" value="60">
+        <select name="color" data-label="color">
+          <option>hotpink</option><option>dodgerblue</option><option selected>mediumseagreen</option><option>orange</option><option>mediumpurple</option>
+        </select>
+        <script type="text/plain">
+          import turtle
+          t = turtle.Turtle()
+          t.speed(0)
+          t.color("{{color}}")
+          t.width(4)
+          t.penup()
+          t.goto(-{{size}} / 2, -125)    # start near the bottom
+          t.pendown()
+
+          sides = {{sides}}
+          for i in range(sides):
+              t.forward({{size}})
+              t.left(360 / sides)
+
+          print(f"A shape with {sides} sides. Each turn is {360 / sides:.1f}°")
+        </script>
+      </div>
+      <p>The turtle turns <code>360 / sides</code> degrees each time, so that after all the turns it has gone all the way round (360°) and is back where it started.</p>
+    </section>
+
+    <section>
+      <h2>Loops inside loops</h2>
+      <p>You can put a loop inside another loop. The inner loop runs completely, every time the outer loop goes round once. It's perfect for grids and tables:</p>
+
+      <div class="runnable" data-lang="python" data-title="Times table and a triangle">
+        <script type="text/plain">
+          for row in range(1, 6):
+              line = ""
+              for col in range(1, 6):
+                  line += f"{row * col:4}"
+              print(line)
+
+          print()
+          for size in range(1, 6):
+              print("⭐" * size)
+        </script>
+      </div>
+      <p><code>{row * col:4}</code> in the f-string means "take up 4 spaces", which keeps the columns lined up.</p>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Print a countdown from 10 to 1, then "Lift off! 🚀". (Hint: <code>range(10, 0, -1)</code>.)</li>
+          <li>Print the 7 times table: 7 × 1 = 7, up to 7 × 10 = 70.</li>
+          <li>Make the star triangle upside down.</li>
+          <li>In the shape maker, try 36 sides. What shape does it look like?</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="python" data-title="Your loop">
+        <script type="text/plain">
+          for n in range(10, 0, -1):
+              print(n)
+          print("Lift off! 🚀")
+        </script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Off by one</strong>: <code>range(1, 10)</code> stops at 9. To include 10, write <code>range(1, 11)</code>.</li>
+          <li><strong>Forgetting to indent</strong> the lines that should repeat.</li>
+          <li><strong>Resetting inside the loop</strong>: putting <code>total = 0</code> inside the loop sets it back to 0 every time. It belongs before the loop.</li>
+          <li><strong>Missing colon</strong> at the end of the <code>for</code> line.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">Which numbers does range(2, 6) give?</p>
+        <div class="opts">
+          <button>2, 3, 4, 5, 6</button>
+          <button data-correct>2, 3, 4, 5</button>
+          <button>0, 1, 2, 3, 4, 5</button>
+        </div>
+        <p class="why">range starts at the first number and stops just <em>before</em> the second.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">How many stars?  for a in range(3): for b in range(4): print("*")</p>
+        <div class="opts">
+          <button>7</button>
+          <button data-correct>12</button>
+          <button>4</button>
+        </div>
+        <p class="why">The inner loop prints 4 stars, and it runs 3 times: 3 × 4 = 12.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>for i in range(5):</code> repeats the pushed-in lines 5 times, with i = 0, 1, 2, 3, 4.</li>
+          <li><code>range(start, stop, step)</code> stops <strong>before</strong> stop.</li>
+          <li><code>for letter in text:</code> goes through each letter.</li>
+          <li>To add things up: start at 0 before the loop, add inside it.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

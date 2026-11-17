@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Numbers &amp; Math · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="03-numbers">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 03 &middot; <b>First steps</b></p>
+      <div class="hero-code" aria-hidden="true">2 + 2</div>
+      <h1>Numbers &amp; Math</h1>
+      <p class="lead">Computers were invented to do math, and Python is a brilliant calculator. Games use math for scores and movement, shops use it for prices, and apps use it for almost everything.</p>
+      <ul class="learn">
+        <li>The math operators</li>
+        <li>Division, remainders and powers</li>
+        <li>Which part is done first</li>
+        <li>Rounding and converting</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>The math operators</h2>
+      <p>An <strong>operator</strong> is a symbol that does something to values. Here are Python's math operators. Some look different from school math:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Operator</th><th>Does</th><th>Example</th><th>Answer</th></tr></thead>
+          <tbody>
+            <tr><td><code>+</code></td><td>add</td><td><code>7 + 2</code></td><td>9</td></tr>
+            <tr><td><code>-</code></td><td>subtract</td><td><code>7 - 2</code></td><td>5</td></tr>
+            <tr><td><code>*</code></td><td>multiply (×)</td><td><code>7 * 2</code></td><td>14</td></tr>
+            <tr><td><code>/</code></td><td>divide (÷)</td><td><code>7 / 2</code></td><td>3.5</td></tr>
+            <tr><td><code>//</code></td><td>divide, whole number only</td><td><code>7 // 2</code></td><td>3</td></tr>
+            <tr><td><code>%</code></td><td>remainder (what's left over)</td><td><code>7 % 2</code></td><td>1</td></tr>
+            <tr><td><code>**</code></td><td>power (to the power of)</td><td><code>7 ** 2</code></td><td>49</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="code-explorer" data-lang="python" data-title="Try every operator">
+        <input type="range" name="a" data-label="a" min="0" max="50" value="17">
+        <input type="range" name="b" data-label="b" min="1" max="12" value="5">
+        <script type="text/plain">
+          a = {{a}}
+          b = {{b}}
+
+          print(a, "+", b, "=", a + b)
+          print(a, "-", b, "=", a - b)
+          print(a, "*", b, "=", a * b)
+          print(a, "/", b, "=", a / b)
+          print(a, "//", b, "=", a // b)
+          print(a, "%", b, "=", a % b)
+          print(a, "**", b, "=", a ** b)
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Division, three ways</h2>
+      <p>Imagine sharing <strong>17 cookies</strong> between <strong>5 friends</strong>:</p>
+
+      <div class="cells" role="img" aria-label="17 cookies: 5 groups of 3, plus 2 left over">
+        <span class="cap">friend 1</span><div class="cell"><b>🍪🍪🍪</b></div>
+        <span class="cap">friend 2</span><div class="cell"><b>🍪🍪🍪</b></div>
+        <span class="cap">friend 3</span><div class="cell"><b>🍪🍪🍪</b></div>
+        <span class="cap">friend 4</span><div class="cell"><b>🍪🍪🍪</b></div>
+        <span class="cap">friend 5</span><div class="cell"><b>🍪🍪🍪</b></div>
+        <span class="cap">left over</span><div class="cell hl"><b>🍪🍪</b></div>
+      </div>
+
+      <ul>
+        <li><code>17 / 5</code> is <strong>3.4</strong>: the exact answer, with decimals.</li>
+        <li><code>17 // 5</code> is <strong>3</strong>: how many whole cookies each friend gets.</li>
+        <li><code>17 % 5</code> is <strong>2</strong>: how many cookies are left over (the <strong>remainder</strong>).</li>
+      </ul>
+
+      <aside class="note tip">
+        <h4>The remainder is surprisingly useful</h4>
+        <p><code>number % 2</code> is <code>0</code> for even numbers and <code>1</code> for odd numbers. It's also how clocks work: 14 hours after midnight is <code>14 % 12 = 2</code> o'clock.</p>
+      </aside>
+
+      <p>One more thing: <code>/</code> always gives a decimal number (a <code>float</code>), even when it divides evenly. <code>6 / 2</code> is <code>3.0</code>, not <code>3</code>.</p>
+    </section>
+
+    <section>
+      <h2>What's done first?</h2>
+      <p>Python follows the same order as math class: <strong>brackets</strong> first, then <strong>powers</strong>, then <strong>× and ÷</strong>, then <strong>+ and −</strong>. When in doubt, add brackets to make it clear.</p>
+
+      <div class="runnable" data-lang="python" data-title="Order of operations">
+        <script type="text/plain">
+          print(2 + 3 * 4)      # multiply first: 2 + 12
+          print((2 + 3) * 4)    # brackets first: 5 * 4
+          print(10 - 2 ** 3)    # power first: 10 - 8
+          print(100 / 10 / 2)   # left to right: 10 / 2
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Math with variables</h2>
+      <p>Math gets really useful with variables. Here's a little program that splits a restaurant bill:</p>
+
+      <div class="runnable" data-lang="python" data-title="Split the bill">
+        <script type="text/plain">
+          bill = 48.60
+          tip_percent = 10
+          people = 3
+
+          tip = bill * tip_percent / 100
+          total = bill + tip
+          each = total / people
+
+          print("Tip:", round(tip, 2))
+          print("Total:", round(total, 2))
+          print("Each person pays:", round(each, 2))
+        </script>
+      </div>
+
+      <h3>Shortcuts for changing a variable</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Shortcut</th><th>Same as</th></tr></thead>
+          <tbody>
+            <tr><td><code>score += 10</code></td><td><code>score = score + 10</code></td></tr>
+            <tr><td><code>lives -= 1</code></td><td><code>lives = lives - 1</code></td></tr>
+            <tr><td><code>coins *= 2</code></td><td><code>coins = coins * 2</code></td></tr>
+            <tr><td><code>cake /= 2</code></td><td><code>cake = cake / 2</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Rounding and other number tools</h2>
+      <div class="runnable" data-lang="python" data-title="Useful number functions">
+        <script type="text/plain">
+          print(round(3.14159))       # nearest whole number
+          print(round(3.14159, 2))    # keep 2 decimals
+          print(abs(-7))              # remove the minus sign
+          print(max(4, 9, 2))         # the biggest
+          print(min(4, 9, 2))         # the smallest
+
+          print(int(7.9))             # chop off the decimals
+          print(float(5))             # make it a decimal
+          print(int("42") + 1)        # turn text into a number
+          print(1_000_000 * 3)        # _ makes big numbers readable
+        </script>
+      </div>
+      <p><code>int()</code> and <code>float()</code> <strong>convert</strong> a value to another type. <code>int("42")</code> turns the text <code>"42"</code> into the number <code>42</code>. You'll need this in lesson 5, when people type numbers into your programs.</p>
+
+      <aside class="note idea">
+        <h4>A tiny surprise</h4>
+        <p>Try <code>print(0.1 + 0.2)</code>. You get <code>0.30000000000000004</code>! Computers store decimals in a way that can't be perfectly exact for some numbers. It's normal in every language. Use <code>round()</code> when you show money or results to people.</p>
+      </aside>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Write a program that works out how many seconds are in a day. (60 seconds × 60 minutes × 24 hours.)</li>
+          <li>You have 100 stickers and want to put 8 on each page. How many full pages? How many stickers are left? Use <code>//</code> and <code>%</code>.</li>
+          <li>Make a variable <code>celsius = 25</code> and convert it to Fahrenheit with <code>celsius * 9 / 5 + 32</code>.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="python" data-title="Your calculator">
+        <script type="text/plain">
+          seconds_in_a_day = 60 * 60 * 24
+          print(seconds_in_a_day)
+        </script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Using x for multiply</strong>: Python uses <code>*</code>. And <code>^</code> is not power: use <code>**</code>.</li>
+          <li><strong>Math with text</strong>: <code>"5" + 3</code> is a <code>TypeError</code>. Convert first: <code>int("5") + 3</code>.</li>
+          <li><strong>Dividing by zero</strong>: <code>5 / 0</code> gives a <code>ZeroDivisionError</code>.</li>
+          <li><strong>Commas in numbers</strong>: <code>1,000</code> is not one thousand. Write <code>1000</code> or <code>1_000</code>.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">What is 20 % 6?</p>
+        <div class="opts">
+          <button>3</button>
+          <button data-correct>2</button>
+          <button>3.33</button>
+        </div>
+        <p class="why">6 goes into 20 three times (18), with 2 left over. <code>%</code> gives the leftover.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">What does print(2 + 3 * 2) show?</p>
+        <div class="opts">
+          <button>10</button>
+          <button data-correct>8</button>
+          <button>12</button>
+        </div>
+        <p class="why">Multiplication comes first: 3 × 2 = 6, then 2 + 6 = 8.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>+ - * /</code> for normal math. <code>//</code> whole division, <code>%</code> remainder, <code>**</code> power.</li>
+          <li>Brackets first, then powers, then × ÷, then + −.</li>
+          <li><code>round(x, 2)</code>, <code>abs()</code>, <code>max()</code>, <code>min()</code>.</li>
+          <li><code>int()</code> and <code>float()</code> convert values into numbers.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

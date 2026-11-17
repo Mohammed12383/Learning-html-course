@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Variables · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="02-variables">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 02 &middot; <b>First steps</b></p>
+      <div class="hero-code" aria-hidden="true">x = 5</div>
+      <h1>Variables</h1>
+      <p class="lead">Programs need to remember things: your name, a score, how many lives are left. A <strong>variable</strong> is a box with a name on it, where the computer keeps one thing for you.</p>
+      <ul class="learn">
+        <li>Making variables</li>
+        <li>Changing them</li>
+        <li>Types: text, numbers, True/False</li>
+        <li>Good names</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>A box with a label</h2>
+      <p>Imagine the computer's memory is a wall of boxes. When you make a variable, you take a box, write a name on it, and put a value inside.</p>
+
+      <div class="memory" role="img" aria-label="Three boxes in memory: name holds Sam, age holds 12, likes_pizza holds True">
+        <div class="slot txt"><span class="nm">name</span><span class="vl">"Sam"</span><span class="ty">text</span></div>
+        <div class="slot num"><span class="nm">age</span><span class="vl">12</span><span class="ty">number</span></div>
+        <div class="slot yes"><span class="nm">likes_pizza</span><span class="vl">True</span><span class="ty">true/false</span></div>
+      </div>
+
+      <p>In Python, you make a variable with an equals sign:</p>
+      <div class="anatomy" role="img" aria-label="name equals Sam: the variable's name, the equals sign meaning store, and the value">
+        <div class="part text"><span>name</span><small>the label<br>on the box</small></div>
+        <div class="part punc"><span> = </span><small>"store this in"</small></div>
+        <div class="part val"><span>"Sam"</span><small>the value<br>inside the box</small></div>
+      </div>
+
+      <aside class="note idea">
+        <h4>= doesn't mean "equals" here</h4>
+        <p>In math, <code>=</code> means two things are the same. In Python, <code>=</code> means <strong>"put the value on the right into the box on the left"</strong>. Read <code>name = "Sam"</code> as "name gets Sam".</p>
+      </aside>
+
+      <div class="runnable" data-lang="python" data-title="Make and use variables">
+        <script type="text/plain">
+          name = "Sam"
+          age = 12
+          likes_pizza = True
+
+          print(name)
+          print(name, "is", age, "years old")
+          print("Likes pizza?", likes_pizza)
+        </script>
+      </div>
+
+      <p>When you <code>print(name)</code>, Python looks inside the box called <code>name</code> and prints what it finds. Notice there are no quotes around <code>name</code> in the print. With quotes, <code>print("name")</code> would print the word "name" itself.</p>
+    </section>
+
+    <section>
+      <h2>Changing what's in the box</h2>
+      <p>A variable can change. That's why it's called a <strong>vari</strong>able. When you store a new value, the old one is thrown away. Watch the box called <code>score</code>:</p>
+
+      <div class="stepper" data-lang="python" data-title="Watch score change">
+        <script type="text/plain">
+          score = 0
+          print("Start:", score)
+          score = 10
+          score = score + 5
+          print("Now:", score)
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "vars": {"score": "0"}, "note": "Make a box called <code>score</code> and put <b>0</b> in it."},
+            {"line": 2, "vars": {"score": "0"}, "out": "Start: 0\n", "note": "Look in the box and print what's inside: 0."},
+            {"line": 3, "vars": {"score": "10"}, "note": "Put <b>10</b> in the box. The 0 is thrown away."},
+            {"line": 4, "vars": {"score": "15"}, "note": "First Python works out the right side: <code>score + 5</code> is 10 + 5 = 15. Then it stores 15 back in <code>score</code>."},
+            {"line": 5, "vars": {"score": "15"}, "out": "Now: 15\n", "note": "The box now holds 15."}
+          ]
+        </script>
+      </div>
+
+      <p>Line 4 is very common in programs: <code>score = score + 5</code> means "take what's in score, add 5, and put the result back in score". There's even a shortcut for it: <code>score += 5</code>.</p>
+    </section>
+
+    <section>
+      <h2>Kinds of values (types)</h2>
+      <p>Every value has a <strong>type</strong>: what kind of thing it is. These are the four you'll use most:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Type</th><th>Name in Python</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>Text</td><td><code>str</code> (string)</td><td><code>"Sam"</code>, <code>"hello world"</code>, <code>"123"</code></td></tr>
+            <tr><td>Whole number</td><td><code>int</code> (integer)</td><td><code>12</code>, <code>-5</code>, <code>1000000</code></td></tr>
+            <tr><td>Decimal number</td><td><code>float</code></td><td><code>3.14</code>, <code>0.5</code>, <code>-2.0</code></td></tr>
+            <tr><td>True or false</td><td><code>bool</code> (boolean)</td><td><code>True</code>, <code>False</code> (capital first letter)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>The <code class="k-prop">type()</code> function tells you the type of any value:</p>
+      <div class="runnable" data-lang="python" data-title="What type is it?">
+        <script type="text/plain">
+          print(type("Sam"))
+          print(type(12))
+          print(type(3.5))
+          print(type(True))
+          print(type("12"))
+        </script>
+      </div>
+      <p>Look at the last line: <code>"12"</code> in quotes is text, not a number. That matters, because you can do math with <code>12</code> but not with <code>"12"</code>.</p>
+    </section>
+
+    <section>
+      <h2>Play with a variable</h2>
+      <p>Move the slider to change what's stored in <code>age</code>. Every line that uses <code>age</code> gets the new value. That's the power of variables: change it in one place, and everything follows.</p>
+
+      <div class="code-explorer" data-lang="python" data-title="One variable, many uses">
+        <input type="range" name="age" data-label="age" min="1" max="100" value="12">
+        <script type="text/plain">
+          age = {{age}}
+
+          print("You are", age, "years old")
+          print("In 10 years you will be", age + 10)
+          print("You have lived about", age * 365, "days")
+          print("That's about", age * 365 * 24, "hours!")
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Naming your variables</h2>
+      <p>You choose the names. Python has a few rules, and good programmers follow a few habits:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>OK?</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td><code>score</code></td><td>Yes</td><td>Short and clear.</td></tr>
+            <tr><td><code>player_name</code></td><td>Yes</td><td>Use underscores <code>_</code> instead of spaces. This style is called <strong>snake_case</strong>.</td></tr>
+            <tr><td><code>level2</code></td><td>Yes</td><td>Numbers are fine, but not at the start.</td></tr>
+            <tr><td><code>2level</code></td><td>No</td><td>Can't start with a number.</td></tr>
+            <tr><td><code>player name</code></td><td>No</td><td>No spaces allowed.</td></tr>
+            <tr><td><code>x</code></td><td>Allowed</td><td>But <code>x</code> doesn't say what's inside. Use a name that explains itself.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Names are <strong>case-sensitive</strong>: <code>Score</code> and <code>score</code> are two different boxes.</p>
+    </section>
+
+    <section>
+      <h2>Two handy tricks</h2>
+      <div class="runnable" data-lang="python" data-title="Several variables in one line, and swapping">
+        <script type="text/plain">
+          x, y = 3, 7
+          print("x is", x, "and y is", y)
+
+          # swap the values in one line
+          x, y = y, x
+          print("now x is", x, "and y is", y)
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Make variables for your <code>name</code>, your <code>city</code> and your <code>favorite_color</code>, then print a sentence using all three.</li>
+          <li>Make a variable <code>lives = 3</code>. Then take one life away with <code>lives = lives - 1</code> and print it.</li>
+          <li>In the first code box, change <code>age</code> to <code>"12"</code> (with quotes). What does <code>print</code> show? Does it look different?</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="python" data-title="Your playground">
+        <script type="text/plain">
+          # Write your code here
+          name = "Sam"
+          print("Hi", name)
+        </script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Using a variable before making it</strong>: <code>print(score)</code> before <code>score = 0</code> gives a <code>NameError</code>. Remember, Python reads top to bottom.</li>
+          <li><strong>Quotes around the name</strong>: <code>print("score")</code> prints the word, not the value.</li>
+          <li><strong>Spelling</strong>: <code>scor</code> and <code>score</code> are different variables.</li>
+          <li><strong>Writing it backwards</strong>: <code>5 = x</code> is an error. The box always goes on the left.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">After these lines, what is in x?  x = 4, then x = x * 2</p>
+        <div class="opts">
+          <button>4</button>
+          <button data-correct>8</button>
+          <button>x * 2</button>
+        </div>
+        <p class="why">Python works out the right side first (4 × 2 = 8), then stores the result back in x.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">What type is "3.5" (with quotes)?</p>
+        <div class="opts">
+          <button>float</button>
+          <button data-correct>str</button>
+          <button>int</button>
+        </div>
+        <p class="why">Anything in quotes is text (a string), even if it looks like a number.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>name = value</code> stores a value in a variable. Read it as "name gets value".</li>
+          <li>Storing a new value replaces the old one. <code>score += 5</code> adds 5.</li>
+          <li>Types: <code>str</code> text, <code>int</code> whole numbers, <code>float</code> decimals, <code>bool</code> True/False.</li>
+          <li>Names: lowercase, underscores, no spaces, can't start with a number.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

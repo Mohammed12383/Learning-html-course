@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your First Program · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="01-print">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 01 &middot; <b>First steps</b></p>
+      <div class="hero-code" aria-hidden="true">print()</div>
+      <h1>Your First Program</h1>
+      <p class="lead">The very first thing every programmer learns is how to make the computer show something on the screen. In Python, that's <code>print()</code>. You'll also learn to read error messages, which is the most useful skill in programming.</p>
+      <ul class="learn">
+        <li>print()</li>
+        <li>Text in quotes</li>
+        <li>Printing many things</li>
+        <li>Comments</li>
+        <li>Reading errors</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>print() shows things</h2>
+      <p><code class="k-prop">print</code> is a <strong>function</strong>: a command with a name. You write its name, then round brackets <code>( )</code>, and inside the brackets you put what you want to show.</p>
+
+      <div class="anatomy" role="img" aria-label="print, open bracket, the text Hello in quotes, close bracket">
+        <div class="part prop"><span>print</span><small>the function's name</small></div>
+        <div class="part punc"><span>(</span><small>open</small></div>
+        <div class="part val"><span>"Hello!"</span><small>what to show<br>(text in quotes)</small></div>
+        <div class="part punc"><span>)</span><small>close</small></div>
+      </div>
+
+      <p>Text in quotes is called a <strong>string</strong> (a "string of letters"). The quotes tell Python where the text starts and ends. They don't appear in the output.</p>
+
+      <div class="runnable" data-lang="python" data-title="Three prints">
+        <script type="text/plain">
+          print("Hello!")
+          print("My name is Python.")
+          print("I can print anything you like 🐍")
+        </script>
+      </div>
+
+      <p>Every <code>print</code> starts a new line. An empty <code>print()</code> prints an empty line, which is handy for adding space.</p>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Change the text in the second line to your own name.</li>
+          <li>Add a fourth line that prints your favorite food.</li>
+          <li>Add <code>print()</code> between two lines. What changes?</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Text or numbers?</h2>
+      <p>Python treats text and numbers differently. Numbers don't need quotes, and Python can do math with them. Look carefully at the difference between these two lines:</p>
+
+      <div class="runnable" data-lang="python" data-title="Quotes change everything">
+        <script type="text/plain">
+          print(5 + 3)
+          print("5 + 3")
+          print(7 * 6)
+        </script>
+      </div>
+
+      <p>Without quotes, Python <strong>calculates</strong> <code>5 + 3</code> and prints <code>8</code>. With quotes, it's just text, so Python prints exactly what's inside. (<code>*</code> means "times" in Python.)</p>
+    </section>
+
+    <section>
+      <h2>Printing several things at once</h2>
+      <p>Put several things in one <code>print</code>, separated by commas. Python puts a space between them.</p>
+
+      <div class="runnable" data-lang="python" data-title="Commas in print">
+        <script type="text/plain">
+          print("I am", 12, "years old")
+          print("Total:", 4 + 5, "apples")
+
+          # sep= changes what goes between the things
+          print("red", "green", "blue", sep=" | ")
+
+          # end= changes what goes at the end (normally a new line)
+          print("Loading", end="...")
+          print("done!")
+        </script>
+      </div>
+
+      <p>Two extra settings you can add inside <code>print()</code>:</p>
+      <ul>
+        <li><code><span class="t-attr">sep</span>=<span class="t-str">" | "</span></code> chooses what goes <strong>between</strong> the things (normally a space).</li>
+        <li><code><span class="t-attr">end</span>=<span class="t-str">"..."</span></code> chooses what goes at the <strong>end</strong> (normally a new line). That's why "done!" appeared on the same line.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Quotes, apostrophes and new lines</h2>
+      <p>You can use double quotes <code>"..."</code> or single quotes <code>'...'</code>. Both work the same. Pick the one that doesn't clash with your text:</p>
+
+      <div class="runnable" data-lang="python" data-title="Quotes inside text">
+        <script type="text/plain">
+          print("It's a sunny day")
+          print('She said "hi" to me')
+
+          # \n inside text means "start a new line here"
+          print("Line one\nLine two\nLine three")
+        </script>
+      </div>
+
+      <p>A backslash <code>\</code> starts a special code inside text. <code>\n</code> means "new line" and <code>\t</code> means "tab" (a big space).</p>
+
+      <h3>Many lines at once: triple quotes</h3>
+      <p>Three quotes <code>"""</code> let a string go over several lines. Perfect for text pictures:</p>
+
+      <div class="runnable" data-lang="python" data-title="Text art">
+        <script type="text/plain">
+          print("""
+            .-----.
+            | o o |
+            |  ^  |   Beep boop!
+            '-----'
+          """)
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Comments: notes for humans</h2>
+      <p>Anything after a <code class="k-tag">#</code> on a line is a <strong>comment</strong>. Python ignores it completely. Use comments to explain your code to yourself and others, or to switch a line off.</p>
+
+      <div class="runnable" data-lang="python" data-title="Comments are ignored">
+        <script type="text/plain">
+          # This program greets the user
+          print("Welcome!")   # this part is a comment too
+
+          # print("This line is switched off")
+          print("Bye!")
+        </script>
+      </div>
+      <p>Try deleting the <code>#</code> before the switched-off line.</p>
+    </section>
+
+    <section>
+      <h2>Your first error (and how to read it)</h2>
+      <p>Every programmer makes mistakes all day long. Even experts! The computer tells you what went wrong with an <strong>error message</strong>. Learning to read them is a superpower. This program has a typo on purpose:</p>
+
+      <div class="runnable" data-lang="python" data-title="A program with a mistake">
+        <script type="text/plain">
+          print("This line is fine")
+          prnt("This line has a typo")
+          print("This line never runs")
+        </script>
+      </div>
+
+      <p>Look at the output. An error message tells you three things:</p>
+      <ol>
+        <li><strong>The type of error.</strong> <code>NameError</code> means Python doesn't know a name.</li>
+        <li><strong>The line.</strong> Line 2. It's also marked in red in the code, and its number turns red.</li>
+        <li><strong>The details.</strong> <code>name 'prnt' is not defined</code>: Python has never heard of "prnt".</li>
+      </ol>
+      <p>Notice that line 1 still ran, but the program <strong>stopped</strong> at the error, so line 3 never ran. Now fix the typo: change <code>prnt</code> to <code>print</code>.</p>
+
+      <div class="runnable" data-lang="python" data-title="Find and fix the two mistakes">
+        <script type="text/plain">
+          print("Roses are red")
+          print("Violets are blue)
+          Print("Python is fun")
+        </script>
+      </div>
+      <p>Fix one mistake at a time: Python only shows the first error it finds. (Hint: one quote is missing, and Python cares about capital letters.)</p>
+    </section>
+
+    <section>
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Missing quote</strong>: <code>print("Hi)</code>. Every string needs a quote at both ends.</li>
+          <li><strong>Missing bracket</strong>: <code>print("Hi"</code>. Every <code>(</code> needs a <code>)</code>.</li>
+          <li><strong>Capital letters</strong>: <code>Print</code> is not <code>print</code>. Python is case-sensitive.</li>
+          <li><strong>Curly quotes</strong> like “this” from a word processor or the iPad keyboard. Python needs straight quotes <code>"</code>. On an iPad, press and hold the quote key, or turn off Smart Punctuation in Settings → General → Keyboard.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">What does print("2 + 2") show?</p>
+        <div class="opts">
+          <button>4</button>
+          <button data-correct>2 + 2</button>
+          <button>An error</button>
+        </div>
+        <p class="why">The quotes make it text, so Python prints it exactly as written. Without quotes, <code>print(2 + 2)</code> would show <code>4</code>.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">A program has an error on line 3. What happens to lines 1 and 2?</p>
+        <div class="opts">
+          <button data-correct>They still run</button>
+          <button>Nothing runs at all</button>
+          <button>Python skips line 3 and keeps going</button>
+        </div>
+        <p class="why">Python runs line by line. Lines 1 and 2 run normally, then the program stops at the error on line 3.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>print("text")</code> shows text. <code>print(5 + 3)</code> shows the answer.</li>
+          <li>Commas print several things with spaces. <code>sep=</code> and <code>end=</code> change the spacing.</li>
+          <li><code>#</code> starts a comment. <code>\n</code> is a new line. <code>"""</code> makes multi-line text.</li>
+          <li>Error messages tell you the <strong>type</strong>, the <strong>line</strong> and the <strong>details</strong>.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

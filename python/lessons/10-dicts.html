@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dictionaries · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="10-dicts">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 10 &middot; <b>Collections</b></p>
+      <div class="hero-code" aria-hidden="true">{ }</div>
+      <h1>Dictionaries</h1>
+      <p class="lead">In a real dictionary, you look up a word and find its meaning. A Python <strong>dictionary</strong> works the same way: you look up a <strong>key</strong> and get its <strong>value</strong>. Phone books, game settings, prices in a shop: they're all dictionaries.</p>
+      <ul class="learn">
+        <li>Keys and values</li>
+        <li>Looking things up</li>
+        <li>Adding and changing</li>
+        <li>Looping over a dictionary</li>
+        <li>Counting things</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Look things up by name</h2>
+      <p>With a list, you find things by position: <code>items[2]</code>. With a dictionary, you find things by a <strong>name</strong> you choose, called a <strong>key</strong>. Think of a wall of labeled drawers:</p>
+
+      <div class="memory" role="img" aria-label="A dictionary called prices: apple is 0.5, banana is 0.25, mango is 1.2">
+        <div class="slot other"><span class="nm">"apple"</span><span class="vl">0.5</span><span class="ty">key → value</span></div>
+        <div class="slot other"><span class="nm">"banana"</span><span class="vl">0.25</span><span class="ty">key → value</span></div>
+        <div class="slot other"><span class="nm">"mango"</span><span class="vl">1.2</span><span class="ty">key → value</span></div>
+      </div>
+
+      <p>A dictionary is written with curly brackets <code>{ }</code>. Each item is <code>key: value</code>, separated by commas:</p>
+
+      <div class="runnable" data-lang="python" data-title="A price list">
+        <script type="text/plain">
+          prices = {
+              "apple": 0.50,
+              "banana": 0.25,
+              "mango": 1.20,
+          }
+
+          print(prices["mango"])
+          print(f"An apple costs ${prices['apple']:.2f}")
+          print(len(prices), "fruits in the shop")
+          print("kiwi" in prices)
+        </script>
+      </div>
+
+      <p>Notice the f-string uses single quotes inside: <code>prices['apple']</code>, because the f-string itself already uses double quotes.</p>
+    </section>
+
+    <section>
+      <h2>Pick a key</h2>
+      <div class="code-explorer" data-lang="python" data-title="Translate a word">
+        <select name="w" data-label="English word">
+          <option>hello</option><option>cat</option><option selected>thank you</option><option>water</option><option>friend</option><option>pizza</option>
+        </select>
+        <script type="text/plain">
+          spanish = {
+              "hello": "hola",
+              "cat": "gato",
+              "thank you": "gracias",
+              "water": "agua",
+              "friend": "amigo",
+          }
+
+          word = "{{w}}"
+          if word in spanish:
+              print(f"'{word}' in Spanish is '{spanish[word]}'")
+          else:
+              print(f"Sorry, '{word}' isn't in my dictionary yet")
+        </script>
+      </div>
+      <p>Choose "pizza": it isn't a key in the dictionary. That's why we check with <code>in</code> first. Asking for a missing key directly, like <code>spanish["pizza"]</code>, gives a <code>KeyError</code>.</p>
+
+      <h3>.get(): ask safely</h3>
+      <div class="runnable" data-lang="python" data-title="get with a default">
+        <script type="text/plain">
+          spanish = {"hello": "hola", "cat": "gato"}
+
+          print(spanish.get("cat"))
+          print(spanish.get("pizza"))               # missing: gives None
+          print(spanish.get("pizza", "no idea 🤷"))  # missing: gives the default
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Adding, changing and removing</h2>
+      <div class="stepper" data-lang="python" data-title="A game character changes">
+        <script type="text/plain">
+          hero = {"name": "Zara", "hp": 100}
+          hero["level"] = 1
+          hero["hp"] = hero["hp"] - 30
+          hero["level"] += 1
+          del hero["level"]
+          print(hero)
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "vars": {"hero": "{'name': 'Zara', 'hp': 100}"}, "note": "Two keys: <code>name</code> and <code>hp</code> (health points)."},
+            {"line": 2, "vars": {"hero": "{'name': 'Zara', 'hp': 100, 'level': 1}"}, "note": "Using a <b>new</b> key adds it to the dictionary."},
+            {"line": 3, "vars": {"hero": "{'name': 'Zara', 'hp': 70, 'level': 1}"}, "note": "Using an <b>existing</b> key changes its value: 100 − 30 = 70."},
+            {"line": 4, "vars": {"hero": "{'name': 'Zara', 'hp': 70, 'level': 2}"}, "note": "<code>+=</code> works too: level goes up to 2."},
+            {"line": 5, "vars": {"hero": "{'name': 'Zara', 'hp': 70}"}, "note": "<code>del</code> removes a key and its value."},
+            {"line": 6, "vars": {"hero": "{'name': 'Zara', 'hp': 70}"}, "out": "{'name': 'Zara', 'hp': 70}\n", "note": "Print the whole dictionary."}
+          ]
+        </script>
+      </div>
+      <p>Keys are unique: a dictionary can't have the same key twice. Storing to an existing key replaces the old value.</p>
+    </section>
+
+    <section>
+      <h2>Looping over a dictionary</h2>
+      <div class="runnable" data-lang="python" data-title="keys, values and items">
+        <script type="text/plain">
+          ages = {"Lina": 13, "Omar": 11, "Maya": 12}
+
+          for name in ages:                  # the keys
+              print(name)
+
+          print(sum(ages.values()), "years in total")
+
+          for name, age in ages.items():     # keys and values together
+              print(f"{name} is {age}")
+        </script>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Code</th><th>Gives</th></tr></thead>
+          <tbody>
+            <tr><td><code>for k in d:</code></td><td>each key</td></tr>
+            <tr><td><code>d.keys()</code></td><td>all the keys</td></tr>
+            <tr><td><code>d.values()</code></td><td>all the values</td></tr>
+            <tr><td><code>for k, v in d.items():</code></td><td>each key and its value together</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Counting things</h2>
+      <p>A dictionary is perfect for counting. The key is the thing, and the value is how many times you've seen it:</p>
+      <div class="runnable" data-lang="python" data-title="Count the votes">
+        <script type="text/plain">
+          votes = ["pizza", "tacos", "pizza", "sushi", "pizza", "tacos"]
+
+          count = {}
+          for food in votes:
+              if food in count:
+                  count[food] += 1
+              else:
+                  count[food] = 1
+
+          print(count)
+          for food, n in count.items():
+              print(f"{food:6} {'█' * n} {n}")
+        </script>
+      </div>
+      <p>The last loop draws a little text bar chart: <code>'█' * n</code> repeats a block <code>n</code> times.</p>
+    </section>
+
+    <section>
+      <h2>Lists of dictionaries</h2>
+      <p>Real programs mix lists and dictionaries. A list of dictionaries is like a table: each dictionary is one row.</p>
+      <div class="runnable" data-lang="python" data-title="A little contacts book">
+        <script type="text/plain">
+          contacts = [
+              {"name": "Lina", "phone": "555-0101", "city": "Muscat"},
+              {"name": "Omar", "phone": "555-0145", "city": "Cairo"},
+              {"name": "Maya", "phone": "555-0199", "city": "Muscat"},
+          ]
+
+          for c in contacts:
+              print(f"{c['name']:6} {c['phone']}  ({c['city']})")
+
+          print()
+          print("Friends in Muscat:")
+          for c in contacts:
+              if c["city"] == "Muscat":
+                  print(" -", c["name"])
+        </script>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Make a dictionary of 3 friends and their favorite colors, then print a sentence for each.</li>
+          <li>Count how many times each letter appears in the word "banana".</li>
+          <li>Add a fourth contact to the contacts book, and print only people whose name starts with "M".</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="python" data-title="Your turn">
+        <script type="text/plain">
+          letters = {}
+          for ch in "banana":
+              letters[ch] = letters.get(ch, 0) + 1
+          print(letters)
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>KeyError</strong>: asking for a key that isn't there. Check with <code>in</code>, or use <code>.get()</code>.</li>
+          <li><strong>Wrong brackets</strong>: create with curly <code>{ }</code>, but look up with square <code>d["key"]</code>.</li>
+          <li><strong>Spelling and capitals</strong>: <code>"Apple"</code> and <code>"apple"</code> are different keys.</li>
+          <li><strong>Missing commas</strong> between items, or <code>=</code> instead of <code>:</code>.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">d = {"a": 1, "b": 2}. What does d["b"] give?</p>
+        <div class="opts">
+          <button>"b"</button>
+          <button data-correct>2</button>
+          <button>1</button>
+        </div>
+        <p class="why">You look up the key <code>"b"</code> and get its value, 2.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>d = {"key": value}</code>. Look up with <code>d["key"]</code>, or safely with <code>d.get("key", default)</code>.</li>
+          <li><code>d["new"] = x</code> adds or changes. <code>del d["key"]</code> removes.</li>
+          <li><code>for k, v in d.items():</code> loops over keys and values.</li>
+          <li>Great for counting, settings, and lookups. Lists of dictionaries make tables.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

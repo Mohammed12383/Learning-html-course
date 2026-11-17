@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Errors &amp; Debugging · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="12-errors">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 12 &middot; <b>Functions &amp; objects</b></p>
+      <div class="hero-code" aria-hidden="true">try</div>
+      <h1>Errors &amp; Debugging</h1>
+      <p class="lead">Every programmer, even the best in the world, writes code with mistakes in it. Mistakes in code are called <strong>bugs</strong>, and finding and fixing them is called <strong>debugging</strong>. It's a skill, and you can learn it.</p>
+      <ul class="learn">
+        <li>Three kinds of errors</li>
+        <li>A gallery of common errors</li>
+        <li>How to find a bug</li>
+        <li>try and except</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Three kinds of errors</h2>
+      <div class="trio">
+        <div><div class="big" style="color: var(--bad)">syntax</div><p><strong>Python can't read it.</strong> A missing bracket, quote or colon. Nothing runs at all.</p></div>
+        <div><div class="big" style="color: var(--c-attr)">runtime</div><p><strong>It crashes while running.</strong> Dividing by zero, a name that doesn't exist. The program stops at that line.</p></div>
+        <div><div class="big" style="color: var(--c-sel)">logic</div><p><strong>It runs, but the answer is wrong.</strong> No error message at all. These are the sneakiest.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>A gallery of errors</h2>
+      <p>Pick a mistake from the menu. The code changes, runs, and you see the error and what it means. Read the error type first, then the line, then the details.</p>
+
+      <div class="code-explorer" data-lang="python" data-title="What does this error look like?">
+        <select name="bug" data-label="the mistake">
+          <option value='print("Hello)'>missing quote (SyntaxError)</option>
+          <option value='if True:&#10;print("hi")'>line not pushed in (IndentationError)</option>
+          <option value='prnt("Hi")' selected>typo in a name (NameError)</option>
+          <option value='age = 12&#10;print("Age: " + age)'>text + number (TypeError)</option>
+          <option value='print(int("ten"))'>not a number (ValueError)</option>
+          <option value='print(10 / 0)'>divide by zero (ZeroDivisionError)</option>
+          <option value='items = ["a", "b", "c"]&#10;print(items[3])'>position too big (IndexError)</option>
+          <option value='d = {"a": 1}&#10;print(d["b"])'>missing key (KeyError)</option>
+          <option value='name = "Sam"&#10;name.shout()'>no such method (AttributeError)</option>
+        </select>
+        <script type="text/plain">
+          print("Starting...")
+          {{bug}}
+          print("Finished!")
+        </script>
+      </div>
+
+      <p>The status bar and the red error box tell you the line. "Starting..." is printed for runtime errors, because the program ran fine until it reached the bad line. For syntax errors, nothing prints at all, because Python couldn't even read the program.</p>
+    </section>
+
+    <section>
+      <h2>How to find a bug</h2>
+      <ol class="steps">
+        <li><div><p><strong>Read the error message.</strong> The type and line number tell you most of the story. Check the line before it too.</p></div></li>
+        <li><div><p><strong>Print things.</strong> Add <code>print()</code> lines to see what's in your variables at each step. This is called <strong>print debugging</strong>, and professionals do it all the time.</p></div></li>
+        <li><div><p><strong>Explain it out loud.</strong> Explain your code line by line to a friend, or even a rubber duck. You'll often spot the mistake halfway through. (Programmers really call this <strong>rubber duck debugging</strong>.)</p></div></li>
+        <li><div><p><strong>Change one thing at a time</strong>, then run it again.</p></div></li>
+      </ol>
+
+      <p>This program should print the average of the scores, but the answer is wrong. There's no error message: it's a <strong>logic error</strong>. Use print debugging to find it:</p>
+
+      <div class="runnable" data-lang="python" data-title="Find the logic bug">
+        <script type="text/plain">
+          scores = [70, 80, 90]
+
+          total = 0
+          for s in scores:
+              total = s          # 🐞 something is wrong here...
+          average = total / len(scores)
+
+          # Tip: add print(total) here to see what's going on
+          print("Average:", average)
+        </script>
+      </div>
+      <p>The average should be 80. If you print <code>total</code>, you'll see it's 90 (just the last score): the loop <em>replaces</em> total each time instead of <em>adding</em> to it. The fix is <code>total = total + s</code>, or <code>total += s</code>.</p>
+    </section>
+
+    <section>
+      <h2>try and except: handling problems politely</h2>
+      <p>Some errors aren't your fault. If you ask for a number and someone types "banana", <code>int()</code> crashes. Instead of crashing, you can <strong>catch</strong> the error and do something sensible:</p>
+
+      <div class="anatomy" role="img" aria-label="try colon: try this risky code. except ValueError colon: if that error happens, do this instead.">
+        <div class="part tag"><span>try:</span><small>try the risky code</small></div>
+        <div class="part tag"><span>  except ValueError:</span><small>if this error happens,<br>do this instead</small></div>
+      </div>
+
+      <div class="runnable" data-lang="python" data-title="Never crash on a bad answer">
+        <script type="text/plain">
+          while True:
+              answer = input("How many cookies do you want? ")
+              try:
+                  cookies = int(answer)
+                  break                     # it worked, leave the loop
+              except ValueError:
+                  print(f"'{answer}' isn't a number. Try again, using digits.")
+
+          print(f"Here are {cookies} cookies: " + "🍪" * cookies)
+        </script>
+      </div>
+
+      <p>Type "banana" first, then a number. If the code inside <code>try</code> works, the <code>except</code> part is skipped. If it fails with a <code>ValueError</code>, Python jumps to <code>except</code> instead of crashing.</p>
+
+      <div class="runnable" data-lang="python" data-title="Catching different errors">
+        <script type="text/plain">
+          def safe_divide(a, b):
+              try:
+                  return a / b
+              except ZeroDivisionError:
+                  print("You can't divide by zero! Returning 0.")
+                  return 0
+
+          print(safe_divide(10, 2))
+          print(safe_divide(10, 0))
+
+          try:
+              colors = ["red", "green"]
+              print(colors[5])
+          except IndexError as e:
+              print("Oops:", e)
+        </script>
+      </div>
+      <p><code>except IndexError as e</code> stores the error in <code>e</code>, so you can print its message.</p>
+
+      <aside class="note tip">
+        <h4>Don't catch everything</h4>
+        <p>Only use <code>try</code> for problems you expect, like bad input. If you wrap everything in <code>try</code>, real bugs get hidden, and they're much harder to find.</p>
+      </aside>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn: fix the bugs</h4>
+        <p>This program has <strong>three</strong> bugs. Fix them one at a time, running after each fix.</p>
+      </aside>
+
+      <div class="runnable" data-lang="python" data-title="Three bugs to squash">
+        <script type="text/plain">
+          shopping = ["milk", "eggs", "bread"]
+
+          print("My shopping list:")
+          for item in shopping
+              print("-", item)
+
+          count = len(shoping)
+          print("Number of items: " + count)
+        </script>
+      </div>
+
+      <div class="quiz">
+        <p class="q">A program runs without any error, but prints the wrong answer. What kind of error is it?</p>
+        <div class="opts">
+          <button>Syntax error</button>
+          <button>Runtime error</button>
+          <button data-correct>Logic error</button>
+        </div>
+        <p class="why">Logic errors give no error message. The code does exactly what you wrote, but what you wrote isn't what you meant.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">Which error does int("hello") cause?</p>
+        <div class="opts">
+          <button>TypeError</button>
+          <button data-correct>ValueError</button>
+          <button>NameError</button>
+        </div>
+        <p class="why">The type is right (text can be turned into a number), but this particular value can't be.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>Syntax errors: Python can't read it. Runtime errors: it crashes. Logic errors: wrong answer.</li>
+          <li>Read the error type, the line, and the details. Check the line before too.</li>
+          <li>Use <code>print()</code> to look inside your variables.</li>
+          <li><code>try: … except SomeError: …</code> handles problems you expect, like bad input.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

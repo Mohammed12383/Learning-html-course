@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Classes &amp; Objects · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="13-classes">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 13 &middot; <b>Functions &amp; objects</b></p>
+      <div class="hero-code" aria-hidden="true">class</div>
+      <h1>Classes &amp; Objects</h1>
+      <p class="lead">Games have players, monsters and coins. Shops have products and customers. A <strong>class</strong> lets you create your own kind of thing, with its own information and its own actions. This is called <strong>object-oriented programming</strong>, and almost every big program uses it.</p>
+      <ul class="learn">
+        <li>Classes and objects</li>
+        <li>__init__ and self</li>
+        <li>Attributes and methods</li>
+        <li>Many objects from one class</li>
+        <li>Inheritance</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>A blueprint and the things you build</h2>
+      <aside class="note idea">
+        <h4>Think of it like this</h4>
+        <p>A <strong>class</strong> is like a cookie cutter: it describes the shape. The cookies you make with it are <strong>objects</strong>. One cutter can make as many cookies as you like, and each cookie can have different sprinkles.</p>
+      </aside>
+
+      <p>An object bundles two things together:</p>
+      <ul>
+        <li><strong>Attributes</strong>: information about it. A dog has a <code>name</code> and an <code>age</code>.</li>
+        <li><strong>Methods</strong>: things it can do. A dog can <code>bark()</code> and <code>have_birthday()</code>. A method is just a function that belongs to the object.</li>
+      </ul>
+
+      <div class="runnable" data-lang="python" data-title="Your first class">
+        <script type="text/plain">
+          class Dog:
+              def __init__(self, name, age):
+                  self.name = name
+                  self.age = age
+
+              def bark(self):
+                  print(f"{self.name} says: Woof! 🐶")
+
+              def have_birthday(self):
+                  self.age += 1
+                  print(f"Happy birthday {self.name}! Now {self.age}.")
+
+          rex = Dog("Rex", 3)
+          bella = Dog("Bella", 5)
+
+          rex.bark()
+          bella.bark()
+          rex.have_birthday()
+          print(rex.name, "is", rex.age, "and", bella.name, "is", bella.age)
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>What do __init__ and self mean?</h2>
+      <ul>
+        <li><code class="k-sel">class Dog:</code> starts the blueprint. Class names start with a capital letter.</li>
+        <li><code class="k-prop">__init__</code> (two underscores on each side) is a special method that runs <strong>automatically</strong> when you make a new object. It sets up the object's starting information. "init" is short for "initialize".</li>
+        <li><code class="k-attr">self</code> means <strong>"this particular object"</strong>. <code>self.name = name</code> means "store the name inside <em>this</em> dog". Every method gets <code>self</code> as its first parameter, so it knows which dog it's working on.</li>
+        <li><code>rex = Dog("Rex", 3)</code> makes a new object. Python calls <code>__init__</code> with <code>name="Rex"</code> and <code>age=3</code>. You never pass <code>self</code> yourself: Python does it.</li>
+      </ul>
+
+      <div class="memory" role="img" aria-label="Two dog objects made from the same class: rex has name Rex and age 4, bella has name Bella and age 5">
+        <div class="slot other"><span class="nm">rex</span><span class="vl">name: "Rex"
+age: 4</span><span class="ty">a Dog object</span></div>
+        <div class="slot other"><span class="nm">bella</span><span class="vl">name: "Bella"
+age: 5</span><span class="ty">a Dog object</span></div>
+      </div>
+      <p>Each object has its own copy of the attributes. Rex's birthday doesn't change Bella's age.</p>
+    </section>
+
+    <section>
+      <h2>Watch an object being made</h2>
+      <div class="stepper" data-lang="python" data-title="Inside Dog(&quot;Rex&quot;, 3)">
+        <script type="text/plain">
+          class Dog:
+              def __init__(self, name, age):
+                  self.name = name
+                  self.age = age
+
+          rex = Dog("Rex", 3)
+          print(rex.name)
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "note": "Python learns the blueprint <code>Dog</code>. No dog exists yet."},
+            {"line": 6, "note": "<code>Dog(\"Rex\", 3)</code>: make a new, empty Dog object and call <code>__init__</code>."},
+            {"line": 2, "vars": {"self": "Dog{ }", "name": "'Rex'", "age": "3"}, "note": "<code>self</code> is the new object. <code>name</code> and <code>age</code> hold the values we passed."},
+            {"line": 3, "vars": {"self": "Dog{name: 'Rex'}", "name": "'Rex'", "age": "3"}, "note": "Store the name <b>inside the object</b>."},
+            {"line": 4, "vars": {"self": "Dog{name: 'Rex', age: 3}", "name": "'Rex'", "age": "3"}, "note": "Store the age inside the object too."},
+            {"line": 6, "vars": {"rex": "Dog{name: 'Rex', age: 3}"}, "note": "<code>__init__</code> is done. The finished object is stored in <code>rex</code>."},
+            {"line": 7, "vars": {"rex": "Dog{name: 'Rex', age: 3}"}, "out": "Rex\n", "note": "<code>rex.name</code> reads the name from inside the object."}
+          ]
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Objects that change: a bank account</h2>
+      <p>Methods can check things and change the object's attributes. This is how objects keep track of things over time:</p>
+
+      <div class="runnable" data-lang="python" data-title="A piggy bank">
+        <script type="text/plain">
+          class PiggyBank:
+              def __init__(self, owner):
+                  self.owner = owner
+                  self.coins = 0
+
+              def add(self, amount):
+                  self.coins += amount
+                  print(f"+{amount} 🪙  ({self.owner} has {self.coins})")
+
+              def spend(self, amount):
+                  if amount > self.coins:
+                      print(f"Not enough! {self.owner} only has {self.coins}.")
+                  else:
+                      self.coins -= amount
+                      print(f"-{amount} 🛍️  ({self.owner} has {self.coins})")
+
+              def __str__(self):
+                  return f"{self.owner}'s piggy bank: {self.coins} coins"
+
+          mine = PiggyBank("Sam")
+          mine.add(10)
+          mine.add(5)
+          mine.spend(20)
+          mine.spend(8)
+          print(mine)
+        </script>
+      </div>
+      <p><code>__str__</code> is another special method. It decides what <code>print(mine)</code> shows. Without it, you'd see something unhelpful like <code>&lt;__main__.PiggyBank object&gt;</code>.</p>
+    </section>
+
+    <section>
+      <h2>Objects that draw: a garden</h2>
+      <p>Each <code>Flower</code> object knows its own position, color and size, and has a <code>draw()</code> method. Make a list of flowers, then draw them all with a loop:</p>
+
+      <div class="code-explorer" data-lang="python" data-title="A garden of Flower objects">
+        <input type="range" name="n" data-label="flowers" min="1" max="7" value="5">
+        <input type="range" name="p" data-label="petals" min="3" max="12" value="6">
+        <script type="text/plain">
+          import turtle
+          t = turtle.Turtle()
+          t.speed(0)
+          t.hideturtle()
+
+          class Flower:
+              def __init__(self, x, color, petals):
+                  self.x = x
+                  self.color = color
+                  self.petals = petals
+
+              def draw(self):
+                  t.penup()
+                  t.goto(self.x, -120)
+                  t.setheading(90)
+                  t.color("seagreen")
+                  t.width(4)
+                  t.pendown()
+                  t.forward(110)                 # the stem
+                  t.width(1)
+                  t.color(self.color)
+                  for i in range(self.petals):   # the petals
+                      t.begin_fill()
+                      t.circle(18)
+                      t.end_fill()
+                      t.left(360 / self.petals)
+
+          colors = ["hotpink", "orange", "mediumpurple", "gold", "tomato", "dodgerblue", "deeppink"]
+          garden = []
+          for i in range({{n}}):
+              garden.append(Flower(-160 + i * 55, colors[i], {{p}}))
+
+          for flower in garden:
+              flower.draw()
+
+          print(f"{len(garden)} Flower objects, {garden[0].petals} petals each")
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Inheritance: a class based on another</h2>
+      <p>A class can <strong>inherit</strong> from another class: it gets all the parent's attributes and methods for free, and can add its own or change some. Write the parent in brackets:</p>
+
+      <div class="runnable" data-lang="python" data-title="Animals">
+        <script type="text/plain">
+          class Animal:
+              def __init__(self, name):
+                  self.name = name
+
+              def speak(self):
+                  return "..."
+
+              def introduce(self):
+                  print(f"I'm {self.name} and I say {self.speak()}")
+
+          class Cat(Animal):
+              def speak(self):
+                  return "Meow 🐱"
+
+          class Cow(Animal):
+              def speak(self):
+                  return "Moo 🐮"
+
+          for pet in [Cat("Mochi"), Cow("Daisy"), Animal("Mystery")]:
+              pet.introduce()
+        </script>
+      </div>
+      <p><code>Cat</code> and <code>Cow</code> only write their own <code>speak</code>. They get <code>__init__</code> and <code>introduce</code> from <code>Animal</code>. Each object uses its own version of <code>speak</code>.</p>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Give <code>Dog</code> a new method <code>sit()</code> that prints "Rex sits. Good dog!".</li>
+          <li>Make a class <code>Player</code> with <code>name</code>, <code>score = 0</code> and a method <code>win_points(n)</code>.</li>
+          <li>Add a <code>Duck</code> class to the animals that says "Quack 🦆".</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="python" data-title="Your class">
+        <script type="text/plain">
+          class Player:
+              def __init__(self, name):
+                  self.name = name
+                  self.score = 0
+
+          p = Player("Zara")
+          print(p.name, p.score)
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Forgetting self</strong> as the first parameter of a method: <code>def bark():</code> should be <code>def bark(self):</code>.</li>
+          <li><strong>Forgetting self.</strong> when using attributes: inside a method, write <code>self.name</code>, not just <code>name</code>.</li>
+          <li><strong>One underscore</strong>: it's <code>__init__</code>, with two on each side.</li>
+          <li><strong>Forgetting the brackets</strong>: <code>rex = Dog</code> doesn't make a dog. <code>rex = Dog("Rex", 3)</code> does.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">What does self mean inside a method?</p>
+        <div class="opts">
+          <button>The class itself</button>
+          <button data-correct>The particular object the method is working on</button>
+          <button>The program</button>
+        </div>
+        <p class="why">When you call <code>rex.bark()</code>, <code>self</code> is <code>rex</code>. When you call <code>bella.bark()</code>, it's <code>bella</code>.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">When does __init__ run?</p>
+        <div class="opts">
+          <button>When you write the class</button>
+          <button data-correct>Automatically, every time a new object is made</button>
+          <button>Only if you call obj.__init__()</button>
+        </div>
+        <p class="why"><code>Dog("Rex", 3)</code> makes the object and runs <code>__init__</code> right away to set it up.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>A <strong>class</strong> is a blueprint. An <strong>object</strong> is a thing made from it: <code>rex = Dog("Rex", 3)</code>.</li>
+          <li><code>__init__(self, ...)</code> sets up a new object. <code>self.x = x</code> stores attributes.</li>
+          <li>Methods are functions inside the class, with <code>self</code> first. Call them with <code>obj.method()</code>.</li>
+          <li><code>class Cat(Animal):</code> inherits everything from Animal.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

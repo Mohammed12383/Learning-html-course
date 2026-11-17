@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loops with while · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="08-while">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 08 &middot; <b>Decisions &amp; loops</b></p>
+      <div class="hero-code" aria-hidden="true">while</div>
+      <h1>Loops with while</h1>
+      <p class="lead">A <code>for</code> loop repeats a set number of times. A <code>while</code> loop keeps going <em>as long as</em> something is true, like "keep asking until they guess the number". In this lesson you'll build your first real game.</p>
+      <ul class="learn">
+        <li>while loops</li>
+        <li>Loops that never end (and how to stop them)</li>
+        <li>break and continue</li>
+        <li>A number guessing game</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Repeat while it's true</h2>
+      <p><code class="k-tag">while</code> checks a question. If it's <code>True</code>, it runs the pushed-in lines, then goes back to the top and checks again. As soon as the question is <code>False</code>, the loop ends.</p>
+
+      <div class="flow" role="img" aria-label="Flow chart: check if fuel is greater than 0. If true, run the loop body and go back to the check. If false, leave the loop.">
+        <div class="fbox fq">fuel &gt; 0 ?</div>
+        <div class="arrow"></div>
+        <div class="branches">
+          <div class="branch yes"><span class="lab">True</span><div class="fbox">run the pushed-in lines,<br>then go back up ↺</div></div>
+          <div class="branch no"><span class="lab">False</span><div class="fbox">leave the loop</div></div>
+        </div>
+      </div>
+
+      <div class="stepper" data-lang="python" data-title="A rocket burns its fuel">
+        <script type="text/plain">
+          fuel = 3
+          while fuel > 0:
+              print("Whoosh! Fuel left:", fuel)
+              fuel = fuel - 1
+          print("Out of fuel 🚀")
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "vars": {"fuel": "3"}, "note": "Start with 3 units of fuel."},
+            {"line": 2, "vars": {"fuel": "3"}, "note": "Is 3 &gt; 0? <b>True</b>, so go into the loop."},
+            {"line": 3, "vars": {"fuel": "3"}, "out": "Whoosh! Fuel left: 3\n", "note": "Print."},
+            {"line": 4, "vars": {"fuel": "2"}, "note": "Use one unit: fuel is now 2. Go back to the top."},
+            {"line": 2, "vars": {"fuel": "2"}, "note": "Is 2 &gt; 0? <b>True</b>, loop again."},
+            {"line": 3, "vars": {"fuel": "2"}, "out": "Whoosh! Fuel left: 2\n", "note": "Print."},
+            {"line": 4, "vars": {"fuel": "1"}, "note": "fuel is now 1."},
+            {"line": 2, "vars": {"fuel": "1"}, "note": "Is 1 &gt; 0? <b>True</b>, one more time."},
+            {"line": 3, "vars": {"fuel": "1"}, "out": "Whoosh! Fuel left: 1\n", "note": "Print."},
+            {"line": 4, "vars": {"fuel": "0"}, "note": "fuel is now 0."},
+            {"line": 2, "vars": {"fuel": "0"}, "note": "Is 0 &gt; 0? <b>False!</b> The loop ends."},
+            {"line": 5, "vars": {"fuel": "0"}, "out": "Out of fuel 🚀\n", "note": "Python jumps to the first line after the loop."}
+          ]
+        </script>
+      </div>
+
+      <p>Line 4 is the most important line. It changes <code>fuel</code>, so that one day the question becomes <code>False</code> and the loop can end.</p>
+    </section>
+
+    <section>
+      <h2>Loops that never end</h2>
+      <p>If nothing inside the loop ever makes the question false, it repeats forever. This is called an <strong>infinite loop</strong>, and every programmer writes one by accident sometimes. Press <strong>Run</strong> on this one, see that it keeps running, then press <strong>Stop</strong>:</p>
+
+      <div class="runnable" data-lang="python" data-noauto data-title="An infinite loop (press Run, then Stop)" data-hint="Press Run. The status says Running… forever. Press Stop in the output bar to stop it.">
+        <script type="text/plain">
+          n = 1
+          while n > 0:
+              n = n + 1    # n only gets bigger, so n > 0 is always True
+
+          print("This line is never reached")
+        </script>
+      </div>
+
+      <aside class="note tip">
+        <h4>Stopping a program on a computer</h4>
+        <p>When you run Python in a terminal on your computer, press <kbd>Ctrl</kbd>+<kbd>C</kbd> to stop a program that's stuck in a loop.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>break: leave the loop now</h2>
+      <p>Sometimes it's easiest to write <code>while True:</code> (repeat forever) and then use <code class="k-tag">break</code> to jump out when you're done. This is perfect for "keep asking until…":</p>
+
+      <div class="runnable" data-lang="python" data-title="Keep asking until the answer is right">
+        <script type="text/plain">
+          while True:
+              answer = input("What's 7 × 8? ")
+              if answer.strip() == "56":
+                  print("Correct! 🎉")
+                  break
+              print("Not quite, try again.")
+
+          print("Thanks for playing!")
+        </script>
+      </div>
+
+      <h3>continue: skip to the next round</h3>
+      <p><code class="k-tag">continue</code> skips the rest of the loop body and starts the next round. It works in <code>for</code> loops too:</p>
+      <div class="runnable" data-lang="python" data-title="Skip the odd numbers">
+        <script type="text/plain">
+          for n in range(1, 11):
+              if n % 2 == 1:
+                  continue      # odd: skip the print
+              print(n, "is even")
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Build it: a number guessing game</h2>
+      <p>Here's a complete game. The computer picks a secret number from 1 to 20 (with <code>random</code>, which you'll learn properly in lesson 15) and gives you hints until you find it. Read the code first, then play:</p>
+
+      <div class="runnable" data-lang="python" data-title="Guess the number">
+        <script type="text/plain">
+          import random
+
+          secret = random.randint(1, 20)
+          tries = 0
+          print("I'm thinking of a number from 1 to 20 🤔")
+
+          while True:
+              guess = int(input("Your guess: "))
+              tries += 1
+
+              if guess < secret:
+                  print("Too low ⬆️")
+              elif guess > secret:
+                  print("Too high ⬇️")
+              else:
+                  print(f"🎉 Yes! It was {secret}. You needed {tries} tries.")
+                  break
+        </script>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn: improve the game</h4>
+        <ol>
+          <li>Make the number go up to 100 instead of 20.</li>
+          <li>Give the player only 5 tries. (Hint: change <code>while True:</code> to <code>while tries &lt; 5:</code>, and after the loop, tell them the number if they didn't find it.)</li>
+          <li>If the guess is very close (within 2), print "So close! 🔥".</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section>
+      <h2>for or while?</h2>
+      <div class="split2">
+        <div>
+          <h4>for</h4>
+          <p>When you <strong>know how many times</strong>: 10 times, once per letter, once per item in a list.</p>
+        </div>
+        <div>
+          <h4>while</h4>
+          <p>When you <strong>don't know how many times</strong>: until they guess right, until the game is over, while there's fuel left.</p>
+        </div>
+      </div>
+
+      <div class="runnable" data-lang="python" data-title="How many times can you double it?">
+        <script type="text/plain">
+          coins = 1
+          days = 0
+          while coins < 1_000_000:
+              coins = coins * 2
+              days += 1
+          print(f"Doubling 1 coin every day makes you a millionaire in {days} days ({coins} coins)")
+        </script>
+      </div>
+      <p>Here we don't know in advance how many days it takes, so <code>while</code> is the right choice.</p>
+    </section>
+
+    <section>
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Forgetting to change the variable</strong> inside the loop, so it never ends.</li>
+          <li><strong>Changing it the wrong way</strong>: <code>fuel = fuel + 1</code> when it should go down.</li>
+          <li><strong>Forgetting <code>break</code></strong> in a <code>while True:</code> loop.</li>
+          <li><strong>The loop never starts</strong> because the question is already false at the beginning.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">How many times does this print?  n = 10, then while n > 7: print(n); n -= 1</p>
+        <div class="opts">
+          <button>7</button>
+          <button data-correct>3</button>
+          <button>Forever</button>
+        </div>
+        <p class="why">It prints for n = 10, 9 and 8. When n is 7, 7 &gt; 7 is False and the loop ends.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">What does break do?</p>
+        <div class="opts">
+          <button>Stops the whole program</button>
+          <button data-correct>Leaves the loop right away</button>
+          <button>Skips to the next round of the loop</button>
+        </div>
+        <p class="why"><code>break</code> leaves the loop. <code>continue</code> skips to the next round.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>while question:</code> repeats as long as the question is True.</li>
+          <li>Something inside must change, or it never ends. Use Stop (or Ctrl+C) to stop it.</li>
+          <li><code>while True:</code> + <code>break</code> for "keep going until…".</li>
+          <li><code>continue</code> skips to the next round.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

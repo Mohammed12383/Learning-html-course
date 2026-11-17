@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Drawing with Turtle · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="14-turtle">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 14 &middot; <b>Fun &amp; real world</b></p>
+      <div class="hero-code" aria-hidden="true">turtle</div>
+      <h1>Drawing with Turtle</h1>
+      <p class="lead">Python comes with a little robot turtle holding a pen. Tell it to move and turn, and it draws. With loops, functions and a few colors, you can make amazing art. This is the most visual lesson in the course.</p>
+      <ul class="learn">
+        <li>Moving and turning</li>
+        <li>Coordinates</li>
+        <li>Colors and filling</li>
+        <li>Spirals and patterns</li>
+        <li>Random art</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Meet the turtle</h2>
+      <p>First you <code>import turtle</code> (you'll learn about <code>import</code> in the next lesson) and make a turtle. Then you give it commands:</p>
+
+      <div class="runnable" data-lang="python" data-title="Move and turn">
+        <script type="text/plain">
+          import turtle
+          t = turtle.Turtle()
+          t.shape("turtle")
+          t.speed(3)
+
+          t.forward(100)   # move forward 100 steps
+          t.left(90)       # turn left 90 degrees
+          t.forward(60)
+          t.right(135)     # turn right 135 degrees
+          t.forward(80)
+        </script>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Command</th><th>Does</th></tr></thead>
+          <tbody>
+            <tr><td><code>t.forward(n)</code> / <code>t.backward(n)</code></td><td>Move n steps (pixels)</td></tr>
+            <tr><td><code>t.left(deg)</code> / <code>t.right(deg)</code></td><td>Turn by some degrees (90 is a corner, 180 turns around, 360 is a full circle)</td></tr>
+            <tr><td><code>t.penup()</code> / <code>t.pendown()</code></td><td>Lift the pen to move without drawing / put it back down</td></tr>
+            <tr><td><code>t.goto(x, y)</code></td><td>Go straight to a point</td></tr>
+            <tr><td><code>t.circle(r)</code></td><td>Draw a circle with radius r</td></tr>
+            <tr><td><code>t.dot(size, color)</code></td><td>Stamp a filled dot</td></tr>
+            <tr><td><code>t.color("red")</code> / <code>t.width(5)</code></td><td>Pen color / pen thickness</td></tr>
+            <tr><td><code>t.speed(0)</code></td><td>0 is fastest. 1 is slowest, 10 is fast.</td></tr>
+            <tr><td><code>t.hideturtle()</code></td><td>Hide the turtle so only the drawing shows</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Where is the turtle? Coordinates</h2>
+      <p>The drawing area is a grid. The middle is <code>(0, 0)</code>. <strong>x</strong> goes left (−) and right (+). <strong>y</strong> goes down (−) and up (+). In this course the area is 400 wide and 300 tall, so x goes from −200 to 200 and y from −150 to 150.</p>
+
+      <div class="runnable" data-lang="python" data-title="Dots at different coordinates">
+        <script type="text/plain">
+          import turtle
+          t = turtle.Turtle()
+          t.speed(0)
+          t.hideturtle()
+          t.penup()
+
+          points = [(0, 0), (100, 50), (-100, 50), (-150, -100), (150, -100)]
+          for x, y in points:
+              t.goto(x, y)
+              t.dot(14, "hotpink")
+              t.write(f"  ({x}, {y})")
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Colors and filled shapes</h2>
+      <p>To fill a shape with color: choose a <code>fillcolor</code>, call <code>begin_fill()</code>, draw the shape, then call <code>end_fill()</code>. You can use color names, or hex codes like <code>"#FF5C8A"</code> (the same as in the HTML course).</p>
+
+      <div class="runnable" data-lang="python" data-title="A little house">
+        <script type="text/plain">
+          import turtle
+          t = turtle.Turtle()
+          t.speed(0)
+          t.hideturtle()
+
+          def rectangle(x, y, w, h, color):
+              t.penup()
+              t.goto(x, y)
+              t.pendown()
+              t.fillcolor(color)
+              t.begin_fill()
+              for side in [w, h, w, h]:
+                  t.forward(side)
+                  t.left(90)
+              t.end_fill()
+
+          rectangle(-80, -100, 160, 110, "#FFD6A5")   # walls
+          rectangle(-20, -100, 40, 60, "#9C6644")     # door
+          rectangle(35, -40, 30, 30, "#A0C4FF")       # window
+
+          # roof: a triangle
+          t.penup()
+          t.goto(-95, 10)
+          t.pendown()
+          t.fillcolor("#FF8FAB")
+          t.begin_fill()
+          t.goto(0, 90)
+          t.goto(95, 10)
+          t.goto(-95, 10)
+          t.end_fill()
+
+          # sun
+          t.penup()
+          t.goto(140, 90)
+          t.dot(50, "gold")
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Spirals: loops make magic</h2>
+      <p>Here's where it gets beautiful. Go forward a little more each time, and turn by the same angle. Tiny changes to the angle make completely different patterns. Move the sliders slowly:</p>
+
+      <div class="code-explorer" data-lang="python" data-title="Spiral maker">
+        <input type="range" name="angle" data-label="turn angle" min="59" max="179" value="91">
+        <input type="range" name="steps" data-label="steps" min="20" max="200" value="120">
+        <input type="range" name="grow" data-label="grow by" min="1" max="5" value="2">
+        <script type="text/plain">
+          import turtle
+          t = turtle.Turtle()
+          t.speed(0)
+          t.hideturtle()
+          t.width(2)
+
+          colors = ["#FF5C8A", "#FF8A3D", "#FFC94D", "#2FB67C", "#3E8BFF", "#8F7BFF"]
+          for i in range({{steps}}):
+              t.color(colors[i % len(colors)])
+              t.forward(i * {{grow}} / 2)
+              t.left({{angle}})
+        </script>
+      </div>
+      <p>Try angles near 90, 120, 144 and 170. A square spiral, a triangle spiral, a star... all from one loop.</p>
+    </section>
+
+    <section>
+      <h2>Patterns with repeated shapes</h2>
+      <div class="runnable" data-lang="python" data-title="Flower of squares">
+        <script type="text/plain">
+          import turtle
+          t = turtle.Turtle()
+          t.speed(0)
+          t.hideturtle()
+
+          colors = ["mediumpurple", "hotpink", "orange"]
+          for i in range(36):
+              t.color(colors[i % 3])
+              for side in range(4):
+                  t.forward(90)
+                  t.left(90)
+              t.left(10)       # turn a little, then draw the next square
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Random art</h2>
+      <p>With the <code>random</code> module, every run makes a different picture. Run it a few times:</p>
+      <div class="runnable" data-lang="python" data-title="Confetti">
+        <script type="text/plain">
+          import turtle
+          import random
+
+          t = turtle.Turtle()
+          t.speed(0)
+          t.hideturtle()
+          t.penup()
+
+          colors = ["#FF5C8A", "#FFC94D", "#2FB67C", "#3E8BFF", "#8F7BFF", "#FF8A3D"]
+          for i in range(80):
+              x = random.randint(-190, 190)
+              y = random.randint(-140, 140)
+              t.goto(x, y)
+              t.dot(random.randint(6, 30), random.choice(colors))
+
+          print("Run it again for a new picture!")
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn: make art</h4>
+        <ol>
+          <li>Draw the first letter of your name with <code>forward</code> and <code>left</code>/<code>right</code>.</li>
+          <li>Add a tree next to the house: a brown rectangle and a green circle.</li>
+          <li>Draw a target: 5 circles inside each other, with alternating red and white fills. (Draw the biggest first.)</li>
+          <li>Make your own spiral with your favorite colors.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="python" data-title="Your canvas">
+        <script type="text/plain">
+          import turtle
+          t = turtle.Turtle()
+          t.speed(0)
+
+          t.color("hotpink")
+          t.width(5)
+          t.circle(50)
+        </script>
+      </div>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>A line where you didn't want one</strong>: use <code>penup()</code> before moving, and <code>pendown()</code> before drawing again.</li>
+          <li><strong>Fill doesn't work</strong>: you need both <code>begin_fill()</code> before and <code>end_fill()</code> after the shape.</li>
+          <li><strong>Drawing off the edge</strong>: keep x between −200 and 200, and y between −150 and 150.</li>
+          <li><strong>Too slow</strong>: add <code>t.speed(0)</code> at the top.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">To draw a triangle, how many degrees should the turtle turn at each corner?</p>
+        <div class="opts">
+          <button>60</button>
+          <button>90</button>
+          <button data-correct>120</button>
+        </div>
+        <p class="why">The turtle must turn 360° in total over the 3 corners: 360 ÷ 3 = 120.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>import turtle</code>, then <code>t = turtle.Turtle()</code>.</li>
+          <li><code>forward</code>, <code>left</code>, <code>right</code>, <code>goto(x, y)</code>, <code>penup</code>/<code>pendown</code>, <code>circle</code>, <code>dot</code>.</li>
+          <li><code>fillcolor</code> + <code>begin_fill()</code> + shape + <code>end_fill()</code> for filled shapes.</li>
+          <li>Loops and small angle changes make beautiful patterns.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

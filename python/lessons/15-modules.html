@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modules · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="15-modules">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 15 &middot; <b>Fun &amp; real world</b></p>
+      <div class="hero-code" aria-hidden="true">import</div>
+      <h1>Modules: random, math &amp; more</h1>
+      <p class="lead">You don't have to build everything yourself. Python comes with hundreds of ready-made toolboxes called <strong>modules</strong>: random numbers, math, time, and much more. Programmers around the world share many thousands more.</p>
+      <ul class="learn">
+        <li>import</li>
+        <li>random: dice and surprises</li>
+        <li>math</li>
+        <li>time</li>
+        <li>The wider world of Python</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>import: open a toolbox</h2>
+      <p>A <strong>module</strong> is a file full of useful functions. <code class="k-tag">import</code> loads it, and then you use its tools with a dot: <code>module.tool()</code>.</p>
+
+      <div class="runnable" data-lang="python" data-title="Three ways to import">
+        <script type="text/plain">
+          import math                    # the whole toolbox
+          print(math.sqrt(81))           # use it with math.
+
+          from math import pi            # just one tool
+          print(pi)                      # no "math." needed
+
+          import random as r             # a nickname
+          print(r.randint(1, 6))
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>random: dice, coins and surprises</h2>
+      <p>Games need surprises. The <code>random</code> module gives you random numbers and random choices:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Code</th><th>Gives</th></tr></thead>
+          <tbody>
+            <tr><td><code>random.randint(1, 6)</code></td><td>A whole number from 1 to 6 (both included). A dice roll!</td></tr>
+            <tr><td><code>random.choice(items)</code></td><td>One random item from a list</td></tr>
+            <tr><td><code>random.shuffle(items)</code></td><td>Mixes the list up (like shuffling cards)</td></tr>
+            <tr><td><code>random.random()</code></td><td>A decimal between 0 and 1</td></tr>
+            <tr><td><code>random.sample(items, 3)</code></td><td>3 different random items</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="runnable" data-lang="python" data-title="Random fun (run it several times)">
+        <script type="text/plain">
+          import random
+
+          print("🎲 Dice:", random.randint(1, 6))
+          print("🪙 Coin:", random.choice(["heads", "tails"]))
+
+          snacks = ["🍕", "🍩", "🍎", "🍪", "🍉"]
+          print("Today's snack:", random.choice(snacks))
+
+          random.shuffle(snacks)
+          print("Shuffled:", snacks)
+          print("Lottery numbers:", sorted(random.sample(range(1, 50), 6)))
+        </script>
+      </div>
+
+      <h3>Is the dice fair?</h3>
+      <p>Roll a dice thousands of times and count each number. If it's fair, every number should come up about the same amount. Move the slider:</p>
+
+      <div class="code-explorer" data-lang="python" data-title="Roll a lot of dice">
+        <input type="range" name="n" data-label="rolls" min="6" max="6000" step="6" value="600">
+        <script type="text/plain">
+          import random
+
+          rolls = {{n}}
+          counts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}
+          for i in range(rolls):
+              counts[random.randint(1, 6)] += 1
+
+          for face in range(1, 7):
+              bar = "█" * round(counts[face] / rolls * 60)
+              print(f"{face}: {bar} {counts[face]}")
+        </script>
+      </div>
+      <p>With only a few rolls, the bars are very uneven. With thousands, they get closer and closer. Scientists use exactly this kind of program to test ideas: it's called a <strong>simulation</strong>.</p>
+    </section>
+
+    <section>
+      <h2>math</h2>
+      <div class="runnable" data-lang="python" data-title="The math toolbox">
+        <script type="text/plain">
+          import math
+
+          print(math.pi)               # 3.14159...
+          print(math.sqrt(144))        # square root
+          print(math.floor(4.7))       # round down
+          print(math.ceil(4.2))        # round up
+          print(math.hypot(3, 4))      # the long side of a right triangle
+
+          radius = 5
+          area = math.pi * radius ** 2
+          print(f"A circle with radius {radius} has area {area:.2f}")
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>time: waiting</h2>
+      <p><code>time.sleep(seconds)</code> pauses the program. Watch the output appear slowly:</p>
+      <div class="runnable" data-lang="python" data-title="A countdown that really counts">
+        <script type="text/plain">
+          import time
+
+          for n in range(5, 0, -1):
+              print(n, "...")
+              time.sleep(0.6)
+          print("🎆 Happy New Year!")
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Build it: a password generator</h2>
+      <div class="code-explorer" data-lang="python" data-title="Strong passwords">
+        <input type="range" name="len" data-label="length" min="6" max="24" value="12">
+        <input type="checkbox" name="sym" data-label="include symbols" data-on="True" data-off="False" checked>
+        <script type="text/plain">
+          import random
+
+          letters = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
+          digits = "23456789"
+          symbols = "!@#$%&*?"
+
+          pool = letters + digits
+          if {{sym}}:
+              pool += symbols
+
+          for i in range(3):
+              password = ""
+              for n in range({{len}}):
+                  password += random.choice(pool)
+              print(password)
+        </script>
+      </div>
+      <p>The letters <code>l</code>, <code>I</code>, <code>O</code>, <code>0</code> and <code>1</code> are left out on purpose, because they're easy to confuse.</p>
+    </section>
+
+    <section>
+      <h2>Your own modules</h2>
+      <p>On your computer, any <code>.py</code> file can be a module. Put useful functions in <code>helpers.py</code>, and in another file in the same folder write <code>import helpers</code>. Then use <code>helpers.greet("Sam")</code>. Big programs are split into many modules this way.</p>
+      <script type="text/plain" class="snippet" data-lang="python">
+        # helpers.py
+        def greet(name):
+            return f"Hello, {name}!"
+
+        # main.py (in the same folder)
+        import helpers
+        print(helpers.greet("Sam"))
+      </script>
+
+      <h3>The world of Python packages</h3>
+      <p>Beyond the built-in modules, there are more than half a million free <strong>packages</strong> made by other programmers. On your computer, you install them with a tool called <code>pip</code> by typing <code>pip install name</code> in the terminal. A few famous ones:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Package</th><th>For</th></tr></thead>
+          <tbody>
+            <tr><td><code>pygame</code></td><td>Making 2D games with graphics and sound</td></tr>
+            <tr><td><code>requests</code></td><td>Getting information from websites</td></tr>
+            <tr><td><code>flask</code></td><td>Building your own websites with Python</td></tr>
+            <tr><td><code>pandas</code> and <code>matplotlib</code></td><td>Working with data and making charts</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>(These need a computer with real Python. They don't run inside this course page.)</p>
+    </section>
+
+    <section>
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Make a "magic 8 ball": a list of answers, and <code>random.choice</code> picks one.</li>
+          <li>Roll two dice and print the total. Say "Doubles! 🎉" if they match.</li>
+          <li>Pick a random team name by joining a random adjective and a random animal.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="python" data-title="Magic 8 ball">
+        <script type="text/plain">
+          import random
+
+          answers = ["Yes!", "No way.", "Maybe...", "Ask again later", "Definitely 🔮"]
+          question = "Will I be a great programmer?"
+          print("❓", question)
+          print("🎱", random.choice(answers))
+        </script>
+      </div>
+
+      <div class="quiz">
+        <p class="q">Which line gives a random number from 1 to 10?</p>
+        <div class="opts">
+          <button>random(1, 10)</button>
+          <button data-correct>random.randint(1, 10)</button>
+          <button>math.random(10)</button>
+        </div>
+        <p class="why">After <code>import random</code>, use <code>random.randint(1, 10)</code>. Both 1 and 10 can come up.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>import module</code>, then <code>module.tool()</code>. Or <code>from module import tool</code>.</li>
+          <li><code>random</code>: <code>randint</code>, <code>choice</code>, <code>shuffle</code>, <code>sample</code>.</li>
+          <li><code>math</code>: <code>sqrt</code>, <code>pi</code>, <code>floor</code>, <code>ceil</code>. <code>time</code>: <code>sleep</code>.</li>
+          <li>Any <code>.py</code> file can be a module. <code>pip install</code> gets packages on a computer.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Final Project · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="16-final-project">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 16 &middot; <b>Build</b></p>
+      <div class="hero-code" aria-hidden="true">game</div>
+      <h1>Final Project: Pocket Pet</h1>
+      <p class="lead">Time to put it all together. You'll build <strong>Pocket Pet</strong>: a little game where you hatch a pet, then feed it, play with it and put it to bed for 10 days. It uses variables, input, if, loops, lists, dictionaries, functions, a class and random. Every part of it is something you've learned.</p>
+      <ul class="learn">
+        <li>Planning a program</li>
+        <li>Building it piece by piece</li>
+        <li>The game loop</li>
+        <li>Making it yours</li>
+        <li>What to learn next</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Play the finished game first</h2>
+      <p>Press <strong>Run</strong> and play. Type your answers in the output box. Can you keep your pet happy for 10 days?</p>
+
+      <div class="runnable" data-lang="python" data-stack data-title="Pocket Pet" data-hint="Press Run and type your answers in the output box. Press Reset to bring the original code back after you change it.">
+        <script type="text/plain" data-name="pocket_pet.py">
+          import random
+
+          FOODS = {
+              # food: (how much less hungry, how much happier)
+              "apple": (3, 0),
+              "fish": (4, 1),
+              "cake": (2, 3),
+          }
+
+          def clamp(n):
+              """Keep a number between 0 and 10."""
+              return max(0, min(10, n))
+
+          def bar(n):
+              return "█" * n + "·" * (10 - n)
+
+
+          class Pet:
+              def __init__(self, name, kind):
+                  self.name = name
+                  self.kind = kind
+                  self.hunger = 3       # 0 = full, 10 = starving
+                  self.happiness = 6    # 0 = sad, 10 = overjoyed
+                  self.energy = 7       # 0 = exhausted, 10 = bouncy
+                  self.day = 1
+
+              def face(self):
+                  if self.hunger >= 8:
+                      return "😫"
+                  if self.energy <= 2:
+                      return "😴"
+                  if self.happiness >= 8:
+                      return "😄"
+                  if self.happiness <= 3:
+                      return "😢"
+                  return "🙂"
+
+              def show(self):
+                  print(f"\n{self.kind} {self.name} {self.face()}   day {self.day} of 10")
+                  print(f"  hunger    [{bar(self.hunger)}]")
+                  print(f"  happiness [{bar(self.happiness)}]")
+                  print(f"  energy    [{bar(self.energy)}]")
+
+              def feed(self, food):
+                  if food not in FOODS:
+                      print(f"{self.name} sniffs it and walks away. 🙄")
+                      return
+                  less_hungry, happier = FOODS[food]
+                  self.hunger = clamp(self.hunger - less_hungry)
+                  self.happiness = clamp(self.happiness + happier)
+                  print(f"Yum! {self.name} loved the {food}. 😋")
+
+              def play(self):
+                  if self.energy < 2:
+                      print(f"{self.name} is too tired to play. 🥱")
+                      return
+                  game = random.choice(["catch", "hide and seek", "tag", "dancing"])
+                  self.happiness = clamp(self.happiness + 3)
+                  self.energy = clamp(self.energy - 2)
+                  self.hunger = clamp(self.hunger + 1)
+                  print(f"You played {game}! {self.name} is having so much fun. 🎉")
+
+              def sleep(self):
+                  self.energy = 10
+                  self.hunger = clamp(self.hunger + 1)
+                  print(f"{self.name} curls up and sleeps. 💤 Fully rested!")
+
+              def next_day(self):
+                  self.day += 1
+                  self.hunger = clamp(self.hunger + 1)
+                  self.happiness = clamp(self.happiness - 1)
+                  if random.random() < 0.3:
+                      surprise = random.choice([
+                          ("found a shiny stone 💎", 2),
+                          ("made a new friend 🐞", 2),
+                          ("got caught in the rain 🌧️", -2),
+                      ])
+                      print(f"Surprise! {self.name} {surprise[0]}")
+                      self.happiness = clamp(self.happiness + surprise[1])
+
+              def is_ok(self):
+                  return self.hunger < 10 and self.happiness > 0
+
+
+          # ---------- The game starts here ----------
+          print("🥚 An egg is wobbling... it's hatching!")
+          name = input("What will you name your pet? ").strip().title()
+          if name == "":
+              name = "Blob"
+          kind = random.choice(["🐱", "🐶", "🐰", "🦊", "🐼", "🐸"])
+          pet = Pet(name, kind)
+          print(f"It's a {kind}! Say hello to {pet.name}.")
+
+          while pet.is_ok() and pet.day <= 10:
+              pet.show()
+              choice = input("(f)eed, (p)lay, (s)leep or (q)uit? ").strip().lower()
+
+              if choice == "f":
+                  food = input(f"Which food? {', '.join(FOODS)}: ").strip().lower()
+                  pet.feed(food)
+              elif choice == "p":
+                  pet.play()
+              elif choice == "s":
+                  pet.sleep()
+              elif choice == "q":
+                  break
+              else:
+                  print("Type f, p, s or q.")
+                  continue
+
+              pet.next_day()
+
+          # ---------- The ending ----------
+          if pet.day > 10:
+              print(f"\n🏆 You looked after {pet.name} for 10 whole days. Best pet parent ever!")
+          elif not pet.is_ok():
+              print(f"\n💔 {pet.name} wasn't happy and ran off to find a new home. Try again!")
+          else:
+              print(f"\n👋 Bye! {pet.name} will miss you.")
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Step 1: plan before you code</h2>
+      <p>Before writing any code, programmers write a short plan in plain words:</p>
+      <ol class="steps">
+        <li><div><p>The pet has a <strong>name</strong>, a <strong>kind</strong> (an emoji), and three numbers from 0 to 10: <strong>hunger</strong>, <strong>happiness</strong>, <strong>energy</strong>.</p></div></li>
+        <li><div><p>Each day: show the pet, ask the player what to do (feed, play, sleep), then make a day pass.</p></div></li>
+        <li><div><p>Each day, the pet gets hungrier and a bit less happy. Sometimes a random surprise happens.</p></div></li>
+        <li><div><p>The game ends after 10 days (you win), if the pet is starving or sad (you lose), or if the player quits.</p></div></li>
+      </ol>
+      <p>Notice how the plan already shows which tools you need: a <strong>class</strong> for the pet, a <strong>while loop</strong> for the days, <strong>if/elif</strong> for choices, <strong>random</strong> for surprises.</p>
+    </section>
+
+    <section>
+      <h2>Step 2: the data</h2>
+      <p class="muted small">From lessons 2, 10 and 11.</p>
+      <p>The foods are a <strong>dictionary</strong>. Each value is a pair of numbers in brackets <code>(3, 0)</code>, called a <strong>tuple</strong>: like a small list that can't change. <code>clamp()</code> is a tiny <strong>function</strong> that keeps every number between 0 and 10, so hunger can never be −2 or 15. <code>bar()</code> turns a number into a little bar, like <code>███···</code>.</p>
+      <script type="text/plain" class="snippet" data-lang="python">
+        def clamp(n):
+            """Keep a number between 0 and 10."""
+            return max(0, min(10, n))
+      </script>
+      <p>The text in triple quotes right under <code>def</code> is called a <strong>docstring</strong>: a comment that explains what the function does.</p>
+    </section>
+
+    <section>
+      <h2>Step 3: the Pet class</h2>
+      <p class="muted small">From lesson 13.</p>
+      <p><code>__init__</code> sets the starting numbers. Then each thing the pet can do is a <strong>method</strong>: <code>feed</code>, <code>play</code>, <code>sleep</code>, <code>next_day</code>. Each method changes the pet's numbers with <code>clamp()</code> and prints what happened. <code>face()</code> uses <code>if</code> to pick an emoji that shows the pet's mood, and <code>is_ok()</code> answers True or False: is the pet still OK?</p>
+      <p>Look at <code>feed()</code>: if the food isn't in the dictionary, it prints a message and uses <code>return</code> to leave the method early. That's a neat trick for handling bad input.</p>
+    </section>
+
+    <section>
+      <h2>Step 4: the game loop</h2>
+      <p class="muted small">From lessons 5, 6 and 8.</p>
+      <p>Almost every game has a <strong>game loop</strong>: show the game, ask what to do, update everything, repeat. Here it's a <code>while</code> loop that keeps going as long as the pet is OK and there are days left:</p>
+      <script type="text/plain" class="snippet" data-lang="python">
+        while pet.is_ok() and pet.day <= 10:
+            pet.show()
+            choice = input("(f)eed, (p)lay, (s)leep or (q)uit? ")
+            ...
+            pet.next_day()
+      </script>
+      <p><code>break</code> leaves the loop when the player quits. <code>continue</code> skips <code>next_day()</code> when the player types something unknown, so a typo doesn't cost a day.</p>
+    </section>
+
+    <section>
+      <h2>Step 5: the ending</h2>
+      <p>After the loop, an <code>if/elif/else</code> checks <em>why</em> the loop ended, and prints the right message: a win, a sad ending, or a goodbye.</p>
+    </section>
+
+    <section>
+      <h2>Make it yours</h2>
+      <aside class="note task">
+        <h4>Ideas to remix Pocket Pet</h4>
+        <ol>
+          <li><strong>New food</strong>: add <code>"pizza": (5, 2)</code> to <code>FOODS</code>. It appears in the game automatically!</li>
+          <li><strong>New action</strong>: add a <code>bath()</code> method and a <code>(b)ath</code> choice that makes the pet happier.</li>
+          <li><strong>New surprises</strong>: add more random events to the list in <code>next_day()</code>.</li>
+          <li><strong>Harder game</strong>: make the pet get hungrier faster, or play for 20 days.</li>
+          <li><strong>A score</strong>: at the end, give points for happiness and print a rating with stars ⭐.</li>
+          <li><strong>Two pets</strong>: make a list of two Pet objects and take care of both!</li>
+        </ol>
+      </aside>
+      <p>Change the code in the box above and press Run to test it. When it works, press <strong>Copy</strong> and save it somewhere, so you don't lose your version.</p>
+
+      <h3>Other projects you can build now</h3>
+      <div class="trio">
+        <div><div class="big" style="color: var(--c-tag)">quiz</div><p>A quiz game with questions in a list of dictionaries, and a final score.</p></div>
+        <div><div class="big" style="color: var(--c-prop)">story</div><p>A choose-your-own-adventure: each choice leads to a different part of the story.</p></div>
+        <div><div class="big" style="color: var(--c-val)">art</div><p>A turtle art generator that draws a different picture every time.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>What to learn next</h2>
+      <ol class="steps">
+        <li><div><p><strong>Build small things often.</strong> The best practice is making your own little programs: a homework helper, a game, a joke generator.</p></div></li>
+        <li><div><p><strong>Python on a computer.</strong> Install Python (see lesson 0) to use files, packages like <code>pygame</code> for real games, and much more.</p></div></li>
+        <li><div><p><strong>Read and practice.</strong> The free online book <strong>Automate the Boring Stuff with Python</strong> and the official tutorial at <strong>docs.python.org</strong> are great next steps.</p></div></li>
+        <li><div><p><strong>Learn more languages.</strong> The Hello courses also teach <strong>HTML</strong> (websites), <strong>TypeScript</strong> (interactive websites) and <strong>C++</strong> (fast programs and games). Now that you know Python, they'll feel familiar.</p></div></li>
+      </ol>
+
+      <div class="quiz">
+        <p class="q">In Pocket Pet, why does the code use continue when the player types an unknown letter?</p>
+        <div class="opts">
+          <button>To end the game</button>
+          <button data-correct>To skip next_day(), so a typo doesn't cost a day</button>
+          <button>To feed the pet</button>
+        </div>
+        <p class="why"><code>continue</code> jumps straight back to the top of the loop, skipping the rest, including <code>pet.next_day()</code>.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>You did it</h4>
+        <p>When you started, a program was a mystery. Now you can store data in variables, lists and dictionaries, make decisions, repeat things with loops, write your own functions and classes, handle errors, draw with the turtle, and build a complete game. That's real programming. Go build something fun. 🐍</p>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

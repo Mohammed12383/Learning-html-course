@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Functions · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="11-functions">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 11 &middot; <b>Functions &amp; objects</b></p>
+      <div class="hero-code" aria-hidden="true">def</div>
+      <h1>Functions</h1>
+      <p class="lead">You've been <em>using</em> functions since lesson 1: <code>print()</code>, <code>len()</code>, <code>input()</code>. Now you'll <em>make</em> your own. A function is a mini-program with a name. Write it once, use it as many times as you like.</p>
+      <ul class="learn">
+        <li>def: making a function</li>
+        <li>Parameters: giving it values</li>
+        <li>return: getting an answer back</li>
+        <li>Default values</li>
+        <li>Variables inside functions</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>A function is a little machine</h2>
+      <p>Think of a function as a machine. You put something in, it does its job, and (sometimes) something comes out.</p>
+
+      <div class="flow" role="img" aria-label="A function as a machine: the input 4 goes into the function double, and 8 comes out">
+        <div class="fbox">put in: <b>4</b></div>
+        <div class="arrow"></div>
+        <div class="fbox fq">double(number)</div>
+        <div class="arrow"></div>
+        <div class="fbox">out comes: <b>8</b></div>
+      </div>
+
+      <div class="anatomy" role="img" aria-label="def greet open bracket name close bracket colon">
+        <div class="part tag"><span>def</span><small>"define":<br>make a function</small></div>
+        <div class="part prop"><span> greet</span><small>its name</small></div>
+        <div class="part punc"><span>(</span><small></small></div>
+        <div class="part text"><span>name</span><small>parameter: a value<br>it needs</small></div>
+        <div class="part punc"><span>):</span><small>then the pushed-in<br>lines it runs</small></div>
+      </div>
+
+      <div class="runnable" data-lang="python" data-title="Make and use a function">
+        <script type="text/plain">
+          def greet(name):
+              print(f"Hello, {name}! 👋")
+              print("Welcome to the club.")
+
+          greet("Lina")
+          greet("Omar")
+          greet("Maya")
+        </script>
+      </div>
+
+      <p>Writing <code>def greet(name):</code> only <strong>teaches</strong> Python the function. Nothing happens until you <strong>call</strong> it: <code>greet("Lina")</code>. Then <code>"Lina"</code> goes into the parameter <code>name</code>, and the function's lines run.</p>
+    </section>
+
+    <section>
+      <h2>Watch a function being called</h2>
+      <p>When Python reaches a function call, it <strong>jumps</strong> into the function, runs it, and then jumps <strong>back</strong> to where it was:</p>
+
+      <div class="stepper" data-lang="python" data-title="Jump in, jump back">
+        <script type="text/plain">
+          def area(width, height):
+              result = width * height
+              return result
+
+          room = area(4, 3)
+          print("The room is", room, "square meters")
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "note": "Python learns the function <code>area</code>. It doesn't run it yet, so it skips down."},
+            {"line": 5, "note": "Here's a call: <code>area(4, 3)</code>. Python jumps into the function."},
+            {"line": 1, "vars": {"width": "4", "height": "3"}, "note": "Inside the function, <code>width</code> gets 4 and <code>height</code> gets 3."},
+            {"line": 2, "vars": {"width": "4", "height": "3", "result": "12"}, "note": "4 × 3 = 12"},
+            {"line": 3, "vars": {"width": "4", "height": "3", "result": "12"}, "note": "<code>return</code> sends 12 back to where the function was called."},
+            {"line": 5, "vars": {"room": "12"}, "note": "Back outside: <code>area(4, 3)</code> became 12, so <code>room</code> gets 12. The function's own variables are gone."},
+            {"line": 6, "vars": {"room": "12"}, "out": "The room is 12 square meters\n", "note": "Print the answer."}
+          ]
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>return: giving an answer back</h2>
+      <p><code class="k-tag">return</code> sends a value back out of the function, so you can store it or use it. This is different from <code>print</code>, which only shows something on the screen:</p>
+
+      <div class="runnable" data-lang="python" data-title="return vs print">
+        <script type="text/plain">
+          def double(n):
+              return n * 2
+
+          def is_even(n):
+              return n % 2 == 0
+
+          x = double(5)
+          print(x)
+          print(double(double(3)))     # use the answer again
+          print(double(10) + 1)
+
+          print(is_even(4), is_even(7))
+          if is_even(10):
+              print("10 is even")
+        </script>
+      </div>
+      <aside class="note idea">
+        <h4>print shows, return gives</h4>
+        <p>A function that only <code>print</code>s is like a friend who tells you the answer out loud but won't write it down. A function that <code>return</code>s hands you the answer on paper, so you can use it again. Most functions should <code>return</code>.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Several parameters and default values</h2>
+      <div class="runnable" data-lang="python" data-title="Default values">
+        <script type="text/plain">
+          def make_pizza(size, topping="cheese", slices=8):
+              return f"A {size} {topping} pizza, cut into {slices} slices"
+
+          print(make_pizza("large"))
+          print(make_pizza("small", "mushroom"))
+          print(make_pizza("medium", slices=6))
+          print(make_pizza(topping="pineapple", size="huge"))
+        </script>
+      </div>
+      <ul>
+        <li><code>topping="cheese"</code> is a <strong>default value</strong>: used when you don't give one.</li>
+        <li>You can name the values when you call: <code>slices=6</code>. Then the order doesn't matter.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Functions that draw</h2>
+      <p>Functions are great for drawing: write <code>draw_star</code> once, then draw stars of any size and color, anywhere. Move the sliders:</p>
+
+      <div class="code-explorer" data-lang="python" data-title="A function, called many times">
+        <input type="range" name="n" data-label="how many stars" min="1" max="8" value="5">
+        <input type="range" name="s" data-label="size" min="20" max="70" value="40">
+        <script type="text/plain">
+          import turtle
+          t = turtle.Turtle()
+          t.speed(0)
+          t.hideturtle()
+
+          def draw_star(x, y, size, color):
+              t.penup()
+              t.goto(x, y)
+              t.pendown()
+              t.color(color)
+              t.begin_fill()
+              for i in range(5):
+                  t.forward(size)
+                  t.right(144)
+              t.end_fill()
+
+          colors = ["gold", "hotpink", "dodgerblue", "mediumseagreen"]
+          for i in range({{n}}):
+              draw_star(-170 + i * 45, 40 - (i % 2) * 70, {{s}}, colors[i % 4])
+
+          print("Drew", {{n}}, "stars with one function")
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Variables inside a function stay inside</h2>
+      <p>A variable made inside a function only exists while the function runs. Outside, it's gone. This is called <strong>scope</strong>, and it's a good thing: functions can't accidentally mess up each other's variables.</p>
+      <div class="runnable" data-lang="python" data-title="Inside vs outside">
+        <script type="text/plain">
+          def make_secret():
+              secret = "🍪 cookie"
+              print("Inside:", secret)
+
+          make_secret()
+          print("Outside:", secret)
+        </script>
+      </div>
+      <p>The last line gives a <code>NameError</code>: outside the function, <code>secret</code> doesn't exist. If you need a value outside, <code>return</code> it.</p>
+    </section>
+
+    <section>
+      <h2>Why functions matter</h2>
+      <ul>
+        <li><strong>No copying</strong>: write the code once, use it everywhere.</li>
+        <li><strong>Easy to fix</strong>: fix a bug in one place, and it's fixed everywhere.</li>
+        <li><strong>Easy to read</strong>: <code>draw_star(...)</code> explains itself.</li>
+        <li><strong>Building blocks</strong>: big programs are made of many small functions.</li>
+      </ul>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Write <code>square(n)</code> that returns n × n.</li>
+          <li>Write <code>shout(text)</code> that returns the text in capitals with "!!!" at the end.</li>
+          <li>Write <code>celsius_to_f(c)</code> that returns <code>c * 9 / 5 + 32</code>, and print a table from 0 to 40 in steps of 10.</li>
+          <li>Write <code>biggest(a, b, c)</code> using if/elif/else (don't use <code>max</code>!).</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="python" data-title="Your functions">
+        <script type="text/plain">
+          def square(n):
+              return n * n
+
+          print(square(7))
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Defining but never calling</strong> the function. Nothing happens until you call it.</li>
+          <li><strong>Calling before defining</strong>: Python reads top to bottom, so <code>def</code> must come first.</li>
+          <li><strong>Forgetting <code>return</code></strong>: then the function gives back <code>None</code>.</li>
+          <li><strong>Wrong number of values</strong>: <code>area(4)</code> when it needs two gives a <code>TypeError</code>.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">def add(a, b): return a + b. What is add(2, 3) * 2?</p>
+        <div class="opts">
+          <button>7</button>
+          <button data-correct>10</button>
+          <button>Error</button>
+        </div>
+        <p class="why"><code>add(2, 3)</code> returns 5, then 5 × 2 = 10.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">What does a function return if it has no return line?</p>
+        <div class="opts">
+          <button>0</button>
+          <button data-correct>None</button>
+          <button>An error</button>
+        </div>
+        <p class="why"><code>None</code> is Python's way of saying "nothing".</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>def name(param):</code> then pushed-in lines. Call it with <code>name(value)</code>.</li>
+          <li><code>return value</code> gives an answer back. <code>print</code> only shows it.</li>
+          <li>Default values: <code>def f(x, y=10):</code>. Named values: <code>f(1, y=5)</code>.</li>
+          <li>Variables inside a function only exist inside it.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

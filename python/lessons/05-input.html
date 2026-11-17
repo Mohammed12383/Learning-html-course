@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Asking Questions · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="05-input">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 05 &middot; <b>First steps</b></p>
+      <div class="hero-code" aria-hidden="true">input()</div>
+      <h1>Asking Questions</h1>
+      <p class="lead">So far, your programs did the same thing every time. With <code>input()</code>, a program can ask a question, wait for the person to type an answer, and use it. That's when programs start to feel alive.</p>
+      <ul class="learn">
+        <li>input()</li>
+        <li>Saving the answer</li>
+        <li>Turning answers into numbers</li>
+        <li>A tiny chatbot</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>input() asks and waits</h2>
+      <p><code class="k-prop">input()</code> shows a question, then <strong>pauses</strong> the program until the person types an answer and presses Enter. The answer comes back, so you can store it in a variable:</p>
+
+      <div class="anatomy" role="img" aria-label="name equals input with the question What's your name">
+        <div class="part text"><span>name</span><small>store the<br>answer here</small></div>
+        <div class="part punc"><span> = </span><small></small></div>
+        <div class="part prop"><span>input</span><small>ask and wait</small></div>
+        <div class="part val"><span>("What's your name? ")</span><small>the question</small></div>
+      </div>
+
+      <div class="runnable" data-lang="python" data-title="Press Run, then answer in the output box">
+        <script type="text/plain">
+          name = input("What's your name? ")
+          print(f"Nice to meet you, {name}!")
+
+          food = input("What's your favorite food? ")
+          print(f"{food}? {name}, that's a great choice.")
+        </script>
+      </div>
+
+      <p>A box appears in the output where you can type. Press Enter (or the Enter button) to answer. Run it again and give different answers: the program does something different each time.</p>
+
+      <aside class="note tip">
+        <h4>Tip</h4>
+        <p>End your question with a space, like <code>"Name? "</code>. Otherwise the answer is squashed right up against the question.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>Answers are always text</h2>
+      <p>This is the number one surprise with <code>input()</code>: even if the person types <code>12</code>, you get the <strong>text</strong> <code>"12"</code>, not the number 12. To do math with it, convert it with <code>int()</code> (whole numbers) or <code>float()</code> (decimals):</p>
+
+      <div class="memory" role="img" aria-label="The answer 12 typed in comes back as the text quote 12 quote. int() turns it into the number 12.">
+        <div class="slot txt"><span class="nm">answer</span><span class="vl">"12"</span><span class="ty">text from input()</span></div>
+        <div class="slot other"><span class="nm">→ int(answer) →</span><span class="vl" style="border-style: dashed">convert</span><span class="ty">int()</span></div>
+        <div class="slot num"><span class="nm">age</span><span class="vl">12</span><span class="ty">a real number</span></div>
+      </div>
+
+      <div class="runnable" data-lang="python" data-title="Convert the answer to a number">
+        <script type="text/plain">
+          age = int(input("How old are you? "))
+
+          print(f"Next year you'll be {age + 1}.")
+          print(f"In dog years, you're {age * 7}!")
+        </script>
+      </div>
+
+      <p><code>int(input(...))</code> does two things in one line: first <code>input</code> gets the text, then <code>int</code> turns it into a number. Try typing a word instead of a number. You'll get a <code>ValueError</code>, because Python can't turn "hello" into a number. (In lesson 12 you'll learn to handle that politely.)</p>
+    </section>
+
+    <section>
+      <h2>Build a tiny chatbot</h2>
+      <p>With variables, f-strings, math and input, you can already make a fun little program:</p>
+
+      <div class="runnable" data-lang="python" data-title="Robo the chatbot">
+        <script type="text/plain">
+          print("🤖 Hi! I'm Robo.")
+          name = input("What's your name? ").strip().title()
+          print(f"🤖 Hello, {name}! What a lovely name.")
+
+          year = int(input("What year were you born? "))
+          age = 2026 - year
+          print(f"🤖 So you're about {age}. I'm only 2 days old!")
+
+          color = input("What's your favorite color? ").lower()
+          print(f"🤖 {color.upper()}! I'll paint my antenna {color} 🎨")
+          print(f"🤖 Bye, {name}. Come back soon!")
+        </script>
+      </div>
+
+      <p>Notice <code>.strip().title()</code> right after <code>input()</code>: it cleans the answer (removes extra spaces, capitalizes the name), so "  sam " becomes "Sam". Cleaning answers is a good habit.</p>
+    </section>
+
+    <section>
+      <h2>Story game: fill in the blanks</h2>
+      <div class="runnable" data-lang="python" data-title="Silly story maker">
+        <script type="text/plain">
+          animal = input("An animal: ")
+          place = input("A place: ")
+          food = input("A food: ")
+          number = int(input("A number: "))
+
+          print()
+          print("=== Your story ===")
+          print(f"Once upon a time, a {animal} walked to {place}.")
+          print(f"It was hungry, so it ate {number} bowls of {food}.")
+          print(f"That's {number * 3} bowls in three days! The end.")
+        </script>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Add one more question to the story and use the answer.</li>
+          <li>Write a program that asks for two numbers and prints their sum. (Don't forget <code>int()</code>!)</li>
+          <li>Write a program that asks for a price and how many items, and prints the total cost with 2 decimals.</li>
+        </ol>
+      </aside>
+
+      <div class="runnable" data-lang="python" data-title="Your turn: add two numbers">
+        <script type="text/plain">
+          a = int(input("First number: "))
+          b = int(input("Second number: "))
+          print(f"{a} + {b} = {a + b}")
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Forgetting <code>int()</code></strong>: <code>input("Age? ") + 1</code> is a <code>TypeError</code>, because you can't add a number to text.</li>
+          <li><strong>Adding text that looks like numbers</strong>: <code>"5" + "3"</code> is <code>"53"</code>, not 8!</li>
+          <li><strong>Not saving the answer</strong>: <code>input("Name? ")</code> on its own asks the question, but the answer is lost. Store it: <code>name = input("Name? ")</code>.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">The person types 7. What does input() give you?</p>
+        <div class="opts">
+          <button>The number 7</button>
+          <button data-correct>The text "7"</button>
+          <button>Nothing until you convert it</button>
+        </div>
+        <p class="why"><code>input()</code> always gives text. Use <code>int()</code> to turn it into a number.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>answer = input("Question? ")</code> asks, waits, and stores what's typed.</li>
+          <li>The answer is always <strong>text</strong>. Use <code>int(input(...))</code> or <code>float(input(...))</code> for numbers.</li>
+          <li>Clean answers with <code>.strip()</code>, <code>.lower()</code> or <code>.title()</code>.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

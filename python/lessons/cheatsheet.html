@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cheat Sheet · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="cheatsheet" data-group="build">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Reference</p>
+      <div class="hero-code" aria-hidden="true">py</div>
+      <h1>Python Cheat Sheet</h1>
+      <p class="lead">Everything from the course on one page. Type in the box to find what you need.</p>
+      <label for="cheat-filter" class="eyebrow" style="margin-top: 8px">Search</label>
+      <input id="cheat-filter" class="cheat-search" type="search" placeholder="Try: list, loop, random, text, error..." autocomplete="off">
+    </header>
+
+    <section class="cheat">
+      <h2>Basics</h2>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>print(x)</code></td><td>Show something</td><td><code>print("Hi", name)</code></td></tr>
+        <tr><td><code>print(a, b, sep="-", end="")</code></td><td>Change spacing and the line ending</td><td><code>print(1, 2, sep=", ")</code></td></tr>
+        <tr><td><code># comment</code></td><td>A note Python ignores</td><td><code># explain this</code></td></tr>
+        <tr><td><code>x = value</code></td><td>Make or change a variable</td><td><code>score = 0</code></td></tr>
+        <tr><td><code>x += 1</code></td><td>Add to a variable (also <code>-= *= /=</code>)</td><td><code>lives -= 1</code></td></tr>
+        <tr><td><code>input("Question? ")</code></td><td>Ask and wait for typing (gives text)</td><td><code>name = input("Name? ")</code></td></tr>
+        <tr><td><code>int(x)</code> / <code>float(x)</code> / <code>str(x)</code></td><td>Convert to whole number / decimal / text</td><td><code>age = int(input("Age? "))</code></td></tr>
+        <tr><td><code>type(x)</code></td><td>What kind of value it is</td><td><code>type(3.5)</code> → float</td></tr>
+        <tr><td><code>True</code> / <code>False</code> / <code>None</code></td><td>Yes, no, nothing</td><td><code>done = False</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Numbers and math</h2>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>+ - * /</code></td><td>Add, subtract, multiply, divide</td><td><code>7 / 2</code> → 3.5</td></tr>
+        <tr><td><code>//</code></td><td>Whole-number division</td><td><code>7 // 2</code> → 3</td></tr>
+        <tr><td><code>%</code></td><td>Remainder (left over)</td><td><code>7 % 2</code> → 1</td></tr>
+        <tr><td><code>**</code></td><td>Power</td><td><code>2 ** 10</code> → 1024</td></tr>
+        <tr><td><code>round(x, n)</code></td><td>Round to n decimals</td><td><code>round(3.14159, 2)</code></td></tr>
+        <tr><td><code>abs() min() max() sum()</code></td><td>Distance from 0, smallest, biggest, total</td><td><code>max(4, 9, 2)</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Text (strings)</h2>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>f"..{x}.."</code></td><td>Put values into text (f-string)</td><td><code>f"Hi {name}"</code></td></tr>
+        <tr><td><code>f"{x:.2f}"</code></td><td>Show 2 decimals</td><td><code>f"${price:.2f}"</code></td></tr>
+        <tr><td><code>+</code> / <code>*</code></td><td>Join text / repeat text</td><td><code>"ha" * 3</code></td></tr>
+        <tr><td><code>len(s)</code></td><td>How many characters</td><td><code>len("cat")</code> → 3</td></tr>
+        <tr><td><code>s[0]</code> / <code>s[-1]</code></td><td>First / last character</td><td><code>"cat"[0]</code> → "c"</td></tr>
+        <tr><td><code>s[a:b]</code></td><td>A slice, from a up to (not including) b</td><td><code>"python"[0:3]</code> → "pyt"</td></tr>
+        <tr><td><code>s[::-1]</code></td><td>Backwards</td><td><code>"abc"[::-1]</code></td></tr>
+        <tr><td><code>.upper() .lower() .title()</code></td><td>Change capitals</td><td><code>name.title()</code></td></tr>
+        <tr><td><code>.strip()</code></td><td>Remove spaces at both ends</td><td><code>input().strip()</code></td></tr>
+        <tr><td><code>.replace(a, b)</code></td><td>Swap text</td><td><code>s.replace("a", "o")</code></td></tr>
+        <tr><td><code>.split()</code> / <code>" ".join(list)</code></td><td>Text to list of words / list to text</td><td><code>"a b".split()</code></td></tr>
+        <tr><td><code>x in s</code></td><td>Is it inside? True/False</td><td><code>"py" in "python"</code></td></tr>
+        <tr><td><code>\n</code> / <code>"""..."""</code></td><td>New line / text over many lines</td><td><code>print("a\nb")</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Decisions</h2>
+      <script type="text/plain" class="snippet" data-lang="python">
+        if score >= 90:
+            print("A")
+        elif score >= 70:
+            print("B")
+        else:
+            print("Keep going")
+      </script>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>== !=</code></td><td>Equal, not equal</td><td><code>if answer == "yes":</code></td></tr>
+        <tr><td><code>&lt; &gt; &lt;= &gt;=</code></td><td>Less, more, or equal</td><td><code>if age &gt;= 13:</code></td></tr>
+        <tr><td><code>and or not</code></td><td>Both, either, opposite</td><td><code>if sunny and warm:</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Loops</h2>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>for i in range(5):</code></td><td>Repeat 5 times, i = 0 to 4</td><td><code>for i in range(5): print(i)</code></td></tr>
+        <tr><td><code>range(a, b, step)</code></td><td>Numbers from a up to (not including) b</td><td><code>range(10, 0, -1)</code></td></tr>
+        <tr><td><code>for x in items:</code></td><td>Each item in a list, or letter in text</td><td><code>for name in friends:</code></td></tr>
+        <tr><td><code>for i, x in enumerate(items):</code></td><td>Each item with its position</td><td><code>enumerate(items, start=1)</code></td></tr>
+        <tr><td><code>while condition:</code></td><td>Repeat while it's True</td><td><code>while lives &gt; 0:</code></td></tr>
+        <tr><td><code>break</code> / <code>continue</code></td><td>Leave the loop / skip to the next round</td><td><code>if done: break</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Lists</h2>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>items = [a, b, c]</code></td><td>Make a list</td><td><code>nums = [3, 1, 2]</code></td></tr>
+        <tr><td><code>items[0]</code> / <code>items[-1]</code></td><td>First / last item</td><td><code>nums[0]</code></td></tr>
+        <tr><td><code>.append(x)</code> / <code>.insert(i, x)</code></td><td>Add at the end / at position i</td><td><code>nums.append(4)</code></td></tr>
+        <tr><td><code>.remove(x)</code> / <code>.pop()</code></td><td>Remove x / remove and give back the last</td><td><code>last = nums.pop()</code></td></tr>
+        <tr><td><code>sorted(items)</code> / <code>.sort()</code></td><td>Sorted copy / sort in place</td><td><code>sorted(nums, reverse=True)</code></td></tr>
+        <tr><td><code>len() sum() min() max()</code></td><td>Count, total, smallest, biggest</td><td><code>sum(nums) / len(nums)</code></td></tr>
+        <tr><td><code>x in items</code></td><td>Is it in the list?</td><td><code>if "milk" in shopping:</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Dictionaries</h2>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>d = {"key": value}</code></td><td>Make a dictionary</td><td><code>ages = {"Lina": 13}</code></td></tr>
+        <tr><td><code>d["key"]</code></td><td>Look up a value</td><td><code>ages["Lina"]</code></td></tr>
+        <tr><td><code>d.get("key", default)</code></td><td>Look up safely</td><td><code>ages.get("Bob", 0)</code></td></tr>
+        <tr><td><code>d["key"] = value</code></td><td>Add or change</td><td><code>ages["Omar"] = 11</code></td></tr>
+        <tr><td><code>del d["key"]</code></td><td>Remove</td><td><code>del ages["Lina"]</code></td></tr>
+        <tr><td><code>for k, v in d.items():</code></td><td>Loop over keys and values</td><td><code>print(k, v)</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Functions and classes</h2>
+      <script type="text/plain" class="snippet" data-lang="python">
+        def area(width, height=1):
+            return width * height
+
+        class Dog:
+            def __init__(self, name):
+                self.name = name
+
+            def bark(self):
+                print(f"{self.name}: Woof!")
+
+        rex = Dog("Rex")
+        rex.bark()
+      </script>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>def name(params):</code></td><td>Make a function</td><td><code>def greet(name):</code></td></tr>
+        <tr><td><code>return value</code></td><td>Give an answer back</td><td><code>return a + b</code></td></tr>
+        <tr><td><code>def f(x, y=10):</code></td><td>Default value</td><td><code>f(1)</code> or <code>f(1, y=5)</code></td></tr>
+        <tr><td><code>class Name:</code></td><td>Make a class (a blueprint)</td><td><code>class Dog:</code></td></tr>
+        <tr><td><code>__init__(self, ...)</code></td><td>Sets up a new object</td><td><code>self.name = name</code></td></tr>
+        <tr><td><code>class Cat(Animal):</code></td><td>Inherit from another class</td><td><code>class Cow(Animal):</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Errors</h2>
+      <div class="table-wrap"><table><thead><tr><th>Error</th><th>Usually means</th><th>Fix</th></tr></thead><tbody>
+        <tr><td><code>SyntaxError</code></td><td>Missing bracket, quote or colon</td><td>Check this line and the one before</td></tr>
+        <tr><td><code>IndentationError</code></td><td>Spaces at the start of a line are wrong</td><td>Push in by 4 spaces, line up blocks</td></tr>
+        <tr><td><code>NameError</code></td><td>Unknown name (typo, or not created yet)</td><td>Check spelling and order</td></tr>
+        <tr><td><code>TypeError</code></td><td>Mixing types, like text + number</td><td>Use <code>str()</code> or <code>int()</code></td></tr>
+        <tr><td><code>ValueError</code></td><td>Right type, wrong value, like <code>int("hi")</code></td><td>Check the input, use try/except</td></tr>
+        <tr><td><code>IndexError</code> / <code>KeyError</code></td><td>Position or key doesn't exist</td><td>Remember lists start at 0; use <code>.get()</code></td></tr>
+        <tr><td><code>try: … except ValueError:</code></td><td>Handle an expected problem</td><td><code>except ValueError: print("Numbers only")</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="cheat">
+      <h2>Modules and turtle</h2>
+      <div class="table-wrap"><table><thead><tr><th>Code</th><th>What it does</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>import random</code></td><td>Load a module</td><td><code>random.randint(1, 6)</code></td></tr>
+        <tr><td><code>random.choice(list)</code></td><td>Pick one at random</td><td><code>random.choice(["a", "b"])</code></td></tr>
+        <tr><td><code>random.shuffle(list)</code></td><td>Mix a list up</td><td><code>random.shuffle(cards)</code></td></tr>
+        <tr><td><code>math.sqrt() math.pi</code></td><td>Square root, pi</td><td><code>import math</code></td></tr>
+        <tr><td><code>time.sleep(s)</code></td><td>Wait s seconds</td><td><code>time.sleep(0.5)</code></td></tr>
+        <tr><td><code>t = turtle.Turtle()</code></td><td>Make a drawing turtle</td><td><code>import turtle</code></td></tr>
+        <tr><td><code>forward left right goto</code></td><td>Move and turn the turtle</td><td><code>t.forward(100)</code></td></tr>
+        <tr><td><code>penup pendown color width</code></td><td>Pen up/down, color, thickness</td><td><code>t.color("hotpink")</code></td></tr>
+        <tr><td><code>begin_fill() … end_fill()</code></td><td>Fill a shape with color</td><td><code>t.fillcolor("gold")</code></td></tr>
+        <tr><td><code>circle(r) dot(size, color)</code></td><td>Circle, filled dot</td><td><code>t.dot(20, "red")</code></td></tr>
+        <tr><td><code>speed(0) hideturtle()</code></td><td>Fastest drawing, hide the turtle</td><td><code>t.speed(0)</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

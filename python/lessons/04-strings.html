@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Text (Strings) · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="04-strings">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 04 &middot; <b>First steps</b></p>
+      <div class="hero-code" aria-hidden="true">"abc"</div>
+      <h1>Text (Strings)</h1>
+      <p class="lead">Names, messages, passwords, tweets: most of what programs handle is text. In this lesson you'll learn to glue text together, cut pieces out of it, change it, and drop variables into sentences.</p>
+      <ul class="learn">
+        <li>Joining text</li>
+        <li>f-strings</li>
+        <li>Letters by position</li>
+        <li>Slicing</li>
+        <li>Text methods</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Joining text together</h2>
+      <p>Text values are called <strong>strings</strong>. You can stick strings together with <code>+</code> (this is called <strong>concatenation</strong>) and repeat them with <code>*</code>:</p>
+
+      <div class="runnable" data-lang="python" data-title="+ and * with text">
+        <script type="text/plain">
+          first = "Ice"
+          second = "cream"
+
+          print(first + second)
+          print(first + " " + second)
+          print("ha" * 3)
+          print("=" * 20)
+        </script>
+      </div>
+      <p>Notice that <code>+</code> doesn't add a space by itself. You have to add <code>" "</code> yourself.</p>
+
+      <h3>Text and numbers don't mix with +</h3>
+      <div class="runnable" data-lang="python" data-title="A common error">
+        <script type="text/plain">
+          age = 12
+          print("I am " + age + " years old")
+        </script>
+      </div>
+      <p>Python won't glue a number onto text, because it isn't sure what you mean. Fix it by turning the number into text with <code>str(age)</code>. Or, much easier, use an f-string.</p>
+    </section>
+
+    <section>
+      <h2>f-strings: the easy way</h2>
+      <p>Put an <code>f</code> before the quotes, and you can drop any variable or calculation into the text using curly brackets <code>{ }</code>. This is the way most Python programmers build sentences.</p>
+
+      <div class="anatomy" role="img" aria-label="f, then quotes containing the text Hi and a variable name in curly brackets">
+        <div class="part tag"><span>f</span><small>"fill in the<br>blanks"</small></div>
+        <div class="part val"><span>"Hi </span><small>normal text</small></div>
+        <div class="part prop"><span>{name}</span><small>a blank, filled with<br>the variable</small></div>
+        <div class="part val"><span>!"</span><small></small></div>
+      </div>
+
+      <div class="runnable" data-lang="python" data-title="f-strings">
+        <script type="text/plain">
+          name = "Sam"
+          age = 12
+          price = 4.5
+
+          print(f"Hi {name}!")
+          print(f"{name} is {age} years old")
+          print(f"Next year {name} will be {age + 1}")
+          print(f"A cookie costs ${price:.2f}")
+        </script>
+      </div>
+      <p>The last line shows a bonus trick: <code>{price:.2f}</code> means "show this number with exactly 2 decimals". Perfect for money.</p>
+    </section>
+
+    <section>
+      <h2>Every letter has a position</h2>
+      <p>A string is a row of characters (letters, spaces, symbols), and each one has a number called its <strong>index</strong>. Computers start counting at <strong>0</strong>, not 1:</p>
+
+      <div class="cells" role="img" aria-label="The word PYTHON: P is index 0, Y 1, T 2, H 3, O 4, N 5. From the end: N is -1, O is -2.">
+        <div class="cell hl"><b>P</b><small>0</small><small>-6</small></div>
+        <div class="cell"><b>Y</b><small>1</small><small>-5</small></div>
+        <div class="cell"><b>T</b><small>2</small><small>-4</small></div>
+        <div class="cell"><b>H</b><small>3</small><small>-3</small></div>
+        <div class="cell"><b>O</b><small>4</small><small>-2</small></div>
+        <div class="cell hl"><b>N</b><small>5</small><small>-1</small></div>
+      </div>
+
+      <p>Square brackets get one letter: <code>word[0]</code> is the first, <code>word[-1]</code> is the last (negative numbers count from the end). <code>len(word)</code> tells you how many characters there are.</p>
+
+      <div class="runnable" data-lang="python" data-title="Get letters by position">
+        <script type="text/plain">
+          word = "PYTHON"
+
+          print(word[0])       # first letter
+          print(word[3])       # fourth letter (we start at 0!)
+          print(word[-1])      # last letter
+          print(len(word))     # how many letters
+        </script>
+      </div>
+
+      <h3>Slicing: cutting out a piece</h3>
+      <p><code>word[start:end]</code> cuts out a piece. It starts <strong>at</strong> <code>start</code> and stops just <strong>before</strong> <code>end</code>. Move the sliders:</p>
+
+      <div class="code-explorer" data-lang="python" data-title="Slice a word">
+        <input type="text" name="w" data-label="word" value="watermelon">
+        <input type="range" name="s" data-label="start" min="0" max="10" value="0">
+        <input type="range" name="e" data-label="end" min="0" max="10" value="5">
+        <script type="text/plain">
+          word = "{{w}}"
+          piece = word[{{s}}:{{e}}]
+
+          print(f"word[{{s}}:{{e}}] is '{piece}'")
+          print("The whole word has", len(word), "letters")
+          print("First 3:", word[:3])
+          print("From index 5 on:", word[5:])
+          print("Backwards:", word[::-1])
+        </script>
+      </div>
+      <p>Leave out a number to go from the very start (<code>word[:3]</code>) or to the very end (<code>word[5:]</code>). And <code>word[::-1]</code> is a famous trick that flips the text backwards.</p>
+    </section>
+
+    <section>
+      <h2>Text methods</h2>
+      <p>Strings come with built-in tools called <strong>methods</strong>. You use them with a dot: <code>text.upper()</code>. They give you a <em>new</em> string and leave the original alone.</p>
+
+      <div class="runnable" data-lang="python" data-title="Useful string methods">
+        <script type="text/plain">
+          text = "  Hello, Python world!  "
+
+          print(text.upper())          # ALL CAPS
+          print(text.lower())          # all small
+          print(text.strip())          # remove spaces at both ends
+          print(text.replace("world", "fans"))
+          print(text.count("o"))       # how many o's
+          print(text.strip().title())  # Capitalize Each Word
+
+          print("Python" in text)      # is it inside? True or False
+          print(text.strip().startswith("Hello"))
+        </script>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Method</th><th>Does</th></tr></thead>
+          <tbody>
+            <tr><td><code>.upper()</code> / <code>.lower()</code></td><td>Capital letters / small letters</td></tr>
+            <tr><td><code>.title()</code> / <code>.capitalize()</code></td><td>Capitalize Every Word / only the first letter</td></tr>
+            <tr><td><code>.strip()</code></td><td>Remove spaces at the start and end</td></tr>
+            <tr><td><code>.replace(a, b)</code></td><td>Swap every <code>a</code> for <code>b</code></td></tr>
+            <tr><td><code>.count(x)</code></td><td>How many times <code>x</code> appears</td></tr>
+            <tr><td><code>.find(x)</code></td><td>The index where <code>x</code> starts (−1 if not found)</td></tr>
+            <tr><td><code>.startswith(x)</code> / <code>.endswith(x)</code></td><td>True or False</td></tr>
+            <tr><td><code>.split()</code></td><td>Break text into a list of words (lesson 9)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The keyword <code class="k-tag">in</code> checks if one piece of text is inside another and gives <code>True</code> or <code>False</code>.</p>
+    </section>
+
+    <section>
+      <h2>Put it together: a name badge</h2>
+      <div class="runnable" data-lang="python" data-title="Name badge maker">
+        <script type="text/plain">
+          name = "  sam rivers "
+          job = "space explorer"
+
+          name = name.strip().title()
+          badge = f"| {name} · {job.upper()} |"
+
+          print("-" * len(badge))
+          print(badge)
+          print("-" * len(badge))
+          print(f"Initials: {name[0]}.{name.split()[1][0]}.")
+        </script>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Change the badge to your own name and dream job.</li>
+          <li>Make a variable <code>secret = "pizza"</code> and print it backwards.</li>
+          <li>Print how many letters are in your full name, using <code>len()</code> and an f-string.</li>
+          <li>Replace every <code>"a"</code> in a sentence with <code>"🍕"</code>.</li>
+        </ol>
+      </aside>
+
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Forgetting the f</strong>: <code>"Hi {name}"</code> prints the curly brackets literally.</li>
+          <li><strong>Counting from 1</strong>: the first letter is <code>[0]</code>, not <code>[1]</code>.</li>
+          <li><strong>Index too big</strong>: <code>"cat"[3]</code> gives an <code>IndexError</code>. "cat" has positions 0, 1 and 2.</li>
+          <li><strong>Forgetting the brackets</strong> on methods: <code>text.upper</code> without <code>()</code> doesn't run it.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">word = "hello". What is word[1]?</p>
+        <div class="opts">
+          <button>h</button>
+          <button data-correct>e</button>
+          <button>l</button>
+        </div>
+        <p class="why">Positions start at 0: h is 0, e is 1.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">name = "Mo". Which line prints "Hi Mo"?</p>
+        <div class="opts">
+          <button>print("Hi {name}")</button>
+          <button data-correct>print(f"Hi {name}")</button>
+          <button>print("Hi" + name)</button>
+        </div>
+        <p class="why">The f makes the curly brackets work. The last one prints "HiMo" with no space.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>+</code> joins text, <code>*</code> repeats it. Use <code>str()</code> to turn numbers into text.</li>
+          <li><code>f"Hi {name}"</code> drops values into text. <code>{x:.2f}</code> shows 2 decimals.</li>
+          <li><code>text[0]</code> first, <code>text[-1]</code> last, <code>text[2:5]</code> a slice, <code>len(text)</code> the length.</li>
+          <li>Methods: <code>.upper()</code>, <code>.lower()</code>, <code>.strip()</code>, <code>.replace()</code>, <code>.split()</code>.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

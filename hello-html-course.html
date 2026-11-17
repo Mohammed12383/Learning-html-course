@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Hello HTML">
 <title>Hello HTML</title>
-<!-- Built by tools/build-single-file.py. Edit the files in lessons/ and assets/, then rebuild. -->
+<!-- Built by tools/build-single-file.py. Edit the lesson files, then rebuild. -->
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap");
 
@@ -857,6 +857,7 @@ td code { white-space: nowrap; overflow-wrap: normal; }
 /* Three languages */
 .trio { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 22px 0; }
 .trio > div { padding: 18px; border-radius: var(--r-md); background: var(--surface); border: 1px solid var(--line); }
+.trio.four { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
 .trio .big { font-family: var(--font-code); font-size: 26px; font-weight: 500; }
 .trio p { margin: 6px 0 0; font-size: 15px; color: var(--ink-2); }
 
@@ -1103,10 +1104,275 @@ td code { white-space: nowrap; overflow-wrap: normal; }
   .ex-code { border-bottom: 0; }
 }
 
+/* ============================================================
+   Programming courses (Python, TypeScript, C++)
+   ============================================================ */
+
+/* Line marks in the editor (error lines, current line) */
+.ed-marks { position: absolute; inset: 0; pointer-events: none; }
+.ed-mark { position: absolute; left: 0; right: 0; }
+.ed-mark.error { background: color-mix(in srgb, var(--bad) 14%, transparent); box-shadow: inset 3px 0 0 var(--bad); }
+.ed-mark.current { background: color-mix(in srgb, var(--c-prop) 14%, transparent); }
+.ed-gutter b { color: var(--bad); font-weight: 700; }
+
+/* Run button */
+.run-btn {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+  background: var(--c-val);
+  color: var(--accent-ink);
+  border: 0;
+  border-radius: 8px;
+  padding: 5px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+.run-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.run-btn:disabled { opacity: 0.45; cursor: default; transform: none; }
+
+/* Output panel */
+.pg-view.run-view { background: var(--surface); }
+.run-bar { background: var(--surface); }
+.run-status {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 99px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.run-status[data-state="running"], .run-status[data-state="waiting"] { background: color-mix(in srgb, var(--c-prop) 16%, transparent); color: var(--c-prop); }
+.run-status[data-state="done"] { background: color-mix(in srgb, var(--ok) 15%, transparent); color: var(--ok); }
+.run-status[data-state="error"] { background: color-mix(in srgb, var(--bad) 14%, transparent); color: var(--bad); }
+.console {
+  flex: 1;
+  min-height: 140px;
+  max-height: 460px;
+  overflow: auto;
+  margin: 0;
+  padding: 14px 16px;
+  font-family: var(--font-code);
+  font-size: 13.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+}
+.console.console-small { min-height: 70px; max-height: 200px; border-top: 1px solid var(--line); flex: none; }
+.c-in { color: var(--c-prop); font-weight: 500; }
+.c-err { color: var(--bad); }
+.c-warn { color: var(--c-attr); }
+.c-note { font-family: var(--font-body); font-size: 13.5px; color: var(--ink-3); white-space: normal; margin: 0 0 8px; }
+.c-note.warn { color: var(--c-attr); }
+.c-error {
+  font-family: var(--font-body);
+  white-space: normal;
+  margin: 8px 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--bad) 8%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--bad) 30%, var(--line));
+  font-size: 14px;
+}
+.c-error strong { color: var(--bad); }
+.c-error .msg { font-family: var(--font-code); font-size: 13px; margin-top: 4px; white-space: pre-wrap; }
+.c-error .help { margin-top: 6px; color: var(--ink-2); }
+.c-ask { display: flex; gap: 6px; margin: 4px 0; white-space: normal; }
+.c-ask input {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-code);
+  font-size: 16px;
+  padding: 6px 10px;
+  border: 2px solid var(--c-prop);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--ink);
+}
+.turtle-stage {
+  background: var(--canvas);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  justify-items: center;
+  padding: 6px;
+}
+/* Skulpt draws on two stacked canvases; keep them in one grid cell so they shrink together */
+.turtle-stage { grid-template-areas: "draw"; }
+.turtle-stage canvas { grid-area: draw; margin: 0 !important; width: min(400px, 100%) !important; height: auto !important; }
+.stdin-box { display: grid; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--line); background: var(--code-bg); font-size: 13.5px; }
+.stdin-box small { color: var(--ink-3); }
+.stdin-box textarea {
+  font-family: var(--font-code);
+  font-size: 15px;
+  padding: 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  resize: vertical;
+  width: 100%;
+}
+.hidden-runner { display: none; }
+.embedded-preview { border-top: 0; flex: 1; }
+
+/* TypeScript type errors under the editor */
+.diag { border-top: 1px solid var(--line); padding: 10px 14px; background: color-mix(in srgb, var(--bad) 6%, var(--code-bg)); display: grid; gap: 8px; font-size: 14px; }
+.diag-head { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--bad); }
+.diag-row { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 10px; }
+.diag-line { font-family: var(--font-code); font-size: 12.5px; color: var(--bad); white-space: nowrap; padding-top: 1px; }
+.diag-msg { font-family: var(--font-code); font-size: 13px; }
+.diag-help { grid-column: 2; color: var(--ink-2); font-size: 13.5px; }
+
+/* Step-through viewer */
+.stepper-box {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+@media (min-width: 780px) { .stepper-box { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); } }
+.step-code { background: var(--code-bg); padding: 12px 0; font-family: var(--font-code); font-size: 14px; line-height: 1.75; overflow: auto; max-height: 460px; }
+.step-line { display: grid; grid-template-columns: 40px minmax(0, 1fr); white-space: pre; transition: background 0.2s ease; }
+.step-line .ln { text-align: right; padding-right: 12px; color: var(--ink-3); opacity: 0.7; }
+.step-line.current { background: color-mix(in srgb, var(--c-prop) 16%, transparent); }
+.step-line.current .ln { color: var(--c-prop); opacity: 1; font-weight: 500; }
+.step-line.current .ln::before { content: "▶ "; font-size: 10px; }
+.step-side { padding: 14px 16px; display: grid; gap: 8px; align-content: start; border-top: 1px solid var(--line); }
+@media (min-width: 780px) { .step-side { border-top: 0; border-left: 1px solid var(--line); } }
+.step-note { min-height: 3.2em; padding: 10px 12px; border-radius: 10px; background: color-mix(in srgb, var(--c-sel) 9%, var(--surface)); font-size: 15px; line-height: 1.45; }
+.step-label { font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin-top: 6px; }
+.step-vars { display: flex; flex-wrap: wrap; gap: 10px; min-height: 58px; }
+.step-empty { color: var(--ink-3); font-size: 14px; align-self: center; }
+.var-box { display: grid; gap: 4px; justify-items: center; }
+.var-name { font-family: var(--font-code); font-size: 12.5px; color: var(--c-prop); }
+.var-val {
+  font-family: var(--font-code);
+  font-size: 15px;
+  padding: 6px 12px;
+  min-width: 52px;
+  text-align: center;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  background: var(--code-bg);
+  white-space: pre;
+}
+.var-box.changed .var-val { border-color: var(--c-val); animation: flash 0.6s ease; }
+.step-out { margin: 0; min-height: 48px; padding: 10px 12px; border-radius: 10px; background: var(--code-bg); font-size: 13.5px; white-space: pre-wrap; }
+.step-ctrls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-top: 0;
+  border-radius: 0 0 var(--r-lg) var(--r-lg);
+  background: var(--code-bg);
+}
+.step-ctrls .run-btn { font-size: 14px; padding: 7px 16px; }
+.step-count { margin-left: auto; font-size: 13px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+/* Memory boxes: variables drawn as labeled boxes */
+.memory {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 20px;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+.memory .slot { display: grid; gap: 6px; justify-items: center; }
+.memory .nm { font-family: var(--font-code); font-size: 13.5px; color: var(--c-prop); }
+.memory .vl {
+  font-family: var(--font-code);
+  font-size: 18px;
+  padding: 10px 16px;
+  min-width: 70px;
+  text-align: center;
+  border: 2px solid color-mix(in srgb, var(--vc, var(--c-val)) 50%, transparent);
+  background: color-mix(in srgb, var(--vc, var(--c-val)) 9%, var(--surface));
+  border-radius: 12px;
+  white-space: pre;
+}
+.memory .ty { font-size: 11.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.memory .slot.num { --vc: var(--c-attr); }
+.memory .slot.txt { --vc: var(--c-val); }
+.memory .slot.yes { --vc: var(--c-sel); }
+.memory .slot.other { --vc: var(--c-prop); }
+
+/* A row of numbered boxes: lists, arrays, strings */
+.cells { display: flex; flex-wrap: wrap; gap: 4px; margin: 20px 0; font-family: var(--font-code); }
+.cells .cell { display: grid; justify-items: center; gap: 6px; }
+.cells .cell b {
+  font-weight: 500;
+  font-size: 17px;
+  padding: 10px 14px;
+  min-width: 50px;
+  text-align: center;
+  border: 2px solid color-mix(in srgb, var(--c-val) 45%, transparent);
+  background: color-mix(in srgb, var(--c-val) 9%, var(--surface));
+  border-radius: 10px;
+  white-space: pre;
+}
+.cells .cell small { font-size: 12px; color: var(--ink-3); }
+.cells .cell.hl b { border-color: var(--c-tag); background: color-mix(in srgb, var(--c-tag) 12%, var(--surface)); }
+.cells .cap { align-self: center; font-family: var(--font-body); font-size: 13px; color: var(--ink-3); margin-right: 8px; }
+
+/* Flow chart for decisions and loops */
+.flow { display: grid; justify-items: center; gap: 0; margin: 22px 0; font-size: 15px; }
+.flow .fbox {
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  font-family: var(--font-code);
+  font-size: 14px;
+  text-align: center;
+  max-width: 100%;
+}
+.flow .fq { border-color: color-mix(in srgb, var(--c-tag) 55%, transparent); background: color-mix(in srgb, var(--c-tag) 8%, var(--surface)); border-radius: 999px; }
+.flow .arrow { width: 2px; height: 22px; background: var(--ink-3); position: relative; }
+.flow .arrow::after { content: ""; position: absolute; bottom: -2px; left: -4px; border: 5px solid transparent; border-top: 7px solid var(--ink-3); border-bottom: 0; }
+.flow .branches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; width: 100%; max-width: 520px; }
+.flow .branch { display: grid; justify-items: center; }
+.flow .branch .lab { font-size: 12.5px; font-weight: 700; color: var(--ink-3); margin-bottom: 4px; }
+.flow .yes .lab { color: var(--ok); }
+.flow .no .lab { color: var(--bad); }
+
+/* Course switcher on home pages */
+.courses { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.course-card {
+  display: grid;
+  gap: 6px;
+  padding: 18px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  text-decoration: none;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.course-card:hover { transform: translateY(-2px); border-color: var(--ink-3); }
+.course-card .chip { font-family: var(--font-code); font-size: 22px; font-weight: 500; }
+.course-card strong { font-family: var(--font-display); font-size: 19px; }
+.course-card p { margin: 0; color: var(--ink-2); font-size: 14.5px; }
+.course-card.current { border-color: var(--ink-3); }
+
 </style>
 </head>
 <body data-root="." data-single>
-<noscript><div class="noscript"><strong>This course needs JavaScript to run.</strong> You may be seeing a quick preview. Open this file in a web browser app to use the live code editors.</div></noscript>
+<noscript><div class="noscript"><strong>This course needs JavaScript to run.</strong> You may be seeing a quick preview. Open this file in a web browser app to use the live code boxes.</div></noscript>
 
 <div data-page="home">
 
@@ -1182,6 +1448,12 @@ td code { white-space: nowrap; overflow-wrap: normal; }
     <h2>The course</h2>
     <p>17 lessons, in order. Each one takes about 15 to 30 minutes. Your progress is saved in this browser.</p>
     <div id="course-map"></div>
+  </section>
+
+  <section class="home-section">
+    <h2>More courses</h2>
+    <p>Finished HTML? These courses work the same way: explanation, code and result side by side.</p>
+    <div class="courses" id="course-list"></div>
   </section>
 
   <section class="home-section">
@@ -7560,7 +7832,8 @@ window.COURSE_ASSETS = {
 (function () {
   'use strict';
 
-  var LESSONS = [
+  var CFG = window.COURSE || {};
+  var LESSONS = CFG.lessons || [
     { id: '00-start-here', title: 'Start Here', chip: 'hello', group: 'basics', blurb: 'What a website really is, how this course works, and how to make your first file.' },
     { id: '01-first-page', title: 'Your First Web Page', chip: '<html>', group: 'basics', blurb: 'Tags, elements and the skeleton every page needs.' },
     { id: '02-text', title: 'Headings, Paragraphs & Lists', chip: '<h1>', group: 'basics', blurb: 'Write titles, paragraphs, bold words and lists.' },
@@ -7579,7 +7852,7 @@ window.COURSE_ASSETS = {
     { id: '15-responsive', title: 'Phones & Tablets', chip: '@media', group: 'polish', blurb: 'Make your site look good on every screen size.' },
     { id: '16-final-project', title: 'Final Project', chip: 'launch', group: 'build', blurb: 'Build a complete, polished website from start to finish.' }
   ];
-  var GROUPS = {
+  var GROUPS = CFG.groups || {
     basics: { name: 'HTML basics', color: '--c-tag' },
     style: { name: 'Styling with CSS', color: '--c-prop' },
     parts: { name: 'Building blocks', color: '--c-attr' },
@@ -7612,7 +7885,9 @@ window.COURSE_ASSETS = {
   }
 
   /* ---------- Progress (saved only in this browser) ---------- */
-  var KEY = 'hello-html:done';
+  var KEY = CFG.storageKey || 'hello-html:done';
+  var COURSE_NAME = CFG.name || 'Hello HTML';
+  var LOGO = CFG.logo || '&lt;/&gt;';
   function getDone() {
     try { return JSON.parse(localStorage.getItem(KEY) || '[]') || []; } catch (e) { return []; }
   }
@@ -7810,8 +8085,12 @@ window.COURSE_ASSETS = {
     return out;
   }
 
-  function highlight(code, lang) { return lang === 'css' ? hlCSS(code) : hlHTML(code); }
-  function langOf(name) { return /\.css$/i.test(name || '') ? 'css' : 'html'; }
+  var LANGS = { html: hlHTML, css: function (c) { return hlCSS(c); } };
+  function highlight(code, lang) { return (LANGS[lang] || hlHTML)(code); }
+  function langOf(name) {
+    var ext = (/\.(\w+)$/.exec(name || '') || [])[1] || 'html';
+    return { css: 'css', py: 'python', ts: 'typescript', cpp: 'cpp', h: 'cpp', js: 'typescript' }[ext.toLowerCase()] || 'html';
+  }
 
   /* ============================================================
      Live preview (a pretend browser window)
@@ -7823,6 +8102,7 @@ window.COURSE_ASSETS = {
     this.xray = false;
     this.fixedHeight = opts.height || 0;
     this.onNavigate = opts.onNavigate || null;
+    this.quietForms = !!opts.quietForms;
     this.files = opts.files || null;
 
     var view = el('div', { class: 'pg-view' + (opts.devices ? ' devices' : '') });
@@ -7989,6 +8269,7 @@ window.COURSE_ASSETS = {
 
   Preview.prototype.onSubmit = function (e) {
     e.preventDefault();
+    if (this.quietForms) return;
     var form = e.target;
     var parts = [];
     try {
@@ -8053,21 +8334,25 @@ window.COURSE_ASSETS = {
     var root = el('div', { class: 'ed' });
     var gutter = el('div', { class: 'ed-gutter', 'aria-hidden': 'true' });
     var main = el('div', { class: 'ed-main' });
+    var marks = el('div', { class: 'ed-marks', 'aria-hidden': 'true' });
     var pre = el('pre', { class: 'ed-hl', 'aria-hidden': 'true' });
     var code = el('code');
     pre.appendChild(code);
+    main.appendChild(marks);
     var id = 'code-' + (++uid);
     var ta = el('textarea', { class: 'ed-input', id: id, spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', autocorrect: 'off', wrap: 'off', 'aria-label': 'Code editor. Type to change the website.' });
     main.appendChild(pre); main.appendChild(ta);
     root.appendChild(gutter); root.appendChild(main);
     root.addEventListener('click', function (e) { if (e.target === root || e.target === gutter) ta.focus(); });
 
-    this.root = root; this.ta = ta; this.code = code; this.pre = pre; this.gutter = gutter;
+    this.root = root; this.ta = ta; this.code = code; this.pre = pre; this.gutter = gutter; this.marksEl = marks;
+    this.marks = [];
     this.lang = 'html';
     this.escaped = false;
 
     ta.addEventListener('input', function () { self.render(); onChange && onChange(ta.value); });
     ta.addEventListener('scroll', function () { pre.scrollLeft = ta.scrollLeft; });
+    this.onChange = onChange;
     ta.addEventListener('keydown', function (e) { self.keys(e); });
   }
   Editor.prototype.set = function (value, lang) {
@@ -8088,7 +8373,24 @@ window.COURSE_ASSETS = {
     var extra = ta.offsetHeight - ta.clientHeight;
     if (extra > 0) ta.style.height = Math.ceil(lines * lh + 28 + extra) + 'px';
     this.pre.scrollLeft = ta.scrollLeft;
+    this.lineHeight = lh;
+    this.paintMarks();
   };
+  // Highlight whole lines: [{ line: 3, kind: 'error' | 'current' | 'warn' }]
+  Editor.prototype.setMarks = function (marks) { this.marks = marks || []; this.paintMarks(); };
+  Editor.prototype.paintMarks = function () {
+    var lh = this.lineHeight || 23;
+    var top = parseFloat(getComputedStyle(this.ta).paddingTop) || 14;
+    this.marksEl.innerHTML = this.marks.map(function (m) {
+      return '<div class="ed-mark ' + m.kind + '" style="top:' + (top + (m.line - 1) * lh) + 'px;height:' + lh + 'px"></div>';
+    }).join('');
+    var lines = this.ta.value.split('\n').length, g = '';
+    var bad = {};
+    this.marks.forEach(function (m) { if (m.kind === 'error') bad[m.line] = 1; });
+    for (var i = 1; i <= lines; i++) g += (bad[i] ? '<b>' + i + '</b>' : i) + (i < lines ? '\n' : '');
+    this.gutter.innerHTML = g;
+  };
+  Editor.prototype.value = function () { return this.ta.value; };
   Editor.prototype.insert = function (text) {
     var ta = this.ta;
     ta.focus();
@@ -8100,12 +8402,14 @@ window.COURSE_ASSETS = {
       ta.dispatchEvent(new Event('input'));
     }
   };
+  // Python and C++ indent with 4 spaces, HTML, CSS and TypeScript with 2
+  Editor.prototype.tab = function () { return this.lang === 'python' || this.lang === 'cpp' ? '    ' : '  '; };
   Editor.prototype.keys = function (e) {
     var ta = this.ta;
     if (e.key === 'Escape') { this.escaped = true; return; }
     if (e.key === 'Tab' && !e.shiftKey && !this.escaped && !e.metaKey && !e.ctrlKey && !e.altKey) {
       e.preventDefault();
-      this.insert('  ');
+      this.insert(this.tab());
       return;
     }
     if (e.key !== 'Tab') this.escaped = false;
@@ -8117,13 +8421,15 @@ window.COURSE_ASSETS = {
       var prev = before.replace(/\s+$/, '').slice(-1);
       var after = ta.value.slice(s);
       var opensTag = /<([a-zA-Z][\w-]*)(\s[^<>]*)?>$/.test(before) && !/<(br|img|hr|input|meta|link|source|area|col|wbr)\b[^>]*>$/i.test(before);
-      if (prev === '{' || opensTag) {
+      var tab = this.tab();
+      if (this.lang !== 'html' && this.lang !== 'css') opensTag = false;
+      if (prev === '{' || opensTag || (this.lang === 'python' && prev === ':')) {
         e.preventDefault();
         if ((prev === '{' && /^\s*}/.test(after)) || (opensTag && /^<\//.test(after))) {
-          this.insert('\n' + indent + '  \n' + indent);
-          ta.selectionStart = ta.selectionEnd = s + 1 + indent.length + 2;
+          this.insert('\n' + indent + tab + '\n' + indent);
+          ta.selectionStart = ta.selectionEnd = s + 1 + indent.length + tab.length;
         } else {
-          this.insert('\n' + indent + '  ');
+          this.insert('\n' + indent + tab);
         }
         return;
       }
@@ -8390,7 +8696,7 @@ window.COURSE_ASSETS = {
   var closeMenu = function () {};
   function buildHeader() {
     var h = el('header', { class: 'site-header' });
-    h.innerHTML = '<a class="logo" href="' + homeHref() + '"><span class="logo-mark">&lt;/&gt;</span>Hello HTML</a>' +
+    h.innerHTML = '<a class="logo" href="' + homeHref() + '"><span class="logo-mark">' + LOGO + '</span>' + esc(COURSE_NAME) + '</a>' +
       '<span class="header-space"></span>' +
       '<div class="progress-pill"><span class="progress-text"></span><span class="progress-track"><span class="progress-fill"></span></span></div>';
     var sidebar = document.getElementById('sidebar');
@@ -8492,6 +8798,25 @@ window.COURSE_ASSETS = {
     map.innerHTML = html;
   }
 
+  /* ---------- Links to all the Hello courses ---------- */
+  var COURSES = [
+    { id: 'html', name: 'Hello HTML', chip: '<html>', color: '--c-tag', dir: '', single: 'hello-html-course.html', blurb: 'Build websites: text, colors, buttons, layouts and pages.' },
+    { id: 'python', name: 'Hello Python', chip: 'print()', color: '--c-prop', dir: 'python/', single: 'hello-python-course.html', blurb: 'Your first programming language: games, drawings and more.' },
+    { id: 'typescript', name: 'Hello TypeScript', chip: 'let x: number', color: '--c-sel', dir: 'typescript/', single: 'hello-typescript-course.html', blurb: 'The language that makes websites interactive, with types.' },
+    { id: 'cpp', name: 'Hello C++', chip: 'cout <<', color: '--c-val', dir: 'cpp/', single: 'hello-cpp-course.html', blurb: 'A fast, powerful language used for games and apps.' }
+  ];
+  function buildCourseList() {
+    var box = document.getElementById('course-list');
+    if (!box) return;
+    var base = ROOT + '/' + (CFG.siteRoot || '.') + '/';
+    var me = CFG.id || (window.COURSE ? '' : 'html');
+    box.innerHTML = COURSES.map(function (c) {
+      var href = SINGLE ? c.single : base + c.dir + 'index.html';
+      return '<a class="course-card' + (c.name === COURSE_NAME ? ' current' : '') + '" href="' + href + '" style="--cc: var(' + c.color + ')">' +
+        '<span class="chip" style="color: var(' + c.color + ')">' + esc(c.chip) + '</span><strong>' + esc(c.name) + (c.name === COURSE_NAME ? ' <small class="muted">(this course)</small>' : '') + '</strong><p>' + esc(c.blurb) + '</p></a>';
+    }).join('');
+  }
+
   function buildCheatFilter() {
     var input = document.getElementById('cheat-filter');
     if (!input) return;
@@ -8509,8 +8834,20 @@ window.COURSE_ASSETS = {
     });
   }
 
+  /* ---------- Extensions (code runners for Python, TypeScript, C++) ---------- */
+  var COMPONENTS = [];
+  var API = {
+    el: el, esc: esc, dedent: dedent, copyText: copyText, highlight: highlight, langOf: langOf,
+    Editor: Editor, Preview: Preview, nextId: function () { return ++uid; },
+    registerLang: function (name, fn) { LANGS[name] = fn; },
+    registerComponent: function (selector, init) { COMPONENTS.push([selector, init]); },
+    span: sp
+  };
+  (window.HelloCourseExtensions || []).forEach(function (fn) { fn(API); });
+
   /* ---------- Turn the markup in a part of the page into live components ---------- */
   function initComponents(root) {
+    COMPONENTS.forEach(function (c) { root.querySelectorAll(c[0]).forEach(c[1]); });
     root.querySelectorAll('script.snippet').forEach(makeSnippet);
     root.querySelectorAll('.quiz').forEach(makeQuiz);
     root.querySelectorAll('.playground').forEach(function (host) {
@@ -8543,7 +8880,7 @@ window.COURSE_ASSETS = {
     });
     closeMenu();
     if (menuBtn) menuBtn.hidden = isHome;
-    document.title = (current ? current.title + ' · ' : id === 'cheatsheet' ? 'Cheat Sheet · ' : '') + 'Hello HTML';
+    document.title = (current ? current.title + ' · ' : id === 'cheatsheet' ? 'Cheat Sheet · ' : '') + COURSE_NAME;
     if (!target.hasAttribute('data-ready')) {
       target.setAttribute('data-ready', '');
       initComponents(target);
@@ -8557,6 +8894,7 @@ window.COURSE_ASSETS = {
   buildSidebar();
   buildHeader();
   buildMap();
+  buildCourseList();
   refreshProgress();
   buildCheatFilter();
   makeSwatches();

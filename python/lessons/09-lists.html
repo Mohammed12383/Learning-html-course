@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lists · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="09-lists">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 09 &middot; <b>Collections</b></p>
+      <div class="hero-code" aria-hidden="true">[ ]</div>
+      <h1>Lists</h1>
+      <p class="lead">A variable holds one thing. A <strong>list</strong> holds many things, in order: a shopping list, the players in a game, every score this week. Lists and loops together are one of the most powerful tools in programming.</p>
+      <ul class="learn">
+        <li>Making lists</li>
+        <li>Getting items by position</li>
+        <li>Adding and removing</li>
+        <li>Looping over a list</li>
+        <li>Sorting, counting and more</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Many things in one box</h2>
+      <p>A list is written with square brackets <code>[ ]</code>, with commas between the items. Like letters in a string, every item has a position (an <strong>index</strong>) starting at 0:</p>
+
+      <div class="cells" role="img" aria-label="A list called fruits: index 0 apple, 1 banana, 2 cherry, 3 mango">
+        <span class="cap">fruits =</span>
+        <div class="cell"><b>"apple"</b><small>0</small></div>
+        <div class="cell"><b>"banana"</b><small>1</small></div>
+        <div class="cell"><b>"cherry"</b><small>2</small></div>
+        <div class="cell"><b>"mango"</b><small>3</small></div>
+      </div>
+
+      <div class="runnable" data-lang="python" data-title="Make a list and read from it">
+        <script type="text/plain">
+          fruits = ["apple", "banana", "cherry", "mango"]
+
+          print(fruits)
+          print(fruits[0])        # the first item
+          print(fruits[2])        # the third item
+          print(fruits[-1])       # the last item
+          print(len(fruits), "fruits")
+          print(fruits[1:3])      # a slice: items 1 and 2
+        </script>
+      </div>
+
+      <p>Lists can hold numbers, text, True/False, or a mix. You can even have an empty list: <code>[]</code>.</p>
+    </section>
+
+    <section>
+      <h2>Changing a list</h2>
+      <p>Unlike strings, lists can be changed. Step through and watch the list grow and shrink:</p>
+
+      <div class="stepper" data-lang="python" data-title="Add, change and remove">
+        <script type="text/plain">
+          pets = ["cat", "dog"]
+          pets.append("fish")
+          pets[0] = "tiger"
+          pets.insert(1, "owl")
+          pets.remove("dog")
+          last = pets.pop()
+          print(pets, last)
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "vars": {"pets": "['cat', 'dog']"}, "note": "Make a list with two items."},
+            {"line": 2, "vars": {"pets": "['cat', 'dog', 'fish']"}, "note": "<code>.append()</code> adds an item to the <b>end</b>."},
+            {"line": 3, "vars": {"pets": "['tiger', 'dog', 'fish']"}, "note": "Replace the item at index 0."},
+            {"line": 4, "vars": {"pets": "['tiger', 'owl', 'dog', 'fish']"}, "note": "<code>.insert(1, ...)</code> squeezes an item in at index 1. The others move along."},
+            {"line": 5, "vars": {"pets": "['tiger', 'owl', 'fish']"}, "note": "<code>.remove()</code> finds \"dog\" and takes it out."},
+            {"line": 6, "vars": {"pets": "['tiger', 'owl']", "last": "'fish'"}, "note": "<code>.pop()</code> takes the <b>last</b> item out and gives it back, so we can store it."},
+            {"line": 7, "vars": {"pets": "['tiger', 'owl']", "last": "'fish'"}, "out": "['tiger', 'owl'] fish\n", "note": "Print both."}
+          ]
+        </script>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Code</th><th>Does</th></tr></thead>
+          <tbody>
+            <tr><td><code>items.append(x)</code></td><td>Add x to the end</td></tr>
+            <tr><td><code>items.insert(i, x)</code></td><td>Put x at position i</td></tr>
+            <tr><td><code>items[i] = x</code></td><td>Replace the item at position i</td></tr>
+            <tr><td><code>items.remove(x)</code></td><td>Remove the first x found</td></tr>
+            <tr><td><code>items.pop()</code></td><td>Remove and give back the last item (or <code>pop(i)</code> for position i)</td></tr>
+            <tr><td><code>x in items</code></td><td>True if x is in the list</td></tr>
+            <tr><td><code>items.index(x)</code></td><td>The position of x</td></tr>
+            <tr><td><code>items.count(x)</code></td><td>How many times x appears</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Looping over a list</h2>
+      <p>This is where lists shine. A <code>for</code> loop gives you each item in turn:</p>
+
+      <div class="runnable" data-lang="python" data-title="Do something with every item">
+        <script type="text/plain">
+          friends = ["Lina", "Omar", "Maya", "Sam"]
+
+          for friend in friends:
+              print(f"Hi {friend}! 👋")
+
+          print()
+          # enumerate gives you the position too
+          for number, friend in enumerate(friends, start=1):
+              print(f"{number}. {friend}")
+        </script>
+      </div>
+
+      <h3>Numbers in lists</h3>
+      <div class="runnable" data-lang="python" data-title="Scores this week">
+        <script type="text/plain">
+          scores = [72, 95, 88, 64, 91]
+
+          print("Highest:", max(scores))
+          print("Lowest:", min(scores))
+          print("Total:", sum(scores))
+          print("Average:", sum(scores) / len(scores))
+
+          print("Sorted:", sorted(scores))
+          print("Biggest first:", sorted(scores, reverse=True))
+
+          good = []
+          for s in scores:
+              if s >= 85:
+                  good.append(s)
+          print("85 or more:", good)
+        </script>
+      </div>
+      <p><code>sorted(list)</code> gives a new sorted list. <code>list.sort()</code> sorts the list itself. The last part shows a classic pattern: start with an empty list and <code>append</code> only the items you want. This is called <strong>filtering</strong>.</p>
+    </section>
+
+    <section>
+      <h2>Draw a list as a chart</h2>
+      <p>Lists are how programs keep data, like daily steps or temperatures. Here, each number in the list becomes a bar drawn by the turtle. Move the sliders to change the numbers in the list:</p>
+
+      <div class="code-explorer" data-lang="python" data-title="A bar chart from a list">
+        <input type="range" name="a" data-label="monday" min="0" max="10" value="4">
+        <input type="range" name="b" data-label="tuesday" min="0" max="10" value="7">
+        <input type="range" name="c" data-label="wednesday" min="0" max="10" value="3">
+        <input type="range" name="d" data-label="thursday" min="0" max="10" value="9">
+        <input type="range" name="e" data-label="friday" min="0" max="10" value="6">
+        <script type="text/plain">
+          import turtle
+          t = turtle.Turtle()
+          t.speed(0)
+          t.hideturtle()
+
+          steps = [{{a}}, {{b}}, {{c}}, {{d}}, {{e}}]   # thousands of steps
+          colors = ["hotpink", "orange", "gold", "mediumseagreen", "dodgerblue"]
+
+          t.penup()
+          t.goto(-150, -120)
+          for i in range(len(steps)):
+              t.fillcolor(colors[i])
+              t.begin_fill()
+              t.pendown()
+              for side in [steps[i] * 22, 50, steps[i] * 22, 50]:
+                  t.left(90)
+                  t.forward(side)
+              t.end_fill()
+              t.penup()
+              t.forward(60)
+
+          print("Steps:", steps)
+          print("Best day had", max(steps), "thousand steps")
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Text and lists together</h2>
+      <p><code>.split()</code> chops text into a list of words. <code>" ".join(list)</code> glues a list back into text.</p>
+      <div class="runnable" data-lang="python" data-title="split and join">
+        <script type="text/plain">
+          sentence = "the quick brown fox jumps"
+          words = sentence.split()
+          print(words)
+          print(len(words), "words")
+
+          words.reverse()
+          print(" ".join(words))
+
+          print("-".join(["2026", "11", "17"]))
+          print("a,b,c".split(","))
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>Build it: a shopping list app</h2>
+      <div class="runnable" data-lang="python" data-title="Shopping list">
+        <script type="text/plain">
+          shopping = []
+          print("Type items to add. Type 'done' when finished.")
+
+          while True:
+              item = input("Add: ").strip()
+              if item.lower() == "done":
+                  break
+              if item in shopping:
+                  print(f"  {item} is already on the list")
+              else:
+                  shopping.append(item)
+
+          print()
+          print(f"🛒 Your list ({len(shopping)} items):")
+          for i, item in enumerate(sorted(shopping), start=1):
+              print(f"  {i}. {item}")
+        </script>
+      </div>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Make a list of your 5 favorite movies and print them numbered.</li>
+          <li>Make a list of numbers and print only the even ones.</li>
+          <li>Ask for 3 test scores with <code>input()</code>, put them in a list, and print the average.</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section>
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Index out of range</strong>: a list of 4 items has positions 0 to 3. <code>items[4]</code> is an <code>IndexError</code>.</li>
+          <li><strong>Forgetting the brackets</strong>: <code>fruits = "apple", "banana"</code> isn't quite a list. Use <code>[ ]</code>.</li>
+          <li><strong>Storing the result of sort()</strong>: <code>new = items.sort()</code> gives <code>None</code>. Use <code>new = sorted(items)</code>.</li>
+          <li><strong>Removing something that isn't there</strong>: <code>.remove(x)</code> gives a <code>ValueError</code>. Check with <code>if x in items:</code> first.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">nums = [5, 10, 15]. What is nums[1]?</p>
+        <div class="opts">
+          <button>5</button>
+          <button data-correct>10</button>
+          <button>15</button>
+        </div>
+        <p class="why">Index 0 is 5, index 1 is 10.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">How do you add "kiwi" to the end of a list called fruits?</p>
+        <div class="opts">
+          <button>fruits + "kiwi"</button>
+          <button data-correct>fruits.append("kiwi")</button>
+          <button>fruits[end] = "kiwi"</button>
+        </div>
+        <p class="why"><code>.append()</code> adds one item to the end of the list.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li><code>items = [a, b, c]</code>. <code>items[0]</code> is the first, <code>items[-1]</code> the last, <code>len(items)</code> the count.</li>
+          <li><code>.append()</code>, <code>.insert()</code>, <code>.remove()</code>, <code>.pop()</code> change the list.</li>
+          <li><code>for item in items:</code> visits every item.</li>
+          <li><code>sum()</code>, <code>min()</code>, <code>max()</code>, <code>sorted()</code>, <code>in</code>. <code>.split()</code> and <code>.join()</code> convert text.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

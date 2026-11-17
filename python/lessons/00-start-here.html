@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Start Here · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="00-start-here">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 00 &middot; <b>First steps</b></p>
+      <div class="hero-code" aria-hidden="true">hello</div>
+      <h1>Start Here</h1>
+      <p class="lead">You don't need to know anything yet. In this lesson you'll find out what programming is, why Python is a great first language, and how to use this course.</p>
+      <ul class="learn">
+        <li>What a program is</li>
+        <li>Why Python</li>
+        <li>How to use the code boxes</li>
+        <li>Running Python yourself</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>What is programming?</h2>
+      <p>A computer is very fast, but it can't think for itself. It only does exactly what it's told. A <strong>program</strong> is a list of instructions for the computer, written in a language it understands. Writing those instructions is called <strong>programming</strong> (or <strong>coding</strong>).</p>
+
+      <aside class="note idea">
+        <h4>Think of it like this</h4>
+        <p>A program is like a recipe. A recipe says: "1. Crack two eggs. 2. Add milk. 3. Stir." The cook follows the steps in order, one at a time. A computer follows your program the same way: line by line, from top to bottom, exactly as written.</p>
+      </aside>
+
+      <p>Here's a real program. It has one instruction: show the words "Hello, world!" on the screen. The code is on the left. What it does is on the right.</p>
+
+      <div class="runnable" data-lang="python" data-title="Your first look at a program">
+        <script type="text/plain">
+          print("Hello, world!")
+        </script>
+      </div>
+
+      <p>Click inside the code and change <code>world</code> to your name. After you stop typing, the program runs again by itself. You can also press the green <strong>Run</strong> button.</p>
+    </section>
+
+    <section>
+      <h2>Why Python?</h2>
+      <p>There are hundreds of programming languages. Python is one of the most popular in the world, and it's a great first language because it reads almost like English:</p>
+
+      <div class="runnable" data-lang="python" data-title="Python reads like English">
+        <script type="text/plain">
+          fruits = ["apple", "banana", "cherry"]
+
+          for fruit in fruits:
+              print("I like", fruit)
+        </script>
+      </div>
+
+      <p>Even without knowing Python, you can probably guess what that does: for every fruit in the list, print "I like" and the fruit. Python is used for real things every day:</p>
+      <div class="trio four">
+        <div><div class="big" style="color: var(--c-tag)">apps</div><p>Parts of Instagram, YouTube and Spotify are written in Python.</p></div>
+        <div><div class="big" style="color: var(--c-prop)">AI</div><p>Most artificial intelligence, including chatbots, is built with Python.</p></div>
+        <div><div class="big" style="color: var(--c-val)">science</div><p>Scientists use it to study space, weather, medicine and animals.</p></div>
+        <div><div class="big" style="color: var(--c-attr)">fun</div><p>Games, drawings, robots and little tools that save you time.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>A program runs line by line</h2>
+      <p>The computer always starts at the top and does one line at a time. Press <strong>Next step</strong> to watch it happen. The highlighted line is the one the computer is doing right now.</p>
+
+      <div class="stepper" data-lang="python" data-title="Watch the computer read your program">
+        <script type="text/plain">
+          print("Good morning!")
+          print("Time to make pancakes.")
+          print("Step 1: crack the eggs")
+          print("Step 2: add the milk")
+          print("Done!")
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "out": "Good morning!\n", "note": "The computer starts at <b>line 1</b> and shows the text."},
+            {"line": 2, "out": "Time to make pancakes.\n", "note": "Then it moves down to <b>line 2</b>."},
+            {"line": 3, "out": "Step 1: crack the eggs\n", "note": "One line at a time, always from top to bottom."},
+            {"line": 4, "out": "Step 2: add the milk\n", "note": "Each <code>print</code> adds a new line to the output."},
+            {"line": 5, "out": "Done!\n", "note": "The last line. After this, the program is finished."}
+          ]
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>How to use this course</h2>
+
+      <h3>Code boxes</h3>
+      <ul>
+        <li><strong>Run</strong> runs the program. Most programs also run again by themselves when you stop typing. On a keyboard, <kbd>Ctrl</kbd>+<kbd>Enter</kbd> also runs it.</li>
+        <li><strong>Output</strong> (on the right, or below on small screens) shows what the program prints and draws.</li>
+        <li><strong>Reset</strong> puts the code back to how it started. You can't break anything.</li>
+        <li><strong>Copy</strong> copies the code. <strong>Stop</strong> stops a program that runs too long.</li>
+        <li>When something goes wrong, the output shows the error, the line is marked in red, and a box explains <strong>what it means</strong> in plain words.</li>
+      </ul>
+
+      <h3>Step-through viewers and explorers</h3>
+      <p>Step-through viewers (like the pancake one above) let you watch a program run line by line and see what's stored in memory. Explorers have sliders: move them and the program changes and runs again.</p>
+
+      <h3>Code colors</h3>
+      <p>Code is colored to help you read it. The same colors are used everywhere in the course:</p>
+      <div class="legend">
+        <code class="k-tag">keywords like if, for</code>
+        <code class="k-val">"text"</code>
+        <code class="k-attr">numbers 42</code>
+        <code class="k-prop">functions print()</code>
+        <code class="k-sel">types like Dog</code>
+      </div>
+      <p>Don't worry about these words yet. You'll meet each one soon.</p>
+    </section>
+
+    <section>
+      <h2>Running Python on your own computer</h2>
+      <p>Everything in this course runs right here in the page, even on an iPad and even offline. When you want to write Python on a computer too, it takes about ten minutes to set up:</p>
+      <ol class="steps">
+        <li><div><p><strong>Install Python</strong> from <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org/downloads</a>. On Windows, tick the box <strong>"Add Python to PATH"</strong> during the install.</p></div></li>
+        <li><div><p><strong>Install VS Code</strong> from <a href="https://code.visualstudio.com" target="_blank" rel="noopener">code.visualstudio.com</a>, then open the Extensions panel on the left and install <strong>Python</strong>.</p></div></li>
+        <li><div><p><strong>Make a file</strong> called <code>hello.py</code>. The <code>.py</code> at the end means "this is Python".</p></div></li>
+        <li><div><p><strong>Type</strong> <code>print("Hello!")</code> and save the file.</p></div></li>
+        <li><div><p><strong>Press the ▶ button</strong> at the top right of VS Code. The output appears in the panel at the bottom, called the <strong>terminal</strong>.</p></div></li>
+      </ol>
+      <aside class="note tip">
+        <h4>Tip</h4>
+        <p>This course runs a version of Python made for web pages. It does everything you'll learn here. Real Python on a computer can do even more, like opening files and making windows and games.</p>
+      </aside>
+    </section>
+
+    <section>
+      <div class="quiz">
+        <p class="q">In what order does the computer run the lines of a program?</p>
+        <div class="opts">
+          <button>All at the same time</button>
+          <button data-correct>One by one, from top to bottom</button>
+          <button>From the bottom up</button>
+        </div>
+        <p class="why">A program is like a recipe: the computer follows the steps in order, starting at the top.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>A <strong>program</strong> is a list of instructions for the computer.</li>
+          <li>The computer runs them <strong>one line at a time, top to bottom</strong>, exactly as written.</li>
+          <li>Python files end in <code>.py</code>.</li>
+          <li>Press <strong>Run</strong> to run code. Use <strong>Reset</strong> if you get lost.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Making Decisions · Hello Python</title>
+  <link rel="stylesheet" href="../../assets/course.css">
+</head>
+<body data-root=".." data-lesson="06-if">
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="All lessons"></nav>
+  <main class="lesson">
+
+    <header class="lesson-hero">
+      <p class="eyebrow">Lesson 06 &middot; <b>Decisions &amp; loops</b></p>
+      <div class="hero-code" aria-hidden="true">if</div>
+      <h1>Making Decisions</h1>
+      <p class="lead">Smart programs do different things in different situations. "If it's raining, take an umbrella. Otherwise, wear sunglasses." In Python, that's <code>if</code> and <code>else</code>.</p>
+      <ul class="learn">
+        <li>Comparing values</li>
+        <li>if, else and elif</li>
+        <li>Indentation</li>
+        <li>and, or, not</li>
+      </ul>
+    </header>
+
+    <section>
+      <h2>Questions with True or False answers</h2>
+      <p>To make a decision, a program asks a yes-or-no question. In Python, these questions use <strong>comparison operators</strong>, and the answer is always <code>True</code> or <code>False</code>:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Operator</th><th>Means</th><th>Example</th><th>Answer</th></tr></thead>
+          <tbody>
+            <tr><td><code>==</code></td><td>is equal to</td><td><code>5 == 5</code></td><td>True</td></tr>
+            <tr><td><code>!=</code></td><td>is not equal to</td><td><code>5 != 3</code></td><td>True</td></tr>
+            <tr><td><code>&gt;</code></td><td>is greater than</td><td><code>5 &gt; 8</code></td><td>False</td></tr>
+            <tr><td><code>&lt;</code></td><td>is less than</td><td><code>5 &lt; 8</code></td><td>True</td></tr>
+            <tr><td><code>&gt;=</code></td><td>greater than or equal to</td><td><code>5 &gt;= 5</code></td><td>True</td></tr>
+            <tr><td><code>&lt;=</code></td><td>less than or equal to</td><td><code>4 &lt;= 3</code></td><td>False</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="runnable" data-lang="python" data-title="Ask some questions">
+        <script type="text/plain">
+          age = 12
+          print(age > 10)
+          print(age == 13)
+          print(age != 13)
+          print("cat" == "Cat")    # capitals matter!
+        </script>
+      </div>
+
+      <aside class="note oops">
+        <h4>= vs ==</h4>
+        <p>One equals sign <code>=</code> <strong>stores</strong> a value. Two equals signs <code>==</code> <strong>compares</strong> two values. Mixing them up is the most common mistake in programming.</p>
+      </aside>
+    </section>
+
+    <section>
+      <h2>if: do something only when it's true</h2>
+      <div class="anatomy" role="img" aria-label="if temperature greater than 25 colon, then an indented print line">
+        <div class="part tag"><span>if</span><small>keyword</small></div>
+        <div class="part text"><span> temperature &gt; 25</span><small>the question<br>(True or False)</small></div>
+        <div class="part punc"><span>:</span><small>colon:<br>"then do this"</small></div>
+      </div>
+      <p>After the colon, the lines to run are written underneath and <strong>pushed in by 4 spaces</strong>. They only run if the question is <code>True</code>.</p>
+
+      <div class="flow" role="img" aria-label="Flow chart: is temperature above 25? If yes, print hot, wear shorts. If no, skip it. Then continue.">
+        <div class="fbox fq">temperature &gt; 25 ?</div>
+        <div class="arrow"></div>
+        <div class="branches">
+          <div class="branch yes"><span class="lab">True</span><div class="fbox">print("Hot! Wear shorts")</div></div>
+          <div class="branch no"><span class="lab">False</span><div class="fbox">skip it</div></div>
+        </div>
+        <div class="arrow"></div>
+        <div class="fbox">print("Have a nice day")</div>
+      </div>
+
+      <div class="runnable" data-lang="python" data-title="Your first if">
+        <script type="text/plain">
+          temperature = 30
+
+          if temperature > 25:
+              print("Hot! Wear shorts 🩳")
+              print("And drink water 💧")
+
+          print("Have a nice day")
+        </script>
+      </div>
+      <p>Change <code>30</code> to <code>15</code>. The two pushed-in lines are skipped, but the last line always runs, because it's not pushed in.</p>
+
+      <h3>Indentation matters</h3>
+      <p>The spaces at the start of a line are called <strong>indentation</strong>. In Python they're not just for looks: they tell Python which lines belong to the <code>if</code>. Use <strong>4 spaces</strong>. In these code boxes, the Tab key adds 4 spaces, and pressing Enter after a colon pushes the next line in for you.</p>
+    </section>
+
+    <section>
+      <h2>else: otherwise</h2>
+      <p><code class="k-tag">else</code> runs when the question is <code>False</code>. Exactly one of the two blocks runs, never both:</p>
+
+      <div class="runnable" data-lang="python" data-title="Two paths">
+        <script type="text/plain">
+          password = input("Password: ")
+
+          if password == "banana123":
+              print("✅ Welcome in!")
+          else:
+              print("❌ Wrong password. Go away!")
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>elif: more than two choices</h2>
+      <p><code class="k-tag">elif</code> means "else, if". Python checks each question from top to bottom and runs the <strong>first</strong> one that's true. Then it skips the rest.</p>
+
+      <div class="stepper" data-lang="python" data-title="Which grade? Watch Python check each question">
+        <script type="text/plain">
+          score = 72
+
+          if score >= 90:
+              print("A: amazing!")
+          elif score >= 70:
+              print("B: great job!")
+          elif score >= 50:
+              print("C: you passed")
+          else:
+              print("Keep practicing")
+
+          print("Done")
+        </script>
+        <script type="application/json">
+          [
+            {"line": 1, "vars": {"score": "72"}, "note": "Store 72 in <code>score</code>."},
+            {"line": 3, "vars": {"score": "72"}, "note": "Is 72 &gt;= 90? <b>False.</b> Skip this block."},
+            {"line": 5, "vars": {"score": "72"}, "note": "Is 72 &gt;= 70? <b>True!</b> Run this block."},
+            {"line": 6, "vars": {"score": "72"}, "out": "B: great job!\n", "note": "Print the message."},
+            {"line": 12, "vars": {"score": "72"}, "out": "Done\n", "note": "One block ran, so the other <code>elif</code> and the <code>else</code> are skipped completely. Python jumps to the end."}
+          ]
+        </script>
+      </div>
+
+      <p>Order matters! If you checked <code>score &gt;= 50</code> first, a score of 95 would get a C, because that question is true too and it would be found first.</p>
+
+      <div class="code-explorer" data-lang="python" data-title="What should I wear?">
+        <input type="range" name="t" data-label="temperature" min="-10" max="40" value="22">
+        <input type="checkbox" name="rain" data-label="is it raining?" data-on="True" data-off="False">
+        <script type="text/plain">
+          temperature = {{t}}
+          raining = {{rain}}
+
+          if temperature >= 30:
+              print("🥵 Super hot: t-shirt and shorts")
+          elif temperature >= 18:
+              print("😎 Warm: t-shirt is fine")
+          elif temperature >= 5:
+              print("🧥 Cool: take a jacket")
+          else:
+              print("🥶 Cold: coat, hat and gloves")
+
+          if raining:
+              print("☔ And bring an umbrella!")
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>and, or, not</h2>
+      <p>Combine questions with three keywords:</p>
+      <ul>
+        <li><code class="k-tag">and</code>: both must be true. "Is it sunny <em>and</em> warm?"</li>
+        <li><code class="k-tag">or</code>: at least one must be true. "Is it Saturday <em>or</em> Sunday?"</li>
+        <li><code class="k-tag">not</code>: flips True and False.</li>
+      </ul>
+
+      <div class="runnable" data-lang="python" data-title="Combining questions">
+        <script type="text/plain">
+          age = 14
+          has_ticket = True
+          day = "Saturday"
+
+          if age >= 12 and has_ticket:
+              print("🎢 You can ride the roller coaster!")
+
+          if day == "Saturday" or day == "Sunday":
+              print("🎉 It's the weekend!")
+
+          if not has_ticket:
+              print("Please buy a ticket first")
+        </script>
+      </div>
+    </section>
+
+    <section>
+      <h2>A little quiz game</h2>
+      <div class="runnable" data-lang="python" data-title="Quiz time">
+        <script type="text/plain">
+          score = 0
+
+          answer = input("What is the capital of France? ")
+          if answer.strip().lower() == "paris":
+              print("Correct! 🎉")
+              score += 1
+          else:
+              print("Oops, it's Paris.")
+
+          answer = input("How many legs does a spider have? ")
+          if answer.strip() == "8":
+              print("Correct! 🕷️")
+              score += 1
+          else:
+              print("Nope, spiders have 8 legs.")
+
+          print(f"You scored {score} out of 2")
+          if score == 2:
+              print("Perfect! 🏆")
+        </script>
+      </div>
+      <p>Notice <code>.strip().lower()</code> on the answer: that way "Paris", "PARIS" and " paris " all count as correct.</p>
+
+      <aside class="note task">
+        <h4>Your turn</h4>
+        <ol>
+          <li>Add a third question to the quiz.</li>
+          <li>Write a program that asks for a number and says if it's even or odd. (Hint: <code>number % 2 == 0</code>.)</li>
+          <li>Ask for someone's age and print "child" (under 13), "teen" (13 to 19) or "adult" (20 and up).</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section>
+      <aside class="note oops">
+        <h4>Common mistakes</h4>
+        <ul>
+          <li><strong>Forgetting the colon</strong> <code>:</code> at the end of <code>if</code>, <code>elif</code> and <code>else</code> lines. That's a <code>SyntaxError</code>.</li>
+          <li><strong>Wrong indentation</strong>: lines inside the block must be pushed in, and line up with each other.</li>
+          <li><strong>Using = instead of ==</strong> in a question.</li>
+          <li><strong>Comparing a number to text</strong>: <code>input()</code> gives text, so <code>answer == 8</code> is always False. Compare with <code>"8"</code> or convert with <code>int()</code>.</li>
+        </ul>
+      </aside>
+
+      <div class="quiz">
+        <p class="q">x = 7. Which block runs?  if x > 10 … elif x > 5 … else …</p>
+        <div class="opts">
+          <button>The if block</button>
+          <button data-correct>The elif block</button>
+          <button>The else block</button>
+          <button>Both elif and else</button>
+        </div>
+        <p class="why">7 &gt; 10 is False, 7 &gt; 5 is True, so the elif runs. Only one block ever runs.</p>
+      </div>
+
+      <div class="quiz">
+        <p class="q">What is True and False?</p>
+        <div class="opts">
+          <button>True</button>
+          <button data-correct>False</button>
+        </div>
+        <p class="why"><code>and</code> needs both sides to be true.</p>
+      </div>
+
+      <aside class="note remember">
+        <h4>Remember</h4>
+        <ul>
+          <li>Compare with <code>== != &lt; &gt; &lt;= &gt;=</code>. The answer is <code>True</code> or <code>False</code>.</li>
+          <li><code>if question:</code> then indented lines. Add <code>elif other:</code> and <code>else:</code> as needed.</li>
+          <li>Only the <strong>first</strong> true block runs.</li>
+          <li>Combine with <code>and</code>, <code>or</code>, <code>not</code>.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <div class="lesson-end"></div>
+  </main>
+</div>
+<script src="../course-config.js"></script>
+<script src="../../assets/vendor/skulpt.min.js"></script>
+<script src="../../assets/vendor/skulpt-stdlib.js"></script>
+<script src="../../assets/code.js"></script>
+<script src="../../assets/course.js"></script>
+</body>
+</html>

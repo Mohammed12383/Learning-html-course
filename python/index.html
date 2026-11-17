@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hello Python</title>
+  <meta name="description" content="A visual Python course for total beginners: code, explanation and the running program side by side.">
+  <link rel="stylesheet" href="../assets/course.css">
+</head>
+<body data-root=".">
+
+  <section class="home-hero">
+    <div>
+      <p class="eyebrow">A visual course for total beginners</p>
+      <h1>Learn <span class="tagword" style="color: var(--c-prop)">Python</span> by playing with it</h1>
+      <p class="lead">Every lesson shows a short explanation, the code, and what it does, side by side. Change the code and run it again. Make games, draw pictures, and build real programs. No experience needed.</p>
+      <div class="cta-row">
+        <a class="btn" href="lessons/00-start-here.html">Start lesson 0</a>
+        <a class="btn ghost" href="lessons/cheatsheet.html">Open the cheat sheet</a>
+      </div>
+    </div>
+
+    <div class="runnable" data-lang="python" data-title="This is real Python. It draws!" data-hint="Change 36 to 12, or change the colors, then press Run.">
+      <script type="text/plain">
+        import turtle
+        t = turtle.Turtle()
+        t.speed(0)
+
+        colors = ["hotpink", "orange", "gold", "mediumseagreen", "dodgerblue", "mediumpurple"]
+        for i in range(36):
+            t.color(colors[i % 6])
+            t.circle(60)
+            t.left(10)
+
+        print("I drew a flower with code!")
+      </script>
+    </div>
+  </section>
+
+  <section class="home-section">
+    <h2>How every lesson works</h2>
+    <p>You learn by looking and trying. Each idea comes with a small program you can change and run.</p>
+    <div class="how">
+      <div>
+        <span class="glyph">1 &middot; read</span>
+        <h3>A short, simple explanation</h3>
+        <p>Plain words and pictures. Every new word is explained the first time you meet it.</p>
+      </div>
+      <div>
+        <span class="glyph">2 &middot; run</span>
+        <h3>Code and result side by side</h3>
+        <p>The code is on the left, what it prints or draws is on the right. Step-through viewers show the program running one line at a time.</p>
+      </div>
+      <div>
+        <span class="glyph">3 &middot; try</span>
+        <h3>Change it, break it, fix it</h3>
+        <p>Mistakes are explained in plain English. Small tasks and quizzes help it stick. Reset always brings the code back.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section">
+    <h2>The course</h2>
+    <p>17 lessons, in order. Each one takes about 15 to 30 minutes. Your progress is saved in this browser.</p>
+    <div id="course-map"></div>
+  </section>
+
+  <section class="home-section">
+    <h2>More courses</h2>
+    <p>All the Hello courses work the same way.</p>
+    <div class="courses" id="course-list"></div>
+  </section>
+
+  <footer class="footer">
+    Hello Python &middot; a beginner course. Python runs right inside this page, even offline.
+  </footer>
+
+  <script src="course-config.js"></script>
+  <script src="../assets/vendor/skulpt.min.js"></script>
+  <script src="../assets/vendor/skulpt-stdlib.js"></script>
+  <script src="../assets/code.js"></script>
+  <script src="../assets/course.js"></script>
+</body>
+</html>

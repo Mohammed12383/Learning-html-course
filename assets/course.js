@@ -9,7 +9,8 @@
 (function () {
   'use strict';
 
-  var LESSONS = [
+  var CFG = window.COURSE || {};
+  var LESSONS = CFG.lessons || [
     { id: '00-start-here', title: 'Start Here', chip: 'hello', group: 'basics', blurb: 'What a website really is, how this course works, and how to make your first file.' },
     { id: '01-first-page', title: 'Your First Web Page', chip: '<html>', group: 'basics', blurb: 'Tags, elements and the skeleton every page needs.' },
     { id: '02-text', title: 'Headings, Paragraphs & Lists', chip: '<h1>', group: 'basics', blurb: 'Write titles, paragraphs, bold words and lists.' },
@@ -28,7 +29,7 @@
     { id: '15-responsive', title: 'Phones & Tablets', chip: '@media', group: 'polish', blurb: 'Make your site look good on every screen size.' },
     { id: '16-final-project', title: 'Final Project', chip: 'launch', group: 'build', blurb: 'Build a complete, polished website from start to finish.' }
   ];
-  var GROUPS = {
+  var GROUPS = CFG.groups || {
     basics: { name: 'HTML basics', color: '--c-tag' },
     style: { name: 'Styling with CSS', color: '--c-prop' },
     parts: { name: 'Building blocks', color: '--c-attr' },
@@ -61,7 +62,9 @@
   }
 
   /* ---------- Progress (saved only in this browser) ---------- */
-  var KEY = 'hello-html:done';
+  var KEY = CFG.storageKey || 'hello-html:done';
+  var COURSE_NAME = CFG.name || 'Hello HTML';
+  var LOGO = CFG.logo || '&lt;/&gt;';
   function getDone() {
     try { return JSON.parse(localStorage.getItem(KEY) || '[]') || []; } catch (e) { return []; }
   }
@@ -259,8 +262,12 @@
     return out;
   }
 
-  function highlight(code, lang) { return lang === 'css' ? hlCSS(code) : hlHTML(code); }
-  function langOf(name) { return /\.css$/i.test(name || '') ? 'css' : 'html'; }
+  var LANGS = { html: hlHTML, css: function (c) { return hlCSS(c); } };
+  function highlight(code, lang) { return (LANGS[lang] || hlHTML)(code); }
+  function langOf(name) {
+    var ext = (/\.(\w+)$/.exec(name || '') || [])[1] || 'html';
+    return { css: 'css', py: 'python', ts: 'typescript', cpp: 'cpp', h: 'cpp', js: 'typescript' }[ext.toLowerCase()] || 'html';
+  }
 
   /* ============================================================
      Live preview (a pretend browser window)
@@ -272,6 +279,7 @@
     this.xray = false;
     this.fixedHeight = opts.height || 0;
     this.onNavigate = opts.onNavigate || null;
+    this.quietForms = !!opts.quietForms;
     this.files = opts.files || null;
 
     var view = el('div', { class: 'pg-view' + (opts.devices ? ' devices' : '') });
@@ -438,6 +446,7 @@
 
   Preview.prototype.onSubmit = function (e) {
     e.preventDefault();
+    if (this.quietForms) return;
     var form = e.target;
     var parts = [];
     try {
@@ -502,21 +511,25 @@
     var root = el('div', { class: 'ed' });
     var gutter = el('div', { class: 'ed-gutter', 'aria-hidden': 'true' });
     var main = el('div', { class: 'ed-main' });
+    var marks = el('div', { class: 'ed-marks', 'aria-hidden': 'true' });
     var pre = el('pre', { class: 'ed-hl', 'aria-hidden': 'true' });
     var code = el('code');
     pre.appendChild(code);
+    main.appendChild(marks);
     var id = 'code-' + (++uid);
     var ta = el('textarea', { class: 'ed-input', id: id, spellcheck: 'false', autocapitalize: 'off', autocomplete: 'off', autocorrect: 'off', wrap: 'off', 'aria-label': 'Code editor. Type to change the website.' });
     main.appendChild(pre); main.appendChild(ta);
     root.appendChild(gutter); root.appendChild(main);
     root.addEventListener('click', function (e) { if (e.target === root || e.target === gutter) ta.focus(); });
 
-    this.root = root; this.ta = ta; this.code = code; this.pre = pre; this.gutter = gutter;
+    this.root = root; this.ta = ta; this.code = code; this.pre = pre; this.gutter = gutter; this.marksEl = marks;
+    this.marks = [];
     this.lang = 'html';
     this.escaped = false;
 
     ta.addEventListener('input', function () { self.render(); onChange && onChange(ta.value); });
     ta.addEventListener('scroll', function () { pre.scrollLeft = ta.scrollLeft; });
+    this.onChange = onChange;
     ta.addEventListener('keydown', function (e) { self.keys(e); });
   }
   Editor.prototype.set = function (value, lang) {
@@ -537,7 +550,24 @@
     var extra = ta.offsetHeight - ta.clientHeight;
     if (extra > 0) ta.style.height = Math.ceil(lines * lh + 28 + extra) + 'px';
     this.pre.scrollLeft = ta.scrollLeft;
+    this.lineHeight = lh;
+    this.paintMarks();
   };
+  // Highlight whole lines: [{ line: 3, kind: 'error' | 'current' | 'warn' }]
+  Editor.prototype.setMarks = function (marks) { this.marks = marks || []; this.paintMarks(); };
+  Editor.prototype.paintMarks = function () {
+    var lh = this.lineHeight || 23;
+    var top = parseFloat(getComputedStyle(this.ta).paddingTop) || 14;
+    this.marksEl.innerHTML = this.marks.map(function (m) {
+      return '<div class="ed-mark ' + m.kind + '" style="top:' + (top + (m.line - 1) * lh) + 'px;height:' + lh + 'px"></div>';
+    }).join('');
+    var lines = this.ta.value.split('\n').length, g = '';
+    var bad = {};
+    this.marks.forEach(function (m) { if (m.kind === 'error') bad[m.line] = 1; });
+    for (var i = 1; i <= lines; i++) g += (bad[i] ? '<b>' + i + '</b>' : i) + (i < lines ? '\n' : '');
+    this.gutter.innerHTML = g;
+  };
+  Editor.prototype.value = function () { return this.ta.value; };
   Editor.prototype.insert = function (text) {
     var ta = this.ta;
     ta.focus();
@@ -549,12 +579,14 @@
       ta.dispatchEvent(new Event('input'));
     }
   };
+  // Python and C++ indent with 4 spaces, HTML, CSS and TypeScript with 2
+  Editor.prototype.tab = function () { return this.lang === 'python' || this.lang === 'cpp' ? '    ' : '  '; };
   Editor.prototype.keys = function (e) {
     var ta = this.ta;
     if (e.key === 'Escape') { this.escaped = true; return; }
     if (e.key === 'Tab' && !e.shiftKey && !this.escaped && !e.metaKey && !e.ctrlKey && !e.altKey) {
       e.preventDefault();
-      this.insert('  ');
+      this.insert(this.tab());
       return;
     }
     if (e.key !== 'Tab') this.escaped = false;
@@ -566,13 +598,15 @@
       var prev = before.replace(/\s+$/, '').slice(-1);
       var after = ta.value.slice(s);
       var opensTag = /<([a-zA-Z][\w-]*)(\s[^<>]*)?>$/.test(before) && !/<(br|img|hr|input|meta|link|source|area|col|wbr)\b[^>]*>$/i.test(before);
-      if (prev === '{' || opensTag) {
+      var tab = this.tab();
+      if (this.lang !== 'html' && this.lang !== 'css') opensTag = false;
+      if (prev === '{' || opensTag || (this.lang === 'python' && prev === ':')) {
         e.preventDefault();
         if ((prev === '{' && /^\s*}/.test(after)) || (opensTag && /^<\//.test(after))) {
-          this.insert('\n' + indent + '  \n' + indent);
-          ta.selectionStart = ta.selectionEnd = s + 1 + indent.length + 2;
+          this.insert('\n' + indent + tab + '\n' + indent);
+          ta.selectionStart = ta.selectionEnd = s + 1 + indent.length + tab.length;
         } else {
-          this.insert('\n' + indent + '  ');
+          this.insert('\n' + indent + tab);
         }
         return;
       }
@@ -839,7 +873,7 @@
   var closeMenu = function () {};
   function buildHeader() {
     var h = el('header', { class: 'site-header' });
-    h.innerHTML = '<a class="logo" href="' + homeHref() + '"><span class="logo-mark">&lt;/&gt;</span>Hello HTML</a>' +
+    h.innerHTML = '<a class="logo" href="' + homeHref() + '"><span class="logo-mark">' + LOGO + '</span>' + esc(COURSE_NAME) + '</a>' +
       '<span class="header-space"></span>' +
       '<div class="progress-pill"><span class="progress-text"></span><span class="progress-track"><span class="progress-fill"></span></span></div>';
     var sidebar = document.getElementById('sidebar');
@@ -941,6 +975,25 @@
     map.innerHTML = html;
   }
 
+  /* ---------- Links to all the Hello courses ---------- */
+  var COURSES = [
+    { id: 'html', name: 'Hello HTML', chip: '<html>', color: '--c-tag', dir: '', single: 'hello-html-course.html', blurb: 'Build websites: text, colors, buttons, layouts and pages.' },
+    { id: 'python', name: 'Hello Python', chip: 'print()', color: '--c-prop', dir: 'python/', single: 'hello-python-course.html', blurb: 'Your first programming language: games, drawings and more.' },
+    { id: 'typescript', name: 'Hello TypeScript', chip: 'let x: number', color: '--c-sel', dir: 'typescript/', single: 'hello-typescript-course.html', blurb: 'The language that makes websites interactive, with types.' },
+    { id: 'cpp', name: 'Hello C++', chip: 'cout <<', color: '--c-val', dir: 'cpp/', single: 'hello-cpp-course.html', blurb: 'A fast, powerful language used for games and apps.' }
+  ];
+  function buildCourseList() {
+    var box = document.getElementById('course-list');
+    if (!box) return;
+    var base = ROOT + '/' + (CFG.siteRoot || '.') + '/';
+    var me = CFG.id || (window.COURSE ? '' : 'html');
+    box.innerHTML = COURSES.map(function (c) {
+      var href = SINGLE ? c.single : base + c.dir + 'index.html';
+      return '<a class="course-card' + (c.name === COURSE_NAME ? ' current' : '') + '" href="' + href + '" style="--cc: var(' + c.color + ')">' +
+        '<span class="chip" style="color: var(' + c.color + ')">' + esc(c.chip) + '</span><strong>' + esc(c.name) + (c.name === COURSE_NAME ? ' <small class="muted">(this course)</small>' : '') + '</strong><p>' + esc(c.blurb) + '</p></a>';
+    }).join('');
+  }
+
   function buildCheatFilter() {
     var input = document.getElementById('cheat-filter');
     if (!input) return;
@@ -958,8 +1011,20 @@
     });
   }
 
+  /* ---------- Extensions (code runners for Python, TypeScript, C++) ---------- */
+  var COMPONENTS = [];
+  var API = {
+    el: el, esc: esc, dedent: dedent, copyText: copyText, highlight: highlight, langOf: langOf,
+    Editor: Editor, Preview: Preview, nextId: function () { return ++uid; },
+    registerLang: function (name, fn) { LANGS[name] = fn; },
+    registerComponent: function (selector, init) { COMPONENTS.push([selector, init]); },
+    span: sp
+  };
+  (window.HelloCourseExtensions || []).forEach(function (fn) { fn(API); });
+
   /* ---------- Turn the markup in a part of the page into live components ---------- */
   function initComponents(root) {
+    COMPONENTS.forEach(function (c) { root.querySelectorAll(c[0]).forEach(c[1]); });
     root.querySelectorAll('script.snippet').forEach(makeSnippet);
     root.querySelectorAll('.quiz').forEach(makeQuiz);
     root.querySelectorAll('.playground').forEach(function (host) {
@@ -992,7 +1057,7 @@
     });
     closeMenu();
     if (menuBtn) menuBtn.hidden = isHome;
-    document.title = (current ? current.title + ' · ' : id === 'cheatsheet' ? 'Cheat Sheet · ' : '') + 'Hello HTML';
+    document.title = (current ? current.title + ' · ' : id === 'cheatsheet' ? 'Cheat Sheet · ' : '') + COURSE_NAME;
     if (!target.hasAttribute('data-ready')) {
       target.setAttribute('data-ready', '');
       initComponents(target);
@@ -1006,6 +1071,7 @@
   buildSidebar();
   buildHeader();
   buildMap();
+  buildCourseList();
   refreshProgress();
   buildCheatFilter();
   makeSwatches();
